@@ -1,18 +1,85 @@
-export default function DataTable({ columns, rows, getKey = (row) => row.id }) {
+export default function DataTable({
+  headers = [],
+  rows = [],
+  getRowKey,
+  emptyMessage = "No hay información disponible.",
+}) {
+  if (!rows.length) {
+    return (
+      <div className="rounded-lg border border-[#c7c6cb] bg-white p-8 text-center text-sm text-[#46464b]">
+        {emptyMessage}
+      </div>
+    );
+  }
+
   return (
-    <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-      <table className="min-w-full text-sm">
-        <thead className="bg-slate-50 dark:bg-slate-800">
-          <tr>{columns.map((column) => <th key={column.key} className="px-4 py-3 text-left">{column.label}</th>)}</tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={getKey(row)} className="border-t border-slate-200 dark:border-slate-800">
-              {columns.map((column) => <td key={column.key} className="px-4 py-3">{column.render ? column.render(row) : row[column.key]}</td>)}
+    <>
+      <div className="space-y-4 md:hidden">
+        {rows.map((row, rowIndex) => (
+          <div
+            key={getRowKey ? getRowKey(row, rowIndex) : rowIndex}
+            className="space-y-3 rounded-lg border border-[#c7c6cb] bg-white p-4"
+          >
+            {headers.map((header, columnIndex) => (
+              <div
+                key={header.key ?? columnIndex}
+                className="flex items-start justify-between gap-4"
+              >
+                <span className="text-xs font-semibold uppercase text-[#46464b]">
+                  {header.label ?? header}
+                </span>
+
+                <span className="text-right text-sm text-[#010105]">
+                  {typeof header.render === "function"
+                    ? header.render(row, rowIndex)
+                    : Array.isArray(row)
+                      ? row[columnIndex]
+                      : row[header.key]}
+                </span>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden overflow-x-auto rounded-lg border border-[#c7c6cb] bg-white md:block">
+        <table className="w-full border-collapse text-left">
+          <thead>
+            <tr className="border-b border-[#c7c6cb] bg-[#eff4ff]">
+              {headers.map((header, index) => (
+                <th
+                  key={header.key ?? index}
+                  className="px-6 py-4 text-xs font-bold uppercase text-[#46464b]"
+                >
+                  {header.label ?? header}
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+
+          <tbody className="divide-y divide-[#c7c6cb]">
+            {rows.map((row, rowIndex) => (
+              <tr
+                key={getRowKey ? getRowKey(row, rowIndex) : rowIndex}
+                className="transition-colors hover:bg-[#eff4ff]"
+              >
+                {headers.map((header, columnIndex) => (
+                  <td
+                    key={header.key ?? columnIndex}
+                    className="px-6 py-4 text-sm text-[#010105]"
+                  >
+                    {typeof header.render === "function"
+                      ? header.render(row, rowIndex)
+                      : Array.isArray(row)
+                        ? row[columnIndex]
+                        : row[header.key]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }

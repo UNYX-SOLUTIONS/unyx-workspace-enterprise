@@ -1,28 +1,23 @@
 import { NavLink } from "react-router-dom";
 import { navigation } from "../../app/navigation";
 
-export default function Sidebar() {
+export default function Sidebar({ open=true,onClose=()=>{} }){
   return (
-    <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-slate-200 bg-white lg:block dark:border-slate-800 dark:bg-slate-900">
-      <div className="flex h-16 items-center px-6 text-xl font-bold">UNYX Workspace</div>
-      <nav className="space-y-1 px-3">
-        {navigation.map(({ label, to, icon: Icon }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) =>
-              `flex items-center gap-3 rounded-lg px-3 py-2 text-sm ${
-                isActive
-                  ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900"
-                  : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
-              }`
-            }
-          >
-            <Icon size={18} />
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-    </aside>
+    <>
+      <aside className={`fixed md:static inset-y-0 left-0 z-40 w-64 bg-gradient-to-b from-[#1a1c24] to-[#0f1117] text-white transform transition-transform ${open?'translate-x-0':'-translate-x-full md:translate-x-0'}`}>
+        <div className="p-6">
+          <h1 className="text-3xl font-bold text-[#2170e4]">UNYX</h1>
+          <nav className="mt-8 space-y-2">
+            {navigation.map(item=>(
+              <NavLink key={item.to} to={item.to} onClick={onClose}
+                className={({isActive})=>`flex items-center gap-3 rounded-lg p-3 ${isActive?'bg-[#2170e4] font-semibold':'hover:bg-[#2a2e3a]'}`}>
+                <span>{item.icon}</span><span>{item.label}</span>
+              </NavLink>
+            ))}
+          </nav>
+        </div>
+      </aside>
+      {open && <div className="fixed inset-0 bg-black/30 md:hidden" onClick={onClose}/>}
+    </>
   );
 }

@@ -1,12 +1,53 @@
-node_modules
-.pnpm-store
-dist
-coverage
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Builds
+dist/
+**/dist/
+dist-ssr/
+**/dist-ssr/
+
+# Environment variables
 .env
 .env.*
 !.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs
+logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Testing and coverage
+coverage/
+**/coverage/
+
+# Local files
+*.local
+
+# Operating systems
 .DS_Store
-.vscode
-.idea
-apps/api/prisma/dev.db
+Thumbs.db
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

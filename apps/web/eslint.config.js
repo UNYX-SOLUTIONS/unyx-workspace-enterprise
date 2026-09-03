@@ -1,15 +1,21 @@
-import baseConfig from "@unyx/eslint-config";
+import config from "@unyx/eslint-config";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 
 export default [
-  ...baseConfig,
+  ...config,
   reactHooks.configs["recommended-latest"],
   reactRefresh.configs.vite,
   {
     rules: {
-      "no-unused-vars": ["error", { argsIgnorePattern: "^_", caughtErrors: "none", ignoreRestSiblings: true }],
       "react-hooks/exhaustive-deps": "warn",
+      "react-refresh/only-export-components": [
+        "error",
+        {
+          allowConstantExport: true,
+          allowExportNames: ["AuthContext", "ThemeContext", "ToastContext"],
+        },
+      ],
     },
   },
 ];

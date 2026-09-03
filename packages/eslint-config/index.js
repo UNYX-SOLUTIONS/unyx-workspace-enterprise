@@ -1,7 +1,8 @@
 import js from "@eslint/js";
 import globals from "globals";
+import tseslint from "typescript-eslint";
 
-export default [
+export const baseConfig = [
   js.configs.recommended,
   {
     languageOptions: {
@@ -14,3 +15,20 @@ export default [
     },
   },
 ];
+
+export const tsConfig = [
+  ...baseConfig,
+  ...tseslint.configs.recommended,
+  {
+    rules: {
+      "no-undef": "off",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        { argsIgnorePattern: "^_", caughtErrors: "none", ignoreRestSiblings: true },
+      ],
+    },
+  },
+];
+
+export default tsConfig;

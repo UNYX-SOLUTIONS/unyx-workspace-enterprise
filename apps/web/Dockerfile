@@ -23,7 +23,10 @@ RUN pnpm install --frozen-lockfile
 COPY apps/web ./apps/web
 COPY packages ./packages
 
-# Build del frontend
+# Compilar paquetes compartidos (tipos para el typecheck del web)
+RUN pnpm --filter @unyx/shared-schemas --filter @unyx/shared-types build
+
+# Build del frontend (typecheck + bundle)
 RUN pnpm --filter @unyx/web build
 
 

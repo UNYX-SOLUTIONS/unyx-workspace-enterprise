@@ -53,7 +53,7 @@ al ejecutar el seed.
 cd apps/api
 $env:FIRESTORE_EXPORT_DIR = "../firestore-export"   # PowerShell
 # export FIRESTORE_EXPORT_DIR="../firestore-export"  # sh
-node prisma/migrate-firestore.mjs
+pnpm exec tsx prisma/migrate-firestore.ts
 ```
 
 El script:

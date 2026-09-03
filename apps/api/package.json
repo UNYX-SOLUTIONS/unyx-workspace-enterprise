@@ -4,9 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "node --watch src/server.js",
-    "start": "node src/server.js",
-    "build": "echo API does not require compilation",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint src",
     "test": "vitest run",
     "prisma:generate": "prisma generate",
@@ -15,13 +16,14 @@
     "prisma:seed": "prisma db seed"
   },
   "prisma": {
-    "seed": "node prisma/seed.js"
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",
     "@unyx/shared-schemas": "workspace:*",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
+    "decimal.js": "^10.6.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
@@ -31,10 +33,18 @@
     "zod": "^4.0.14"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^26.4.1",
+    "@types/supertest": "^7.2.1",
     "@unyx/eslint-config": "workspace:*",
     "eslint": "^9.31.0",
     "prisma": "^6.13.0",
     "supertest": "^7.1.4",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   }
 }

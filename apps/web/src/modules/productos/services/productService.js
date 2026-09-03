@@ -1,104 +1,34 @@
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  orderBy,
-  query,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
+import { api } from "../../../config/api";
 
-import { db } from "../../../lib/firebase";
-
-const COLLECTION_NAME = "products";
-
-function normalizeProduct(product = {}) {
-  const ref = String(product.ref || "").trim();
-  const name = String(product.name || "").trim();
-  const brand = String(product.brand || "").trim();
-  const category = String(product.category || "").trim();
-  const price = Number(product.price || 0);
-
-  if (!ref) {
-    throw new Error("La referencia del producto es obligatoria.");
-  }
-
-  if (!name) {
-    throw new Error("El nombre del producto es obligatorio.");
-  }
-
-  if (!Number.isFinite(price) || price < 0) {
-    throw new Error("El precio del producto no es válido.");
-  }
-
+function toProductView(product) {
   return {
-    ref,
-    name,
-    brand,
-    category,
-    price,
+    ...product,
+    ref: product.codigo,
+    name: product.nombre,
+    brand: product.marca,
+    category: product.categoria,
+    price: Number(product.precio ?? 0),
   };
 }
 
-export async function getProducts() {
-  const productsQuery = query(
-    collection(db, COLLECTION_NAME),
-    orderBy("createdAt", "desc")
-  );
-
-  const snapshot = await getDocs(productsQuery);
-
-  return snapshot.docs.map((documentSnapshot) => ({
-    id: documentSnapshot.id,
-    ...documentSnapshot.data(),
-  }));
+export async function getProducts({ page = 1, pageSize = 200, search = "" } = {}) {
+  const { data } = await api.get("/productos", {
+    params: { page, pageSize, search: search || undefined },
+  });
+  return data.data.map(toProductView);
 }
 
 export async function addProduct(product) {
-  const normalizedProduct = normalizeProduct(product);
-
-  const documentReference = await addDoc(
-    collection(db, COLLECTION_NAME),
-    {
-      ...normalizedProduct,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    }
-  );
-
-  return {
-    id: documentReference.id,
-    ...normalizedProduct,
-  };
+  const { data } = await api.post("/productos", product);
+  return toProductView(data);
 }
 
 export async function updateProduct(id, product) {
-  if (!id) {
-    throw new Error("El identificador del producto es obligatorio.");
-  }
-
-  const normalizedProduct = normalizeProduct(product);
-  const productReference = doc(db, COLLECTION_NAME, id);
-
-  await updateDoc(productReference, {
-    ...normalizedProduct,
-    updatedAt: serverTimestamp(),
-  });
-
-  return {
-    id,
-    ...normalizedProduct,
-  };
+  const { data } = await api.put(`/productos/${encodeURIComponent(id)}`, product);
+  return toProductView(data);
 }
 
 export async function deleteProduct(id) {
-  if (!id) {
-    throw new Error("El identificador del producto es obligatorio.");
-  }
-
-  await deleteDoc(doc(db, COLLECTION_NAME, id));
-
-  return id;
+  const { data } = await api.delete(`/productos/${encodeURIComponent(id)}`);
+  return data;
 }

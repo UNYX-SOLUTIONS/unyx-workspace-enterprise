@@ -17,10 +17,17 @@ export const app = express();
 app.use(helmet());
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(express.json({ limit: "10mb" }));
-app.use(morgan("dev"));
+app.use(morgan(env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use("/api", rateLimit({ windowMs: 60_000, limit: 300 }));
 
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60_000,
+  limit: 10,
+  message: { error: "Demasiados intentos de inicio de sesión", code: "TOO_MANY_REQUESTS" },
+});
+
 app.use("/api/health", healthRouter);
+app.use("/api/auth/login", loginLimiter);
 app.use("/api/auth", authRouter);
 app.use("/api/proformas", proformasRouter);
 app.use("/api/clientes", clientesRouter);

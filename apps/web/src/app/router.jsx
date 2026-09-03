@@ -1,6 +1,9 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import MainLayout from "../layouts/MainLayout";
+import ProtectedRoute from "./ProtectedRoute";
+
+import LoginPage from "../modules/autenticacion/pages/LoginPage";
 
 import DashboardPage from "../modules/dashboard/pages/DashboardPage";
 
@@ -20,21 +23,25 @@ import NotFoundPage from "../modules/errors/pages/NotFoundPage";
 
 export const router = createBrowserRouter([
   {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
     path: "/",
-    element: <MainLayout />,
+    element: (
+      <ProtectedRoute>
+        <MainLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
         element: <Navigate to="/dashboard" replace />,
       },
-
-      // Dashboard
       {
         path: "dashboard",
         element: <DashboardPage />,
       },
-
-      // Proformas
       {
         path: "proformas",
         element: <ProformaHistoryPage />,
@@ -47,20 +54,14 @@ export const router = createBrowserRouter([
         path: "proformas/:numero/editar",
         element: <ProformaPage />,
       },
-
-      // Clientes
       {
         path: "clientes",
         element: <ClientsPage />,
       },
-
-      // Productos
       {
         path: "productos",
         element: <ProductsPage />,
       },
-
-      // Mantenimientos
       {
         path: "mantenimientos",
         element: <MaintenanceHistoryPage />,
@@ -73,15 +74,12 @@ export const router = createBrowserRouter([
         path: "mantenimientos/:numero/editar",
         element: <MaintenancePage />,
       },
-
-      // Configuración
       {
         path: "configuracion",
         element: <SettingsPage />,
       },
     ],
   },
-
   {
     path: "*",
     element: <NotFoundPage />,

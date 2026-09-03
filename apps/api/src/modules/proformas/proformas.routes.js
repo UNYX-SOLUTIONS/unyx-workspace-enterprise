@@ -1,16 +1,14 @@
 import { Router } from "express";
-import { prisma } from "../../config/prisma.js";
+import { requireAuth } from "../../middleware/auth.js";
+import * as controller from "./proformas.controller.js";
 
 export const proformasRouter = Router();
 
-proformasRouter.get("/", async (req, res, next) => {
-  try {
-    const rows = await prisma.proforma.findMany({
-      include: { cliente: true, items: true },
-      orderBy: { createdAt: "desc" },
-    });
-    res.json(rows);
-  } catch (error) {
-    next(error);
-  }
-});
+proformasRouter.use(requireAuth);
+
+proformasRouter.get("/numero-siguiente", controller.previewNumber);
+proformasRouter.get("/", controller.list);
+proformasRouter.get("/:id", controller.getOne);
+proformasRouter.post("/", controller.create);
+proformasRouter.put("/:id", controller.update);
+proformasRouter.delete("/:id", controller.remove);

@@ -1,27 +1,39 @@
 import { z } from "zod";
 
 export const clientSchema = z.object({
-  nombre: z.string().min(2),
-  ruc: z.string().min(10),
-  email: z.string().email().optional().or(z.literal("")),
+  nombre: z.string().trim().min(2),
+  ruc: z.string().trim().min(10),
+  email: z.email().optional().or(z.literal("")),
   telefono: z.string().optional(),
   direccion: z.string().optional(),
   ciudad: z.string().optional(),
 });
 
+export const clientStatusEnum = z.enum(["Activo", "Pendiente", "Inactivo"]);
+
 export const proformaItemSchema = z.object({
-  codigo: z.string().min(1),
-  descripcion: z.string().min(1),
+  codigo: z.string().optional(),
+  descripcion: z.string().trim().min(1),
   marca: z.string().optional(),
   cantidad: z.coerce.number().positive(),
   precio: z.coerce.number().nonnegative(),
 });
 
-export const proformaSchema = z.object({
-  numero: z.string().min(1),
+export const proformaEstadoEnum = z.enum([
+  "BORRADOR",
+  "EMITIDA",
+  "ACEPTADA",
+  "CERRADA",
+]);
+
+export const proformaInputSchema = z.object({
+  clienteId: z.string().optional(),
+  cliente: clientSchema.optional(),
   fecha: z.string().min(1),
-  validezDias: z.coerce.number().int().positive().default(5),
-  cliente: clientSchema,
+  validezDias: z.coerce.number().int().min(1).max(365),
   items: z.array(proformaItemSchema).min(1),
   notas: z.string().optional(),
+  estado: proformaEstadoEnum,
 });
+
+export const proformaSchema = proformaInputSchema;

@@ -10,3 +10,17 @@ api.interceptors.request.use((config) => {
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      const onLoginPage = window.location.pathname === "/login";
+      if (!onLoginPage && localStorage.getItem("unyx_token")) {
+        localStorage.removeItem("unyx_token");
+        window.location.assign("/login");
+      }
+    }
+    return Promise.reject(error);
+  }
+);

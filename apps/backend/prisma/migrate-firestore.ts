@@ -13,6 +13,55 @@ const STATE_MAP = {
   cerrada: "CERRADA",
 };
 
+// Convierte un valor del formato de exportación de Firebase (REST/consola)
+// { stringValue | integerValue | doubleValue | booleanValue | timestampValue | arrayValue | mapValue | nullValue }
+// a un valor plano de JavaScript.
+function convertFieldValue(value: unknown): unknown {
+  if (!value || typeof value !== "object") return null;
+  const field = value as Record<string, unknown>;
+
+  if ("stringValue" in field) return field.stringValue;
+  if ("integerValue" in field) return Number(field.integerValue);
+  if ("doubleValue" in field) return Number(field.doubleValue);
+  if ("booleanValue" in field) return field.booleanValue;
+  if ("nullValue" in field) return null;
+  if ("timestampValue" in field) return field.timestampValue;
+  if ("referenceValue" in field) return String(field.referenceValue).split("/").pop();
+
+  if ("arrayValue" in field) {
+    const values = (field.arrayValue as { values?: unknown[] })?.values ?? [];
+    return values.map(convertFieldValue);
+  }
+
+  if ("mapValue" in field) {
+    const fields = (field.mapValue as { fields?: Record<string, unknown> })?.fields ?? {};
+    return Object.fromEntries(
+      Object.entries(fields).map(([key, fieldValue]) => [key, convertFieldValue(fieldValue)])
+    );
+  }
+
+  return null;
+}
+
+// Convierte documentos del formato de exportación de la consola de Firebase:
+// { "documents": [ { "name": ".../clients/<docId>", "fields": { ... } } ] }
+function convertConsoleExport(parsed: unknown): Record<string, unknown>[] {
+  const rawDocuments = (parsed as { documents?: unknown[] })?.documents;
+  if (!Array.isArray(rawDocuments)) return [];
+
+  return rawDocuments.map((rawDocument) => {
+    const document = rawDocument as { name?: string; fields?: Record<string, unknown> };
+    const docId = String(document.name ?? "").split("/").pop() ?? "";
+    const data = Object.fromEntries(
+      Object.entries(document.fields ?? {}).map(([key, value]) => [
+        key,
+        convertFieldValue(value),
+      ])
+    );
+    return { id: docId, ...data };
+  });
+}
+
 function readExport(name) {
   const file = path.join(EXPORT_DIR, `${name}.json`);
   if (!fs.existsSync(file)) return [];
@@ -20,9 +69,16 @@ function readExport(name) {
   if (!raw.trim()) return [];
 
   const parsed = JSON.parse(raw);
+
+  // Formato de exportación de la consola de Firebase (REST)
+  if (parsed && typeof parsed === "object" && "documents" in parsed) {
+    return convertConsoleExport(parsed);
+  }
+
   if (Array.isArray(parsed)) {
     return parsed.map((item) => ({ id: item.id || item.docId, ...(item.data || item) }));
   }
+
   return Object.entries(parsed).map(([id, data]) => ({ id, ...data }));
 }
 
@@ -247,6 +303,44 @@ async function migrateMaintenances(maintenances: Record<string, unknown>[]) {
   return created;
 }
 
+// Aplica los contadores de Firestore (counters.json) si superan los números
+// migrados: { id: "proformas", lastNumber: N } y { id: "mantenimientos", current: N }.
+async function applyCounters() {
+  const counters = readExport("counters");
+  if (!counters.length) return;
+
+  const proformaCounter = Number(
+    counters.find((counter) => counter.id === "proformas")?.lastNumber ?? 0
+  );
+  const maintenanceCounter = Number(
+    counters.find((counter) => counter.id === "mantenimientos")?.current ?? 0
+  );
+
+  if (proformaCounter > 0) {
+    const sequence = await prisma.sequence.findUnique({ where: { key: "proforma" } });
+    const current = sequence?.value ?? 0;
+    if (proformaCounter > current) {
+      await prisma.sequence.upsert({
+        where: { key: "proforma" },
+        update: { value: proformaCounter },
+        create: { key: "proforma", value: proformaCounter },
+      });
+    }
+  }
+
+  if (maintenanceCounter > 0) {
+    const sequence = await prisma.sequence.findUnique({ where: { key: "mantenimiento" } });
+    const current = sequence?.value ?? 0;
+    if (maintenanceCounter > current) {
+      await prisma.sequence.upsert({
+        where: { key: "mantenimiento" },
+        update: { value: maintenanceCounter },
+        create: { key: "mantenimiento", value: maintenanceCounter },
+      });
+    }
+  }
+}
+
 async function main() {
   const clients = readExport("clients");
   const products = readExport("products");
@@ -257,6 +351,8 @@ async function main() {
   const migratedProducts = await migrateProducts(products);
   const migratedProformas = await migrateProformas(proformas);
   const migratedMaintenances = await migrateMaintenances(maintenances);
+
+  await applyCounters();
 
   console.log(
     `Migración completada: ${migratedClients} clientes, ${migratedProducts} productos, ${migratedProformas} proformas, ${migratedMaintenances} mantenimientos.`

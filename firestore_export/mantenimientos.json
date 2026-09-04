@@ -1,0 +1,2502 @@
+[
+  {
+    "id": "MANT-00000001",
+    "conclusion": "Después del mantenimiento preventivo, el equipo se encuentra operativo y presenta una mejora considerable en el tiempo de encendido, uso del procesador, espacio disponible y temperaturas de funcionamiento. El tiempo de inicio disminuyó de 50 a 24 segundos y la temperatura máxima se redujo de 85 °C a 70 °C. El SSD, la memoria RAM, la seguridad de Windows y los componentes principales funcionan correctamente.\n\nLa principal limitación identificada es el consumo elevado de memoria RAM, que alcanza el 75 % en reposo. Por esta razón, se recomienda ampliar la capacidad total a 12 GB. La batería continúa funcional, aunque debe mantenerse bajo observación debido a su cantidad de ciclos. El estado general del equipo se clasifica como operativo con observaciones y apto para continuar en servicio.",
+    "equipo": {
+      "numeroSerie": "PF2SLX1A",
+      "procesador": "Intel Core i5-1035G1 · 4 núcleos · 8 procesadores lógicos",
+      "almacenamiento": "SSD NVMe SK Hynix HFM512GDHTNI-87A0B · 476.94 GB",
+      "modelo": "81WD - IdeaPad 3 14IIL05",
+      "marca": "LENOVO",
+      "accesorios": "",
+      "tipo": "Laptop",
+      "cargadorEntregado": false,
+      "sistemaOperativo": "Microsoft Windows 11 Pro de 64 bits · versión 10.0.26100",
+      "ram": "8 GB DDR4 en Dual Channel · 4 GB soldados + 4 GB SODIMM Samsung SM30N76635 · 2667 MT/s"
+    },
+    "problemasReportados": [
+      "9",
+      "Lentitud general",
+      "Mantenimiento Preventivo, la laptop se estaba comenzando a poner lenta."
+    ],
+    "accionesRealizadas": "Se realizó el diagnóstico inicial del hardware, almacenamiento, memoria RAM, batería, seguridad y sistema operativo.\nSe efectuó limpieza física interna y externa del equipo, incluyendo ventilador, rejillas y sistema de refrigeración.\nSe verificó la instalación de 8 GB de memoria RAM en configuración Dual Channel.\nSe ejecutó la prueba de memoria de Windows sin detectar errores.\nSe comprobó el estado del SSD NVMe, el funcionamiento de TRIM y el espacio disponible.\nSe activó la protección del sistema y se creó un punto de restauración antes de realizar cambios.\nSe instalaron las actualizaciones pendientes de Windows y se actualizó el equipo a Windows 11 versión 25H2.\nSe actualizó la BIOS de la versión EMCN42WW a EMCN44WW.\nSe verificaron los controladores y componentes principales del equipo.\nSe activaron el antivirus, la protección en tiempo real y el antispyware de Windows.\nSe ejecutó un análisis rápido de seguridad sin detectar amenazas.\nSe eliminaron archivos temporales y residuos del sistema, liberando espacio en la unidad C.\nSe revisaron las aplicaciones y servicios configurados para iniciar con Windows.\nSe realizaron pruebas finales de rendimiento, temperatura y estabilidad.",
+    "checklist": [
+      {
+        "actividad": "Consultar los problemas reportados por el usuario",
+        "observacion": "Mantenimiento preventivo",
+        "estado": "Conforme",
+        "id": 1,
+        "categoria": "Diagnóstico inicial"
+      },
+      {
+        "categoria": "Diagnóstico inicial",
+        "observacion": "Tiempo de encendido inicial: 50 segundos.",
+        "estado": "Conforme",
+        "id": 2,
+        "actividad": "Registrar el tiempo de encendido antes del mantenimiento"
+      },
+      {
+        "categoria": "Diagnóstico inicial",
+        "observacion": "CPU promedio: 2.8 %. RAM utilizada: 5.43 GB de 7.75 GB, equivalente al 70.1 %. Actividad del disco: 0 %. El consumo de RAM es elevado para un equipo en reposo.",
+        "estado": "Observación",
+        "id": 3,
+        "actividad": "Revisar el uso de CPU, memoria RAM y disco en reposo"
+      },
+      {
+        "categoria": "Diagnóstico inicial",
+        "observacion": "Sin Respaldo",
+        "estado": "Conforme",
+        "id": 4,
+        "actividad": "Confirmar la existencia de un respaldo de la información"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Unidad SSD NVMe SK Hynix HFM512GDHTNI-87A0B, con capacidad física de 476.94 GB.",
+        "categoria": "Almacenamiento",
+        "id": 5,
+        "actividad": "Identificar si la unidad es HDD, SSD SATA o SSD NVMe"
+      },
+      {
+        "categoria": "Almacenamiento",
+        "observacion": "Windows reporta la unidad en estado Healthy, funcionamiento OK y 0 % de desgaste utilizado. Los atributos SMART detallados no estuvieron disponibles.",
+        "actividad": "Revisar el estado SMART y la vida útil estimada",
+        "id": 6,
+        "estado": "Conforme"
+      },
+      {
+        "categoria": "Almacenamiento",
+        "observacion": "No se reportaron errores de lectura o escritura.",
+        "actividad": "Comprobar errores o sectores defectuosos",
+        "id": 7,
+        "estado": "Conforme"
+      },
+      {
+        "categoria": "Almacenamiento",
+        "observacion": "Temperatura del SSD: 36 °C. Unidad C: con 140.20 GB disponibles de 250.67 GB. Unidad E: con 224.49 GB disponibles de 224.61 GB.",
+        "actividad": "Verificar temperatura y espacio disponible",
+        "id": 8,
+        "estado": "Conforme"
+      },
+      {
+        "actividad": "Comprobar que TRIM esté activo en unidades SSD",
+        "observacion": "TRIM habilitado. NTFS DisableDeleteNotify = 0.",
+        "estado": "Conforme",
+        "id": 9,
+        "categoria": "Almacenamiento"
+      },
+      {
+        "actividad": "Verificar capacidad, velocidad y reconocimiento total",
+        "observacion": "8 GB reconocidos correctamente. El equipo cuenta con 4 GB soldados y un módulo Samsung SODIMM de 4 GB, modelo M471A5244CB0-CWE, Lenovo P/N SM30N76635. El módulo es DDR4-3200 y funciona a 2667 MT/s por limitación de la plataforma.",
+        "categoria": "Memoria RAM",
+        "id": 10,
+        "estado": "Conforme"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Se registraron 5.43 GB utilizados de 7.75 GB, equivalente al 70.1 % en reposo. La capacidad puede resultar limitada para multitarea.",
+        "categoria": "Memoria RAM",
+        "id": 11,
+        "actividad": "Revisar el consumo de memoria en reposo"
+      },
+      {
+        "categoria": "Memoria RAM",
+        "observacion": "El Diagnóstico de memoria de Windows finalizó sin detectar errores.",
+        "estado": "Conforme",
+        "id": 12,
+        "actividad": "Ejecutar una prueba de errores de memoria"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Configuración Dual Channel confirmada, con 4 GB soldados a la placa y un módulo SODIMM de 4 GB instalado en la única ranura disponible.",
+        "actividad": "Verificar configuración Single Channel o Dual Channel",
+        "id": 13,
+        "categoria": "Memoria RAM"
+      },
+      {
+        "categoria": "Refrigeración",
+        "observacion": "Ventilador operativo y sin ruidos anormales durante las pruebas.",
+        "actividad": "Revisar el funcionamiento y ruido del ventilador",
+        "id": 14,
+        "estado": "Conforme"
+      },
+      {
+        "actividad": "Medir la temperatura del procesador en reposo",
+        "observacion": "Temperatura del procesador en reposo: 54 °C. Valor aceptable para una laptop.",
+        "estado": "Conforme",
+        "id": 15,
+        "categoria": "Refrigeración"
+      },
+      {
+        "actividad": "Medir la temperatura durante una prueba de carga",
+        "observacion": "Temperatura máxima registrada: 85 °C. Valor elevado, pero aceptable durante una prueba de carga.",
+        "estado": "Conforme",
+        "id": 16,
+        "categoria": "Refrigeración"
+      },
+      {
+        "actividad": "Verificar si existe reducción térmica de rendimiento",
+        "observacion": "",
+        "categoria": "Refrigeración",
+        "id": 17,
+        "estado": "No aplica"
+      },
+      {
+        "categoria": "Batería y alimentación",
+        "observacion": "Presencia de leve abombado.",
+        "actividad": "Revisar el estado físico de la batería",
+        "id": 18,
+        "estado": "Conforme"
+      },
+      {
+        "categoria": "Batería y alimentación",
+        "observacion": "Capacidad de diseño: 35,300 mWh. Capacidad de carga completa: 30,880 mWh. Salud estimada: 87.5 %.",
+        "estado": "Conforme",
+        "id": 19,
+        "actividad": "Comparar capacidad actual y capacidad de diseño"
+      },
+      {
+        "actividad": "Revisar ciclos de carga y porcentaje de desgaste",
+        "observacion": "La batería presenta 12.5 % de desgaste y registra 1051 ciclos de carga. Conserva una capacidad adecuada, aunque evidencia un uso considerable.",
+        "estado": "Observación",
+        "id": 20,
+        "categoria": "Batería y alimentación"
+      },
+      {
+        "actividad": "Probar cargador, conector y estabilidad de carga",
+        "observacion": "Sin novedad",
+        "estado": "Conforme",
+        "id": 21,
+        "categoria": "Batería y alimentación"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "",
+        "actividad": "Probar pantalla, brillo y estado de las bisagras",
+        "id": 22,
+        "categoria": "Componentes"
+      },
+      {
+        "categoria": "Componentes",
+        "observacion": "",
+        "actividad": "Probar teclado y touchpad",
+        "id": 23,
+        "estado": "Conforme"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "",
+        "actividad": "Probar cámara, micrófono, parlantes y audífonos",
+        "id": 24,
+        "categoria": "Componentes"
+      },
+      {
+        "actividad": "Probar puertos USB, HDMI, Ethernet y lector de tarjetas",
+        "observacion": "",
+        "estado": "Conforme",
+        "id": 25,
+        "categoria": "Componentes"
+      },
+      {
+        "actividad": "Probar conexiones WiFi y Bluetooth",
+        "observacion": "",
+        "categoria": "Componentes",
+        "id": 26,
+        "estado": "Conforme"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Equipo en buen estado físico general. Presenta rayaduras superficiales mínimas en la carcasa. ",
+        "actividad": "Revisar carcasa, tornillos y patas de goma",
+        "id": 27,
+        "categoria": "Componentes"
+      },
+      {
+        "categoria": "Limpieza física",
+        "observacion": "",
+        "actividad": "Limpiar carcasa, pantalla, teclado y touchpad",
+        "id": 28,
+        "estado": "Conforme"
+      },
+      {
+        "actividad": "Retirar polvo de ventiladores, rejillas y disipadores",
+        "observacion": "Limpieza de ventiladores",
+        "estado": "Conforme",
+        "id": 29,
+        "categoria": "Limpieza física"
+      },
+      {
+        "categoria": "Limpieza física",
+        "observacion": "",
+        "actividad": "Revisar conexiones, cables y tornillos internos",
+        "id": 30,
+        "estado": "Conforme"
+      },
+      {
+        "categoria": "Limpieza física",
+        "observacion": "Cambio de pasta térmica",
+        "estado": "Conforme",
+        "id": 31,
+        "actividad": "Revisar la condición de la pasta térmica"
+      },
+      {
+        "categoria": "Software",
+        "observacion": "Se encontró pendiente Windows 11 versión 25H2 y se registraron errores previos de instalación en Windows Update.",
+        "estado": "Observación",
+        "id": 32,
+        "actividad": "Instalar actualizaciones pendientes del sistema operativo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "",
+        "actividad": "Actualizar controladores desde fuentes oficiales",
+        "id": 33,
+        "categoria": "Software"
+      },
+      {
+        "categoria": "Software",
+        "observacion": "",
+        "estado": "No aplica",
+        "id": 34,
+        "actividad": "Revisar actualizaciones de BIOS o firmware"
+      },
+      {
+        "categoria": "Software",
+        "observacion": "Se desinstaló Whatsapp Outdate, se aconseja desinstalar Whatsapp y usarlo en el navegador, ya que el aplicativo ralentiza la PC",
+        "actividad": "Desinstalar programas innecesarios o duplicados",
+        "id": 35,
+        "estado": "Observación"
+      },
+      {
+        "actividad": "Desactivar aplicaciones innecesarias del inicio",
+        "observacion": "Se detectaron ocho entradas de inicio. Se han desactivado al inicio.",
+        "estado": "Observación",
+        "id": 36,
+        "categoria": "Software"
+      },
+      {
+        "actividad": "Limpiar archivos temporales y liberar espacio",
+        "observacion": "",
+        "categoria": "Software",
+        "id": 37,
+        "estado": "Conforme"
+      },
+      {
+        "actividad": "Comprobar y reparar archivos del sistema",
+        "observacion": "",
+        "estado": "Conforme",
+        "id": 38,
+        "categoria": "Software"
+      },
+      {
+        "categoria": "Software",
+        "observacion": "",
+        "estado": "No aplica",
+        "id": 39,
+        "actividad": "Revisar configuración de energía y memoria virtual"
+      },
+      {
+        "actividad": "Confirmar que el antivirus y el firewall estén activos",
+        "observacion": "",
+        "categoria": "Seguridad",
+        "id": 40,
+        "estado": "Conforme"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "",
+        "categoria": "Seguridad",
+        "id": 41,
+        "actividad": "Ejecutar un análisis completo de amenazas"
+      },
+      {
+        "actividad": "Revisar extensiones y aplicaciones sospechosas",
+        "observacion": "",
+        "categoria": "Seguridad",
+        "id": 42,
+        "estado": "Conforme"
+      },
+      {
+        "categoria": "Pruebas finales",
+        "observacion": "24 s",
+        "estado": "Conforme",
+        "id": 43,
+        "actividad": "Medir nuevamente el tiempo de encendido"
+      },
+      {
+        "categoria": "Pruebas finales",
+        "observacion": "CPU promedio de 4,2 %, RAM en 75 % y disco en 0 %. CPU y disco presentan valores normales, pero el consumo de RAM continúa elevado.",
+        "estado": "Conforme",
+        "id": 44,
+        "actividad": "Comparar uso de CPU, RAM y disco en reposo"
+      },
+      {
+        "categoria": "Pruebas finales",
+        "observacion": "",
+        "estado": "Conforme",
+        "id": 45,
+        "actividad": "Revisar nuevamente las temperaturas"
+      },
+      {
+        "actividad": "Ejecutar una prueba corta de estabilidad",
+        "observacion": "",
+        "estado": "Conforme",
+        "id": 46,
+        "categoria": "Pruebas finales"
+      },
+      {
+        "categoria": "Pruebas finales",
+        "observacion": "",
+        "estado": "Conforme",
+        "id": 47,
+        "actividad": "Confirmar el funcionamiento de periféricos y conexiones"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "",
+        "categoria": "Pruebas finales",
+        "id": 48,
+        "actividad": "Verificar la apertura de los programas principales"
+      }
+    ],
+    "updatedAt": "2026-07-20T04:30:30.955000+00:00",
+    "cliente": {
+      "direccion": "Ludeña & Asociados, S/N, 090602 Guayaquil",
+      "ruc": "0992922214001",
+      "nombre": "LUDEÑA & ASOCIADOS LUDASOCI C. LTDA.",
+      "telefono": "(04) 207-5050",
+      "ciudad": "Guayaquil"
+    },
+    "hallazgos": [
+      "El SSD SK Hynix NVMe presenta estado saludable, funcionamiento normal y 0 % de desgaste reportado.",
+      "El equipo reconoce 7,75 GB de los 8 GB de memoria RAM instalados.",
+      "La memoria funciona en Dual Channel mediante 4 GB soldados y un módulo Samsung de 4 GB instalado en el slot SODIMM.",
+      "El consumo de memoria RAM permanece elevado, con 5,81 GB utilizados, equivalente al 75 % en reposo.",
+      "La prueba de memoria de Windows no detectó errores.",
+      "El tiempo de encendido se redujo de 50 a 24 segundos.",
+      "El uso de CPU en reposo disminuyó de 30 % a 4,2 %.",
+      "La actividad del disco en reposo disminuyó de 1 % a 0 %.",
+      "La temperatura del procesador en reposo disminuyó de 54 °C a 48 °C.",
+      "La temperatura máxima disminuyó de 85 °C a 70 °C durante la prueba de carga.",
+      "La unidad C dispone de 151,74 GB libres, frente a los 133 GB registrados inicialmente.",
+      "La batería conserva aproximadamente el 88 % de su capacidad de diseño y registra 1051 ciclos de carga.",
+      "Se encontraron registros históricos de errores de Windows Update, DCOM, Eventlog, TPM y SysMain, sin evidencia de una falla crítica actual.",
+      "La carcasa presenta rayaduras superficiales mínimas que no afectan el funcionamiento del equipo."
+    ],
+    "recomendaciones": [
+      "Considerar la ampliación de memoria RAM reemplazando el módulo SODIMM de 4 GB por uno de 8 GB compatible, para alcanzar el máximo oficial de 12 GB.",
+      "Mantener desactivado el inicio automático de aplicaciones que el usuario no necesite, especialmente Teams, Edge y AnyDesk.",
+      "Conservar activos Windows Defender, la protección en tiempo real y el firewall.",
+      "Ejecutar periódicamente análisis completos de seguridad.",
+      "Mantener al menos el 20 % de espacio libre en la unidad C.",
+      "Realizar mantenimiento físico preventivo cada 6 a 12 meses, dependiendo del ambiente de uso.",
+      "Mantener Windows, los controladores y las aplicaciones actualizados desde fuentes oficiales.",
+      "Supervisar la autonomía de la batería debido a sus 1051 ciclos de carga y considerar su reemplazo si presenta apagados repentinos o una reducción considerable de duración.",
+      "Mantener respaldada la información importante del usuario.",
+      "No instalar limpiadores del registro, optimizadores ni actualizadores de controladores de terceros."
+    ],
+    "fecha": "2026-07-19",
+    "tecnicoResponsable": "Jhonston Benjumea",
+    "diagnosticoInicial": {
+      "estadoDisco": "SSD NVMe Healthy · funcionamiento OK · 36 °C · 0 % de desgaste reportado",
+      "usoCpu": "2.8 % promedio en reposo",
+      "temperaturaReposo": "54 °C",
+      "espacioDisponible": "C: 140.20 GB de 250.67 GB · E: 224.49 GB de 224.61 GB",
+      "condicionFisica": "Equipo en buen estado físico general, con rayaduras superficiales mínimas en la carcasa.",
+      "temperaturaMaxima": "85 °C",
+      "estadoBateria": "87.5 % de salud · 12.5 % de desgaste · 1051 ciclos de carga",
+      "usoRam": "5.43 GB de 7.75 GB · 70.1 %",
+      "tiempoEncendido": "50 segundos",
+      "usoDisco": "0 % promedio en reposo"
+    },
+    "diagnosticoFinal": {
+      "estadoDisco": "",
+      "usoCpu": "4,2 %",
+      "temperaturaReposo": "48 °C",
+      "espacioDisponible": "151,74 GB",
+      "condicionFisica": "",
+      "temperaturaMaxima": "70 °C",
+      "estadoBateria": "",
+      "usoRam": "5,81 GB",
+      "tiempoEncendido": "24 s",
+      "usoDisco": "0 %"
+    },
+    "numero": "MANT-00000001",
+    "estado": "En revisión",
+    "observaciones": ""
+  },
+  {
+    "id": "MANT-00000002",
+    "conclusion": "Después del mantenimiento preventivo, el equipo se encuentra operativo y estable. Se realizó limpieza general, cambio de pasta térmica, actualización de BIOS y controladores, reparación de archivos del sistema, optimización del inicio, eliminación de eScan y activación de Microsoft Defender y el firewall.\n\nEl tiempo de encendido disminuyó de 57 a 40 segundos. La temperatura en reposo bajó de 54 °C a 50 °C y la temperatura máxima se redujo de 82 °C a 75 °C. El SSD, la memoria RAM, los periféricos, los puertos y las conexiones funcionan correctamente. El equipo completó la prueba de estabilidad y varios reinicios sin volver a presentar el código HP 5.3.\n\nEl estado general se clasifica como operativo con observaciones debido al ligero abombamiento de la batería, el botón dañado del touchpad, la poca firmeza de las bisagras y los soportes de goma inferiores sueltos.",
+    "equipo": {
+      "numeroSerie": "5CG8172F8X",
+      "procesador": "Intel Pentium Silver N5000 · 4 núcleos · 4 procesadores lógicos",
+      "almacenamiento": "SSD SATA Kingston A400 SA400S37480G · 447.13 GB",
+      "modelo": "HP Laptop 14-ck0xxx",
+      "marca": "HP",
+      "accesorios": "",
+      "tipo": "Laptop",
+      "cargadorEntregado": false,
+      "sistemaOperativo": "Microsoft Windows 11 Pro de 64 bits · versión 10.0.26200",
+      "ram": "8 GB DDR4 Samsung M471A1K43CB1-CRC · 2400 MT/s · un módulo de 8 GB instalado en el único slot disponible · Single Channel"
+    },
+    "accionesRealizadas": "Se realizó limpieza general interna y externa del equipo.\nSe limpió la carcasa, pantalla, teclado y touchpad.\nSe limpió el disipador, las rejillas y el sistema pasivo de refrigeración.\nSe retiró la pasta térmica anterior y se aplicó pasta térmica nueva.\nSe instalaron actualizaciones de Windows, Microsoft Defender, controladores y componentes HP.\nSe actualizó la BIOS de la versión F.64 a la versión F.82.\nSe desinstaló eScan y se activaron Microsoft Defender, la protección en tiempo real y el firewall.\nSe ejecutó un análisis rápido de amenazas sin detectar problemas.\nSe revisaron las extensiones del navegador sin encontrar elementos sospechosos.\nSe desinstalaron programas innecesarios y se desactivaron aplicaciones innecesarias del inicio.\nSe eliminaron archivos temporales y se liberó espacio en la unidad C.\nSe ejecutaron DISM y SFC sin detectar problemas pendientes.\nSe comprobó el disco sin detectar errores.\nSe ejecutó la prueba de memoria sin detectar errores.\nSe probaron el cargador, periféricos, puertos y conexiones.\nSe ejecutó una prueba final de estabilidad sin bloqueos ni reinicios.",
+    "checklist": [
+      {
+        "estado": "Conforme",
+        "observacion": "El usuario solicitó mantenimiento preventivo y reportó lentitud general del equipo.",
+        "categoria": "Diagnóstico inicial",
+        "id": 1,
+        "actividad": "Consultar los problemas reportados por el usuario"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Tiempo de encendido inicial: 57 segundos.",
+        "categoria": "Diagnóstico inicial",
+        "id": 2,
+        "actividad": "Registrar el tiempo de encendido antes del mantenimiento"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "CPU promedio: 7.4 %. RAM utilizada: 3.84 GB de 7.77 GB, equivalente al 49.4 %. Actividad del disco: 0 %. Los valores se encuentran dentro de rangos normales en reposo.",
+        "categoria": "Diagnóstico inicial",
+        "id": 3,
+        "actividad": "Revisar el uso de CPU, memoria RAM y disco en reposo"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Se confirmó que la información del usuario no cuenta con un respaldo. Se recomienda respaldar los archivos importantes antes de realizar cambios que puedan afectar el sistema.",
+        "categoria": "Diagnóstico inicial",
+        "id": 4,
+        "actividad": "Confirmar la existencia de un respaldo de la información"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Unidad SSD SATA Kingston A400 SA400S37480G, con capacidad física de 447.13 GB.",
+        "categoria": "Almacenamiento",
+        "id": 5,
+        "actividad": "Identificar si la unidad es HDD, SSD SATA o SSD NVMe"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Windows reporta la unidad en estado Healthy y funcionamiento OK. SMART no predice fallas y el SSD registra 2226 horas de funcionamiento. El 0 % utilizado reportado debe tomarse como referencia del controlador, no como una medición SMART completa de desgaste.",
+        "categoria": "Almacenamiento",
+        "id": 6,
+        "actividad": "Revisar el estado SMART y la vida útil estimada"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "SMART no predice fallas en el SSD interno y la comprobación del disco finalizó sin detectar errores. El evento NTFS registrado en D: correspondía posiblemente al USB General UDisk utilizado para el diagnóstico.",
+        "categoria": "Almacenamiento",
+        "id": 7,
+        "actividad": "Comprobar errores o sectores defectuosos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Temperatura del SSD: 26 °C. Unidad C: con 348.76 GB disponibles de 446.22 GB, equivalente al 78.2 % libre.",
+        "categoria": "Almacenamiento",
+        "id": 8,
+        "actividad": "Verificar temperatura y espacio disponible"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "TRIM habilitado. NTFS DisableDeleteNotify = 0.",
+        "categoria": "Almacenamiento",
+        "id": 9,
+        "actividad": "Comprobar que TRIM esté activo en unidades SSD"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "8 GB instalados y 7.77 GB reconocidos por Windows. Se detectó un módulo Samsung M471A1K43CB1-CRC de 8 GB funcionando a 2400 MT/s.",
+        "categoria": "Memoria RAM",
+        "id": 10,
+        "actividad": "Verificar capacidad, velocidad y reconocimiento total"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se registraron 3.84 GB utilizados de 7.77 GB, equivalente al 49.4 % en reposo. Consumo adecuado para la capacidad instalada.",
+        "categoria": "Memoria RAM",
+        "id": 11,
+        "actividad": "Revisar el consumo de memoria en reposo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "La prueba de memoria finalizó sin detectar errores.",
+        "categoria": "Memoria RAM",
+        "id": 12,
+        "actividad": "Ejecutar una prueba de errores de memoria"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El equipo cuenta con un único slot de memoria RAM, ocupado por un módulo Samsung de 8 GB. La memoria funciona en configuración Single Channel.",
+        "categoria": "Memoria RAM",
+        "id": 13,
+        "actividad": "Verificar configuración Single Channel o Dual Channel"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "El equipo no incorpora ventilador. Utiliza un sistema de refrigeración pasiva, por lo que no corresponde realizar una prueba de funcionamiento o ruido de ventilador.",
+        "categoria": "Refrigeración",
+        "id": 14,
+        "actividad": "Revisar el funcionamiento y ruido del ventilador"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Temperatura inicial del procesador en reposo: 54 °C. El equipo utiliza refrigeración pasiva sin ventilador.",
+        "categoria": "Refrigeración",
+        "id": 15,
+        "actividad": "Medir la temperatura del procesador en reposo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Temperatura máxima inicial registrada durante la prueba de carga: 82 °C. El valor es elevado, pero se mantiene dentro de un rango operativo para una prueba de carga; debe compararse después del mantenimiento.",
+        "categoria": "Refrigeración",
+        "id": 16,
+        "actividad": "Medir la temperatura durante una prueba de carga"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "No se consideró necesaria una comprobación específica de Thermal Throttling. El equipo completó la prueba de carga y estabilidad con una temperatura máxima de 75 °C, sin bloqueos ni reinicios.",
+        "categoria": "Refrigeración",
+        "id": 17,
+        "actividad": "Verificar si existe reducción térmica de rendimiento"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Durante la inspección física se identificó un ligero abombamiento de la batería. Aunque la deformación no es fuerte, se recomienda evaluar su reemplazo preventivo y vigilar cualquier aumento de volumen, calentamiento anormal, olor o presión sobre la carcasa.",
+        "categoria": "Batería y alimentación",
+        "id": 18,
+        "actividad": "Revisar el estado físico de la batería"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Battery Report muestra 18,272 mWh tanto como capacidad de diseño como de carga completa, lo que produciría un 100 % nominal. Sin embargo, el historial registra un máximo de 24,036 mWh y valores recientes de 20,778 mWh, por lo que el reporte es inconsistente. Frente al máximo histórico, la capacidad actual equivale aproximadamente al 76.0 %. No debe registrarse 100 % de salud como valor concluyente.",
+        "categoria": "Batería y alimentación",
+        "id": 19,
+        "actividad": "Comparar capacidad actual y capacidad de diseño"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "El controlador no reporta el conteo de ciclos. Tomando únicamente como referencia el máximo histórico de 24,036 mWh y la capacidad actual de 18,272 mWh, la reducción aproximada es de 24.0 %. El desgaste y la salud exactos no pueden determinarse de forma confiable; revisar autonomía real y condición física.",
+        "categoria": "Batería y alimentación",
+        "id": 20,
+        "actividad": "Revisar ciclos de carga y porcentaje de desgaste"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El cargador, el conector y la estabilidad de la carga funcionan correctamente.",
+        "categoria": "Batería y alimentación",
+        "id": 21,
+        "actividad": "Probar cargador, conector y estabilidad de carga"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "La pantalla funciona, pero las bisagras no se encuentran firmes y permiten que la pantalla se vaya hacia atrás. Se recomienda revisar y ajustar sus anclajes para evitar daños en la carcasa o el cableado de pantalla.",
+        "categoria": "Componentes",
+        "id": 22,
+        "actividad": "Probar pantalla, brillo y estado de las bisagras"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Se identificó un botón físico del touchpad dañado. Pendiente confirmar el funcionamiento del movimiento del cursor, gestos y botón restante.",
+        "categoria": "Componentes",
+        "id": 23,
+        "actividad": "Probar teclado y touchpad"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Cámara, micrófono, parlantes y salida de audífonos probados correctamente.",
+        "categoria": "Componentes",
+        "id": 24,
+        "actividad": "Probar cámara, micrófono, parlantes y audífonos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Los puertos USB, HDMI, Ethernet y lector de tarjetas fueron probados y funcionan correctamente.",
+        "categoria": "Componentes",
+        "id": 25,
+        "actividad": "Probar puertos USB, HDMI, Ethernet y lector de tarjetas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "WiFi y Bluetooth fueron probados y funcionan correctamente. El diagnóstico final detectó el adaptador Realtek RTL8723DE con conexión activa.",
+        "categoria": "Componentes",
+        "id": 26,
+        "actividad": "Probar conexiones WiFi y Bluetooth"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Los soportes de goma inferiores se encuentran sueltos y sin adhesivo. Las bisagras presentan poca firmeza. Pendiente revisar tornillos y anclajes internos antes de realizar ajustes.",
+        "categoria": "Componentes",
+        "id": 27,
+        "actividad": "Revisar carcasa, tornillos y patas de goma"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se realizó limpieza de carcasa, pantalla, teclado y touchpad.",
+        "categoria": "Limpieza física",
+        "id": 28,
+        "actividad": "Limpiar carcasa, pantalla, teclado y touchpad"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El equipo no incorpora ventilador. Se realizó limpieza de rejillas, disipador y sistema pasivo de refrigeración.",
+        "categoria": "Limpieza física",
+        "id": 29,
+        "actividad": "Retirar polvo de ventiladores, rejillas y disipadores"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Hay un tornillo pegado.",
+        "categoria": "Limpieza física",
+        "id": 30,
+        "actividad": "Revisar conexiones, cables y tornillos internos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se retiró el compuesto térmico anterior, se limpiaron las superficies de contacto y se realizó el cambio de pasta térmica.",
+        "categoria": "Limpieza física",
+        "id": 31,
+        "actividad": "Revisar la condición de la pasta térmica"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se instalaron las actualizaciones de Windows, los componentes del fabricante y las tres actualizaciones pendientes de Microsoft Defender.",
+        "categoria": "Software",
+        "id": 32,
+        "actividad": "Instalar actualizaciones pendientes del sistema operativo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se actualizaron los controladores y componentes HP. Los errores 0x80240016 corresponden a intentos anteriores y no quedaron controladores pendientes ni dispositivos con advertencias.",
+        "categoria": "Software",
+        "id": 33,
+        "actividad": "Actualizar controladores desde fuentes oficiales"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "BIOS actualizada de la versión F.64 a la versión F.82, con fecha 07/08/2025. El equipo recuperó el arranque después de la incidencia con código HP 5.3.",
+        "categoria": "Software",
+        "id": 34,
+        "actividad": "Revisar actualizaciones de BIOS o firmware"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se desinstalaron programas innecesarios y se eliminó eScan junto con sus componentes anteriores. AnyDesk se conserva porque es utilizado y está autorizado por el usuario.",
+        "categoria": "Software",
+        "id": 35,
+        "actividad": "Desinstalar programas innecesarios o duplicados"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se revisaron y desactivaron las aplicaciones de inicio innecesarias. El diagnóstico continúa enumerando nueve entradas porque registra también elementos deshabilitados; se conservaron los componentes de seguridad y audio necesarios.",
+        "categoria": "Software",
+        "id": 36,
+        "actividad": "Desactivar aplicaciones innecesarias del inicio"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se eliminaron archivos temporales y residuos del sistema. El espacio disponible en C: aumentó de 348.76 GB a 351.34 GB.",
+        "categoria": "Software",
+        "id": 37,
+        "actividad": "Limpiar archivos temporales y liberar espacio"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se ejecutaron DISM y SFC y finalizaron normalmente, sin problemas pendientes. También se comprobó el disco sin detectar errores. Los eventos anteriores de MWAgent y eScan correspondían al antivirus desinstalado.",
+        "categoria": "Software",
+        "id": 38,
+        "actividad": "Comprobar y reparar archivos del sistema"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "",
+        "categoria": "Software",
+        "id": 39,
+        "actividad": "Revisar configuración de energía y memoria virtual"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Microsoft Defender, la protección en tiempo real, el antispyware y el firewall de Windows quedaron activos.",
+        "categoria": "Seguridad",
+        "id": 40,
+        "actividad": "Confirmar que el antivirus y el firewall estén activos"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Se ejecutó un análisis rápido de amenazas sin detectar problemas. No se realizó un análisis completo, por lo que se recomienda programarlo posteriormente.",
+        "categoria": "Seguridad",
+        "id": 41,
+        "actividad": "Ejecutar un análisis completo de amenazas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se revisaron las extensiones del navegador sin detectar elementos sospechosos. eScan fue eliminado y AnyDesk es reconocido y autorizado por el usuario.",
+        "categoria": "Seguridad",
+        "id": 42,
+        "actividad": "Revisar extensiones y aplicaciones sospechosas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El tiempo de encendido disminuyó de 57 a 40 segundos, obteniéndose una mejora de 17 segundos, equivalente aproximadamente al 29.8 %.",
+        "categoria": "Pruebas finales",
+        "id": 43,
+        "actividad": "Medir nuevamente el tiempo de encendido"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Resultado final: CPU promedio de 5.0 %, RAM utilizada de 4.73 GB de 7.77 GB, equivalente al 60.9 %, y disco en 0.2 %. La CPU mejoró y los valores generales permanecen dentro de rangos operativos.",
+        "categoria": "Pruebas finales",
+        "id": 44,
+        "actividad": "Comparar uso de CPU, RAM y disco en reposo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "La temperatura en reposo disminuyó de 54 °C a 50 °C y la máxima durante carga disminuyó de 82 °C a 75 °C después de la limpieza y el cambio de pasta térmica.",
+        "categoria": "Pruebas finales",
+        "id": 45,
+        "actividad": "Revisar nuevamente las temperaturas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El equipo completó la prueba corta de estabilidad sin bloqueos ni reinicios. La temperatura máxima registrada fue de 75 °C.",
+        "categoria": "Pruebas finales",
+        "id": 46,
+        "actividad": "Ejecutar una prueba corta de estabilidad"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se confirmó el funcionamiento de cámara, micrófono, parlantes, audífonos, USB, HDMI, Ethernet, lector de tarjetas, WiFi y Bluetooth. Se mantienen como observaciones físicas el botón dañado del touchpad y las bisagras con poca firmeza.",
+        "categoria": "Pruebas finales",
+        "id": 47,
+        "actividad": "Confirmar el funcionamiento de periféricos y conexiones"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Los programas principales abren y funcionan correctamente después del mantenimiento.",
+        "categoria": "Pruebas finales",
+        "id": 48,
+        "actividad": "Verificar la apertura de los programas principales"
+      }
+    ],
+    "problemasReportados": [
+      "Lentitud general",
+      "Mantenimiento Preventivo"
+    ],
+    "updatedAt": "2026-07-20T08:33:21.391000+00:00",
+    "cliente": {
+      "direccion": "Ludeña & Asociados, S/N, 090602 Guayaquil",
+      "ruc": "0992922214001",
+      "nombre": "LUDEÑA & ASOCIADOS LUDASOCI C. LTDA.",
+      "telefono": "(04) 207-5050",
+      "ciudad": "Guayaquil"
+    },
+    "hallazgos": [
+      "El SSD Kingston A400 se encuentra en estado saludable, sin fallas SMART y con una temperatura de 26 °C.",
+      "El tiempo de encendido disminuyó de 57 a 40 segundos.",
+      "El uso promedio de CPU disminuyó de 7,4 % a 5 %.",
+      "La temperatura en reposo disminuyó de 54 °C a 50 °C.",
+      "La temperatura máxima disminuyó de 82 °C a 75 °C.",
+      "El espacio disponible aumentó de 348,76 GB a 351,34 GB.",
+      "Microsoft Defender, la protección en tiempo real y el firewall quedaron activos.",
+      "La batería presenta un ligero abombamiento y una salud aproximada del 76 % frente al máximo histórico registrado.",
+      "Uno de los botones físicos del touchpad se encuentra dañado.",
+      "Las bisagras presentan poca firmeza y permiten que la pantalla se vaya hacia atrás.",
+      "Los soportes de goma inferiores están sueltos y sin adhesivo.",
+      "Después de actualizar la BIOS, el equipo completó varios reinicios sin volver a presentar el código HP 5.3."
+    ],
+    "recomendaciones": [
+      "Evaluar el reemplazo preventivo de la batería debido al ligero abombamiento.",
+      "Reparar o reemplazar el botón físico dañado del touchpad.",
+      "Revisar y ajustar los anclajes de las bisagras.",
+      "Fijar o reemplazar los soportes de goma inferiores con un adhesivo adecuado.",
+      "Crear un respaldo de los archivos importantes del usuario.",
+      "Ejecutar periódicamente un análisis completo con Microsoft Defender.",
+      "Mantener activos Microsoft Defender, la protección en tiempo real y el firewall.",
+      "Supervisar el arranque del equipo y verificar que no vuelva a presentarse el código HP 5.3.",
+      "Realizar mantenimiento preventivo periódico del sistema pasivo de refrigeración."
+    ],
+    "fecha": "2026-07-19",
+    "tecnicoResponsable": "Jhonston Benjumea",
+    "diagnosticoInicial": {
+      "estadoDisco": "SSD SATA Kingston Healthy · SMART sin falla predicha · 26 °C · 2226 horas de funcionamiento",
+      "usoCpu": "7.4 % promedio en reposo",
+      "temperaturaReposo": "54 °C",
+      "espacioDisponible": "C: 348.76 GB de 446.22 GB · 78.2 % libre",
+      "condicionFisica": "Botón del touchpad dañado, bisagras con poca firmeza que permiten que la pantalla se vaya hacia atrás, soportes de goma inferiores sueltos y sin adhesivo, y batería ligeramente abombada. El equipo utiliza refrigeración pasiva sin ventilador. Se realizó cambio de pasta térmica.",
+      "temperaturaMaxima": "82 °C",
+      "estadoBateria": "Reporte inconsistente: capacidad de diseño y carga completa actuales de 18,272 mWh · máximo histórico registrado de 24,036 mWh · salud aproximada frente al máximo histórico: 76.0 % · ciclos no disponibles",
+      "usoRam": "3.84 GB de 7.77 GB · 49.4 %",
+      "tiempoEncendido": "57 segundos",
+      "usoDisco": "0 % promedio en reposo"
+    },
+    "diagnosticoFinal": {
+      "estadoDisco": "",
+      "usoCpu": "5 %",
+      "temperaturaReposo": "50 °C",
+      "espacioDisponible": "351,34 GB",
+      "condicionFisica": "",
+      "temperaturaMaxima": "75 °C",
+      "estadoBateria": "",
+      "usoRam": "4,73 GB de 7,77 GB, equivalente al 60,9 %",
+      "tiempoEncendido": "40 segundos",
+      "usoDisco": "0,2 %"
+    },
+    "numero": "MANT-00000002",
+    "estado": "Finalizado",
+    "observaciones": "El diagnóstico automático clasificó el equipo como crítico debido a eventos históricos y al apagado forzado ocurrido durante la incidencia de arranque. Esta clasificación no representa una falla crítica actual.\n\nDespués de actualizar la BIOS a la versión F.82, el equipo completó varios reinicios sin volver a presentar el código HP 5.3. AnyDesk es utilizado y autorizado por el usuario. Se realizó un análisis rápido de amenazas sin detectar problemas; se recomienda ejecutar periódicamente un análisis completo."
+  },
+  {
+    "id": "MANT-00000003",
+    "conclusion": "Después del mantenimiento preventivo, el equipo se encuentra operativo y estable. Se realizó limpieza interna, limpieza del ventilador, cambio de pasta térmica, eliminación de archivos temporales, optimización del inicio y corrección del problema visual de la búsqueda de Windows. El tiempo de encendido disminuyó de 56 a 32 segundos, la temperatura en reposo bajó de 53 °C a 50 °C y la temperatura máxima se redujo de 85 °C a 82 °C. El SSD mantiene un estado SMART saludable y el equipo funciona sin bloqueos ni reinicios. El estado general se clasifica como conforme con observaciones debido al daño de la tecla correspondiente a la letra N, por lo que se aconseja reemplazar el teclado completo; además del desgaste de la batería, el espacio reducido disponible en el SSD, la falta de respaldo y las pruebas no confirmadas.",
+    "equipo": {
+      "numeroSerie": "",
+      "procesador": "Intel Core i5-1235U",
+      "almacenamiento": "SSD NVMe de 512 GB",
+      "modelo": "ProBook 440 G9",
+      "marca": "HP",
+      "accesorios": "Cargador",
+      "tipo": "Laptop",
+      "cargadorEntregado": true,
+      "sistemaOperativo": "Windows 10 Pro",
+      "ram": "16 GB"
+    },
+    "problemasReportados": [
+      "Mantenimiento Preventivo"
+    ],
+    "accionesRealizadas": "Se realizó limpieza interna general del equipo.\nSe limpió el ventilador, las rejillas y el sistema de refrigeración.\nSe retiró la pasta térmica anterior y se aplicó pasta térmica nueva al procesador.\nSe eliminaron archivos temporales y se optimizaron las aplicaciones de inicio de Windows.\nSe revisó el estado SMART del SSD, el cual se mantiene saludable.\nSe ejecutó DISM correctamente, sin detectar daños en la imagen de Windows.\nSe corrigió el problema de visualización de textos en la búsqueda de Windows.\nSe comprobaron la cámara, los parlantes y los puertos USB.\nSe revisó el estado físico de la batería y se confirmó que no presenta abombamiento.\nSe realizaron pruebas finales de funcionamiento y estabilidad, sin bloqueos ni reinicios.",
+    "checklist": [
+      {
+        "categoria": "Diagnóstico inicial",
+        "observacion": "Mantenimiento preventivo solicitado para mejorar el rendimiento general del equipo.",
+        "estado": "Conforme",
+        "id": 1,
+        "actividad": "Consultar los problemas reportados por el usuario"
+      },
+      {
+        "actividad": "Registrar el tiempo de encendido antes del mantenimiento",
+        "observacion": "Tiempo de encendido inicial: 56 segundos.",
+        "categoria": "Diagnóstico inicial",
+        "id": 2,
+        "estado": "Conforme"
+      },
+      {
+        "actividad": "Revisar el uso de CPU, memoria RAM y disco en reposo",
+        "observacion": "El diagnóstico automático registró funcionamiento estable. Memoria utilizada inicialmente: 6,99 GB de 16 GB, equivalente al 44,7 %.",
+        "estado": "Conforme",
+        "id": 3,
+        "categoria": "Diagnóstico inicial"
+      },
+      {
+        "actividad": "Confirmar la existencia de un respaldo de la información",
+        "observacion": "El usuario no dispone de respaldo de sus archivos importantes.",
+        "categoria": "Diagnóstico inicial",
+        "id": 4,
+        "estado": "Observación"
+      },
+      {
+        "actividad": "Identificar si la unidad es HDD, SSD SATA o SSD NVMe",
+        "observacion": "Unidad SSD NVMe de 512 GB.",
+        "estado": "Conforme",
+        "id": 5,
+        "categoria": "Almacenamiento"
+      },
+      {
+        "actividad": "Revisar el estado SMART y la vida útil estimada",
+        "observacion": "El diagnóstico reporta el SSD en estado Healthy.",
+        "estado": "Conforme",
+        "id": 6,
+        "categoria": "Almacenamiento"
+      },
+      {
+        "actividad": "Comprobar errores o sectores defectuosos",
+        "observacion": "",
+        "estado": "No aplica",
+        "id": 7,
+        "categoria": "Almacenamiento"
+      },
+      {
+        "categoria": "Almacenamiento",
+        "observacion": "Espacio libre inicial: 54,51 GB. Espacio libre final: 54,88 GB, aproximadamente 11,5 % de la unidad.",
+        "estado": "Observación",
+        "id": 8,
+        "actividad": "Verificar temperatura y espacio disponible"
+      },
+      {
+        "categoria": "Almacenamiento",
+        "observacion": "No se confirmó una comprobación específica de TRIM.",
+        "estado": "Pendiente",
+        "id": 9,
+        "actividad": "Comprobar que TRIM esté activo en unidades SSD"
+      },
+      {
+        "actividad": "Verificar capacidad, velocidad y reconocimiento total",
+        "observacion": "El sistema reconoce 16 GB de memoria RAM y funcionó normalmente durante el mantenimiento.",
+        "categoria": "Memoria RAM",
+        "id": 10,
+        "estado": "Conforme"
+      },
+      {
+        "categoria": "Memoria RAM",
+        "observacion": "Uso inicial: 6,99 GB, equivalente al 44,7 %. Uso final: 6,60 GB, equivalente al 42,2 %.",
+        "estado": "Conforme",
+        "id": 11,
+        "actividad": "Revisar el consumo de memoria en reposo"
+      },
+      {
+        "actividad": "Ejecutar una prueba de errores de memoria",
+        "observacion": "No se realizó una prueba especializada de memoria. No se observaron fallas durante el uso y las pruebas de estabilidad.",
+        "categoria": "Memoria RAM",
+        "id": 12,
+        "estado": "No aplica"
+      },
+      {
+        "categoria": "Memoria RAM",
+        "observacion": "",
+        "estado": "No aplica",
+        "id": 13,
+        "actividad": "Verificar configuración Single Channel o Dual Channel"
+      },
+      {
+        "actividad": "Revisar el funcionamiento y ruido del ventilador",
+        "observacion": "El ventilador funciona normalmente. Se realizó limpieza interna y del ventilador.",
+        "categoria": "Refrigeración",
+        "id": 14,
+        "estado": "Conforme"
+      },
+      {
+        "actividad": "Medir la temperatura del procesador en reposo",
+        "observacion": "Temperatura inicial en reposo: 53 °C. Temperatura final en reposo: 50 °C.",
+        "categoria": "Refrigeración",
+        "id": 15,
+        "estado": "Conforme"
+      },
+      {
+        "categoria": "Refrigeración",
+        "observacion": "Temperatura máxima inicial: 85 °C. Temperatura máxima final: 82 °C.",
+        "estado": "Conforme",
+        "id": 16,
+        "actividad": "Medir la temperatura durante una prueba de carga"
+      },
+      {
+        "categoria": "Refrigeración",
+        "observacion": "",
+        "estado": "No aplica",
+        "id": 17,
+        "actividad": "Verificar si existe reducción térmica de rendimiento"
+      },
+      {
+        "categoria": "Batería y alimentación",
+        "observacion": "Batería físicamente normal, sin abombamiento.",
+        "estado": "Conforme",
+        "id": 18,
+        "actividad": "Revisar el estado físico de la batería"
+      },
+      {
+        "actividad": "Comparar capacidad actual y capacidad de diseño",
+        "observacion": "Capacidad de diseño: 42.772 mWh. Capacidad de carga completa final: 32.296 mWh. Salud estimada: 75,5 %.",
+        "estado": "Observación",
+        "id": 19,
+        "categoria": "Batería y alimentación"
+      },
+      {
+        "actividad": "Revisar ciclos de carga y porcentaje de desgaste",
+        "observacion": "La batería registra 793 ciclos y un desgaste estimado de 24,5 %.",
+        "estado": "Observación",
+        "id": 20,
+        "categoria": "Batería y alimentación"
+      },
+      {
+        "actividad": "Probar cargador, conector y estabilidad de carga",
+        "observacion": "El cargador se encuentra en buen estado y funciona normalmente.",
+        "estado": "Conforme",
+        "id": 21,
+        "categoria": "Batería y alimentación"
+      },
+      {
+        "actividad": "Probar pantalla, brillo y estado de las bisagras",
+        "observacion": "Carcasa y bisagras en buen estado. No se reportaron fallas de pantalla o brillo.",
+        "categoria": "Componentes",
+        "id": 22,
+        "estado": "Conforme"
+      },
+      {
+        "actividad": "Probar teclado y touchpad",
+        "observacion": "El teclado presenta daño en la tecla correspondiente a la letra N. Se aconseja realizar el cambio completo del teclado. No se reportaron fallas en el touchpad.",
+        "categoria": "Componentes",
+        "id": 23,
+        "estado": "Observación"
+      },
+      {
+        "categoria": "Componentes",
+        "observacion": "Cámara y parlantes comprobados y funcionando. Micrófono y salida de audífonos no fueron confirmados.",
+        "estado": "Observación",
+        "id": 24,
+        "actividad": "Probar cámara, micrófono, parlantes y audífonos"
+      },
+      {
+        "actividad": "Probar puertos USB, HDMI, Ethernet y lector de tarjetas",
+        "observacion": "Puertos USB comprobados y funcionando. HDMI, Ethernet y lector de tarjetas no fueron confirmados.",
+        "estado": "Observación",
+        "id": 25,
+        "categoria": "Componentes"
+      },
+      {
+        "categoria": "Componentes",
+        "observacion": "Conexiones WiFi y Bluetooth verificadas, sin novedades.",
+        "estado": "Conforme",
+        "id": 26,
+        "actividad": "Probar conexiones WiFi y Bluetooth"
+      },
+      {
+        "categoria": "Componentes",
+        "observacion": "Carcasa en buen estado. No se reportaron novedades en tornillos o patas de goma.",
+        "estado": "Conforme",
+        "id": 27,
+        "actividad": "Revisar carcasa, tornillos y patas de goma"
+      },
+      {
+        "actividad": "Limpiar carcasa, pantalla, teclado y touchpad",
+        "observacion": "Se realizó limpieza general como parte del mantenimiento preventivo.",
+        "categoria": "Limpieza física",
+        "id": 28,
+        "estado": "Conforme"
+      },
+      {
+        "categoria": "Limpieza física",
+        "observacion": "Se realizó limpieza interna y del ventilador.",
+        "estado": "Conforme",
+        "id": 29,
+        "actividad": "Retirar polvo de ventiladores, rejillas y disipadores"
+      },
+      {
+        "actividad": "Revisar conexiones, cables y tornillos internos",
+        "observacion": "Se realizó revisión general durante la limpieza interna, sin novedades reportadas.",
+        "categoria": "Limpieza física",
+        "id": 30,
+        "estado": "Conforme"
+      },
+      {
+        "categoria": "Limpieza física",
+        "observacion": "Se reemplazó la pasta térmica del procesador.",
+        "estado": "Conforme",
+        "id": 31,
+        "actividad": "Revisar la condición de la pasta térmica"
+      },
+      {
+        "actividad": "Instalar actualizaciones pendientes del sistema operativo",
+        "observacion": "El sistema fue actualizado. Sin embargo, Windows 10 ya no recibe nuevas actualizaciones de soporte general, por lo que se recomienda actualizar el sistema operativo.",
+        "estado": "Observación",
+        "id": 32,
+        "categoria": "Software"
+      },
+      {
+        "actividad": "Actualizar controladores desde fuentes oficiales",
+        "observacion": "Controladores actualizados desde fuentes oficiales.",
+        "estado": "Conforme",
+        "id": 33,
+        "categoria": "Software"
+      },
+      {
+        "actividad": "Revisar actualizaciones de BIOS o firmware",
+        "observacion": "BIOS y firmware revisados y actualizados.",
+        "estado": "Conforme",
+        "id": 34,
+        "categoria": "Software"
+      },
+      {
+        "actividad": "Desinstalar programas innecesarios o duplicados",
+        "observacion": "Se eliminaron programas innecesarios o duplicados. McAfee permanece instalado como solución antivirus.",
+        "categoria": "Software",
+        "id": 35,
+        "estado": "Conforme"
+      },
+      {
+        "actividad": "Desactivar aplicaciones innecesarias del inicio",
+        "observacion": "Se optimizó el inicio de Windows.",
+        "estado": "Conforme",
+        "id": 36,
+        "categoria": "Software"
+      },
+      {
+        "actividad": "Limpiar archivos temporales y liberar espacio",
+        "observacion": "Se eliminaron archivos temporales. El espacio libre aumentó de 54,51 GB a 54,88 GB.",
+        "categoria": "Software",
+        "id": 37,
+        "estado": "Conforme"
+      },
+      {
+        "actividad": "Comprobar y reparar archivos del sistema",
+        "observacion": "DISM terminó correctamente y no reportó daños. SFC no pudo iniciarse porque la Protección de recursos de Windows no logró iniciar el servicio de reparación.",
+        "categoria": "Software",
+        "id": 38,
+        "estado": "Observación"
+      },
+      {
+        "actividad": "Revisar configuración de energía y memoria virtual",
+        "observacion": "",
+        "estado": "No aplica",
+        "id": 39,
+        "categoria": "Software"
+      },
+      {
+        "categoria": "Seguridad",
+        "observacion": "McAfee permanece instalado como antivirus. No se confirmó expresamente el estado del firewall.",
+        "estado": "Observación",
+        "id": 40,
+        "actividad": "Confirmar que el antivirus y el firewall estén activos"
+      },
+      {
+        "actividad": "Ejecutar un análisis completo de amenazas",
+        "observacion": "Se ejecutó el análisis de amenazas y no se detectaron amenazas.",
+        "categoria": "Seguridad",
+        "id": 41,
+        "estado": "Conforme"
+      },
+      {
+        "actividad": "Revisar extensiones y aplicaciones sospechosas",
+        "observacion": "Se revisaron las extensiones y aplicaciones instaladas, sin novedades pendientes.",
+        "categoria": "Seguridad",
+        "id": 42,
+        "estado": "Conforme"
+      },
+      {
+        "actividad": "Medir nuevamente el tiempo de encendido",
+        "observacion": "Tiempo final de encendido: 32 segundos. Mejora de 24 segundos frente al valor inicial.",
+        "categoria": "Pruebas finales",
+        "id": 43,
+        "estado": "Conforme"
+      },
+      {
+        "categoria": "Pruebas finales",
+        "observacion": "La memoria utilizada disminuyó de 6,99 GB a 6,60 GB, de 44,7 % a 42,2 %.",
+        "estado": "Conforme",
+        "id": 44,
+        "actividad": "Comparar uso de CPU, RAM y disco en reposo"
+      },
+      {
+        "categoria": "Pruebas finales",
+        "observacion": "La temperatura en reposo disminuyó de 53 °C a 50 °C y la máxima de 85 °C a 82 °C.",
+        "estado": "Conforme",
+        "id": 45,
+        "actividad": "Revisar nuevamente las temperaturas"
+      },
+      {
+        "categoria": "Pruebas finales",
+        "observacion": "El equipo funciona estable, sin bloqueos ni reinicios.",
+        "estado": "Conforme",
+        "id": 46,
+        "actividad": "Ejecutar una prueba corta de estabilidad"
+      },
+      {
+        "actividad": "Confirmar el funcionamiento de periféricos y conexiones",
+        "observacion": "Cámara, parlantes y puertos USB funcionan. Los demás periféricos y conexiones no fueron confirmados.",
+        "estado": "Observación",
+        "id": 47,
+        "categoria": "Pruebas finales"
+      },
+      {
+        "actividad": "Verificar la apertura de los programas principales",
+        "observacion": "El equipo se mantuvo estable durante las pruebas finales y no se reportaron fallas de apertura.",
+        "categoria": "Pruebas finales",
+        "id": 48,
+        "estado": "Conforme"
+      }
+    ],
+    "updatedAt": "2026-07-27T21:27:12.755000+00:00",
+    "cliente": {
+      "direccion": "Ludeña & Asociados, S/N, 090602 Guayaquil",
+      "ruc": "0992922214001",
+      "nombre": "LUDEÑA & ASOCIADOS LUDASOCI C. LTDA.",
+      "telefono": "(04) 207-5050",
+      "ciudad": "Guayaquil"
+    },
+    "hallazgos": [
+      "El tiempo de encendido inicial era de 56 segundos.",
+      "La temperatura inicial en reposo era de 53 °C y la máxima alcanzaba 85 °C.",
+      "El teclado presenta daño en la tecla correspondiente a la letra N.",
+      "El SSD se encuentra saludable, pero conserva únicamente 54,88 GB libres, aproximadamente el 11,5 % de su capacidad.",
+      "La batería registra 793 ciclos, una salud estimada del 75,5 % y un desgaste aproximado del 24,5 %, sin abombamiento físico.",
+      "El usuario no dispone de respaldo de sus archivos importantes.",
+      "No se realizó una prueba especializada de memoria RAM, aunque el equipo funcionó correctamente y sin fallas durante el mantenimiento.",
+      "SFC no pudo ejecutarse porque la Protección de recursos de Windows no logró iniciar el servicio de reparación.",
+      "El problema visual de la búsqueda de Windows fue solucionado."
+    ],
+    "recomendaciones": [
+      "Realizar el cambio completo del teclado debido al daño de la tecla correspondiente a la letra N.",
+      "Crear y mantener un respaldo periódico de los archivos importantes.",
+      "Liberar o trasladar archivos para conservar entre el 15 % y el 20 % del SSD disponible.",
+      "Controlar la autonomía de la batería debido a sus 793 ciclos y al desgaste aproximado del 24,5 %.",
+      "Realizar una prueba de memoria RAM si se presentan bloqueos, reinicios o pantallazos azules.",
+      "Mantener McAfee actualizado y verificar periódicamente que la protección en tiempo real permanezca activa.",
+      "Actualizar el equipo a Windows 11, previa verificación de compatibilidad y respaldo de la información, debido a la finalización del soporte general de Windows 10.",
+      "Comprobar en un próximo mantenimiento los puertos y conexiones que no fueron confirmados."
+    ],
+    "fecha": "2026-07-27",
+    "tecnicoResponsable": "Jhonston Benjumea",
+    "diagnosticoInicial": {
+      "estadoDisco": "SSD NVMe de 512 GB · estado SMART Healthy",
+      "usoCpu": "",
+      "temperaturaReposo": "53 °C",
+      "espacioDisponible": "54,51 GB libres · aproximadamente 11,5 %",
+      "condicionFisica": "Carcasa y bisagras en buen estado. El teclado presenta daño en la tecla correspondiente a la letra N. Se aconseja realizar el cambio completo del teclado. Batería sin abombamiento.",
+      "temperaturaMaxima": "85 °C",
+      "estadoBateria": "75,5 % de salud estimada · 24,5 % de desgaste · 793 ciclos",
+      "usoRam": "6,99 GB de 16 GB · 44,7 %",
+      "tiempoEncendido": "56 segundos",
+      "usoDisco": ""
+    },
+    "diagnosticoFinal": {
+      "estadoDisco": "",
+      "usoCpu": "",
+      "temperaturaReposo": "",
+      "espacioDisponible": "",
+      "condicionFisica": "",
+      "temperaturaMaxima": "",
+      "estadoBateria": "",
+      "usoRam": "",
+      "tiempoEncendido": "",
+      "usoDisco": ""
+    },
+    "numero": "MANT-00000003",
+    "estado": "Finalizado",
+    "observaciones": "El equipo conserva McAfee como solución antivirus. La batería se encuentra físicamente normal y sin abombamiento. No se realizó una prueba especializada de memoria RAM, pero el equipo funcionó correctamente durante las pruebas. Se verificó el funcionamiento de la cámara, los parlantes, los puertos USB, WiFi y Bluetooth. El sistema operativo y los controladores fueron actualizados, y se recomienda migrar a Windows 11 debido a la finalización del soporte general de Windows 10. DISM finalizó correctamente, mientras que SFC no pudo iniciar el servicio de reparación."
+  },
+  {
+    "id": "MANT-00000004",
+    "conclusion": "Después del mantenimiento preventivo, el equipo se encuentra operativo y estable. Se realizó limpieza general, cambio de pasta térmica, actualización de BIOS y controladores, reparación de archivos del sistema, optimización del inicio, eliminación de eScan y activación de Microsoft Defender y el firewall. El tiempo de encendido disminuyó de 57 a 40 segundos, la temperatura en reposo bajó de 54 °C a 50 °C y la temperatura máxima se redujo de 82 °C a 75 °C. El SSD, la memoria RAM, los periféricos, los puertos y las conexiones funcionan correctamente. El equipo completó la prueba de estabilidad y varios reinicios sin volver a presentar el código HP 5.3. El estado general se clasifica como operativo con observaciones debido al ligero abombamiento de la batería, el botón dañado del touchpad, la poca firmeza de las bisagras y los soportes de goma sueltos.",
+    "equipo": {
+      "numeroSerie": "5CG8172F8X",
+      "procesador": "Intel Pentium Silver N5000 · 4 núcleos · 4 procesadores lógicos",
+      "almacenamiento": "SSD SATA Kingston A400 SA400S37480G · 447.13 GB",
+      "modelo": "HP Laptop 14-ck0xxx",
+      "marca": "HP",
+      "accesorios": "",
+      "tipo": "Laptop",
+      "cargadorEntregado": false,
+      "sistemaOperativo": "Microsoft Windows 11 Pro de 64 bits · versión 10.0.26200",
+      "ram": "8 GB DDR4 Samsung M471A1K43CB1-CRC · 2400 MT/s · un módulo de 8 GB instalado en el único slot disponible · Single Channel"
+    },
+    "problemasReportados": [],
+    "accionesRealizadas": "Se realizó limpieza general interna y externa del equipo.\nSe limpió la carcasa, la pantalla, el teclado y el touchpad.\nSe limpió el sistema pasivo de refrigeración, las rejillas y el disipador.\nSe retiró la pasta térmica anterior y se aplicó pasta térmica nueva.\nSe instalaron actualizaciones de Windows, Microsoft Defender, controladores y componentes HP.\nSe actualizó la BIOS de la versión F.64 a la versión F.82.\nSe desinstaló eScan y se activaron Microsoft Defender, la protección en tiempo real y el firewall de Windows.\nSe ejecutó un análisis rápido de amenazas sin detectar novedades.\nSe revisaron las extensiones del navegador sin encontrar elementos sospechosos.\nSe desinstalaron programas innecesarios y se desactivaron aplicaciones innecesarias del inicio.\nSe eliminaron archivos temporales y se liberó espacio en la unidad C:.\nSe ejecutaron DISM y SFC sin detectar problemas pendientes.\nSe comprobó el disco sin detectar errores.\nSe ejecutó la prueba de memoria sin detectar errores.\nSe probaron el cargador, los periféricos, los puertos y las conexiones.\nSe ejecutó una prueba final de estabilidad sin bloqueos ni reinicios.\nSe ejecutó el diagnóstico final de hardware, rendimiento, almacenamiento y seguridad.",
+    "checklist": [
+      {
+        "estado": "Conforme",
+        "observacion": "El usuario solicitó mantenimiento preventivo y reportó lentitud general del equipo.",
+        "categoria": "Diagnóstico inicial",
+        "id": 1,
+        "actividad": "Consultar los problemas reportados por el usuario"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Tiempo de encendido inicial: 57 segundos.",
+        "categoria": "Diagnóstico inicial",
+        "id": 2,
+        "actividad": "Registrar el tiempo de encendido antes del mantenimiento"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "CPU promedio: 7.4 %. RAM utilizada: 3.84 GB de 7.77 GB, equivalente al 49.4 %. Actividad del disco: 0 %. Los valores se encuentran dentro de rangos normales en reposo.",
+        "categoria": "Diagnóstico inicial",
+        "id": 3,
+        "actividad": "Revisar el uso de CPU, memoria RAM y disco en reposo"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Se confirmó que la información del usuario no cuenta con un respaldo. Se recomienda respaldar los archivos importantes antes de realizar cambios que puedan afectar el sistema.",
+        "categoria": "Diagnóstico inicial",
+        "id": 4,
+        "actividad": "Confirmar la existencia de un respaldo de la información"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Unidad SSD SATA Kingston A400 SA400S37480G, con capacidad física de 447.13 GB.",
+        "categoria": "Almacenamiento",
+        "id": 5,
+        "actividad": "Identificar si la unidad es HDD, SSD SATA o SSD NVMe"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Windows reporta la unidad en estado Healthy y funcionamiento OK. SMART no predice fallas y el SSD registra 2226 horas de funcionamiento. El 0 % utilizado reportado debe tomarse como referencia del controlador, no como una medición SMART completa de desgaste.",
+        "categoria": "Almacenamiento",
+        "id": 6,
+        "actividad": "Revisar el estado SMART y la vida útil estimada"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "SMART no predice fallas en el SSD interno y la comprobación del disco finalizó sin detectar errores. El evento NTFS registrado en D: correspondía posiblemente al USB General UDisk utilizado para el diagnóstico.",
+        "categoria": "Almacenamiento",
+        "id": 7,
+        "actividad": "Comprobar errores o sectores defectuosos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Temperatura del SSD: 26 °C. Unidad C: con 348.76 GB disponibles de 446.22 GB, equivalente al 78.2 % libre.",
+        "categoria": "Almacenamiento",
+        "id": 8,
+        "actividad": "Verificar temperatura y espacio disponible"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "TRIM habilitado. NTFS DisableDeleteNotify = 0.",
+        "categoria": "Almacenamiento",
+        "id": 9,
+        "actividad": "Comprobar que TRIM esté activo en unidades SSD"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "8 GB instalados y 7.77 GB reconocidos por Windows. Se detectó un módulo Samsung M471A1K43CB1-CRC de 8 GB funcionando a 2400 MT/s.",
+        "categoria": "Memoria RAM",
+        "id": 10,
+        "actividad": "Verificar capacidad, velocidad y reconocimiento total"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se registraron 3.84 GB utilizados de 7.77 GB, equivalente al 49.4 % en reposo. Consumo adecuado para la capacidad instalada.",
+        "categoria": "Memoria RAM",
+        "id": 11,
+        "actividad": "Revisar el consumo de memoria en reposo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "La prueba de memoria finalizó sin detectar errores.",
+        "categoria": "Memoria RAM",
+        "id": 12,
+        "actividad": "Ejecutar una prueba de errores de memoria"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El equipo cuenta con un único slot de memoria RAM, ocupado por un módulo Samsung de 8 GB. La memoria funciona en configuración Single Channel.",
+        "categoria": "Memoria RAM",
+        "id": 13,
+        "actividad": "Verificar configuración Single Channel o Dual Channel"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "El equipo no incorpora ventilador. Utiliza un sistema de refrigeración pasiva, por lo que no corresponde realizar una prueba de funcionamiento o ruido de ventilador.",
+        "categoria": "Refrigeración",
+        "id": 14,
+        "actividad": "Revisar el funcionamiento y ruido del ventilador"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Temperatura inicial del procesador en reposo: 54 °C. El equipo utiliza refrigeración pasiva sin ventilador.",
+        "categoria": "Refrigeración",
+        "id": 15,
+        "actividad": "Medir la temperatura del procesador en reposo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Temperatura máxima inicial registrada durante la prueba de carga: 82 °C. El valor es elevado, pero se mantiene dentro de un rango operativo para una prueba de carga; debe compararse después del mantenimiento.",
+        "categoria": "Refrigeración",
+        "id": 16,
+        "actividad": "Medir la temperatura durante una prueba de carga"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "No se consideró necesaria una comprobación específica de Thermal Throttling. El equipo completó la prueba de carga y estabilidad con una temperatura máxima de 75 °C, sin bloqueos ni reinicios.",
+        "categoria": "Refrigeración",
+        "id": 17,
+        "actividad": "Verificar si existe reducción térmica de rendimiento"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Durante la inspección física se identificó un ligero abombamiento de la batería. Aunque la deformación no es fuerte, se recomienda evaluar su reemplazo preventivo y vigilar cualquier aumento de volumen, calentamiento anormal, olor o presión sobre la carcasa.",
+        "categoria": "Batería y alimentación",
+        "id": 18,
+        "actividad": "Revisar el estado físico de la batería"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Battery Report muestra 18,272 mWh tanto como capacidad de diseño como de carga completa, lo que produciría un 100 % nominal. Sin embargo, el historial registra un máximo de 24,036 mWh y valores recientes de 20,778 mWh, por lo que el reporte es inconsistente. Frente al máximo histórico, la capacidad actual equivale aproximadamente al 76.0 %. No debe registrarse 100 % de salud como valor concluyente.",
+        "categoria": "Batería y alimentación",
+        "id": 19,
+        "actividad": "Comparar capacidad actual y capacidad de diseño"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "El controlador no reporta el conteo de ciclos. Tomando únicamente como referencia el máximo histórico de 24,036 mWh y la capacidad actual de 18,272 mWh, la reducción aproximada es de 24.0 %. El desgaste y la salud exactos no pueden determinarse de forma confiable; revisar autonomía real y condición física.",
+        "categoria": "Batería y alimentación",
+        "id": 20,
+        "actividad": "Revisar ciclos de carga y porcentaje de desgaste"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El cargador, el conector y la estabilidad de la carga funcionan correctamente.",
+        "categoria": "Batería y alimentación",
+        "id": 21,
+        "actividad": "Probar cargador, conector y estabilidad de carga"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "La pantalla funciona, pero las bisagras no se encuentran firmes y permiten que la pantalla se vaya hacia atrás. Se recomienda revisar y ajustar sus anclajes para evitar daños en la carcasa o el cableado de pantalla.",
+        "categoria": "Componentes",
+        "id": 22,
+        "actividad": "Probar pantalla, brillo y estado de las bisagras"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Se identificó un botón físico del touchpad dañado. Pendiente confirmar el funcionamiento del movimiento del cursor, gestos y botón restante.",
+        "categoria": "Componentes",
+        "id": 23,
+        "actividad": "Probar teclado y touchpad"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Cámara, micrófono, parlantes y salida de audífonos probados correctamente.",
+        "categoria": "Componentes",
+        "id": 24,
+        "actividad": "Probar cámara, micrófono, parlantes y audífonos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Los puertos USB, HDMI, Ethernet y lector de tarjetas fueron probados y funcionan correctamente.",
+        "categoria": "Componentes",
+        "id": 25,
+        "actividad": "Probar puertos USB, HDMI, Ethernet y lector de tarjetas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "WiFi y Bluetooth fueron probados y funcionan correctamente. El diagnóstico final detectó el adaptador Realtek RTL8723DE con conexión activa.",
+        "categoria": "Componentes",
+        "id": 26,
+        "actividad": "Probar conexiones WiFi y Bluetooth"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Los soportes de goma inferiores se encuentran sueltos y sin adhesivo. Las bisagras presentan poca firmeza. Pendiente revisar tornillos y anclajes internos antes de realizar ajustes.",
+        "categoria": "Componentes",
+        "id": 27,
+        "actividad": "Revisar carcasa, tornillos y patas de goma"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se realizó limpieza de carcasa, pantalla, teclado y touchpad.",
+        "categoria": "Limpieza física",
+        "id": 28,
+        "actividad": "Limpiar carcasa, pantalla, teclado y touchpad"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El equipo no incorpora ventilador. Se realizó limpieza de rejillas, disipador y sistema pasivo de refrigeración.",
+        "categoria": "Limpieza física",
+        "id": 29,
+        "actividad": "Retirar polvo de ventiladores, rejillas y disipadores"
+      },
+      {
+        "estado": "Pendiente",
+        "observacion": "Pendiente registrar la revisión interna.",
+        "categoria": "Limpieza física",
+        "id": 30,
+        "actividad": "Revisar conexiones, cables y tornillos internos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se retiró el compuesto térmico anterior, se limpiaron las superficies de contacto y se realizó el cambio de pasta térmica.",
+        "categoria": "Limpieza física",
+        "id": 31,
+        "actividad": "Revisar la condición de la pasta térmica"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se instalaron las actualizaciones de Windows, los componentes del fabricante y las tres actualizaciones pendientes de Microsoft Defender.",
+        "categoria": "Software",
+        "id": 32,
+        "actividad": "Instalar actualizaciones pendientes del sistema operativo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se actualizaron los controladores y componentes HP. Los errores 0x80240016 corresponden a intentos anteriores y no quedaron controladores pendientes ni dispositivos con advertencias.",
+        "categoria": "Software",
+        "id": 33,
+        "actividad": "Actualizar controladores desde fuentes oficiales"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "BIOS actualizada de la versión F.64 a la versión F.82, con fecha 07/08/2025. El equipo recuperó el arranque después de la incidencia con código HP 5.3.",
+        "categoria": "Software",
+        "id": 34,
+        "actividad": "Revisar actualizaciones de BIOS o firmware"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se desinstalaron programas innecesarios y se eliminó eScan junto con sus componentes anteriores. AnyDesk se conserva porque es utilizado y está autorizado por el usuario.",
+        "categoria": "Software",
+        "id": 35,
+        "actividad": "Desinstalar programas innecesarios o duplicados"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se revisaron y desactivaron las aplicaciones de inicio innecesarias. El diagnóstico continúa enumerando nueve entradas porque registra también elementos deshabilitados; se conservaron los componentes de seguridad y audio necesarios.",
+        "categoria": "Software",
+        "id": 36,
+        "actividad": "Desactivar aplicaciones innecesarias del inicio"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se eliminaron archivos temporales y residuos del sistema. El espacio disponible en C: aumentó de 348.76 GB a 351.34 GB.",
+        "categoria": "Software",
+        "id": 37,
+        "actividad": "Limpiar archivos temporales y liberar espacio"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se ejecutaron DISM y SFC y finalizaron normalmente, sin problemas pendientes. También se comprobó el disco sin detectar errores. Los eventos anteriores de MWAgent y eScan correspondían al antivirus desinstalado.",
+        "categoria": "Software",
+        "id": 38,
+        "actividad": "Comprobar y reparar archivos del sistema"
+      },
+      {
+        "estado": "Pendiente",
+        "observacion": "Pendiente revisar el modo de energía y confirmar que la memoria virtual sea administrada automáticamente por Windows.",
+        "categoria": "Software",
+        "id": 39,
+        "actividad": "Revisar configuración de energía y memoria virtual"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Microsoft Defender, la protección en tiempo real, el antispyware y el firewall de Windows quedaron activos.",
+        "categoria": "Seguridad",
+        "id": 40,
+        "actividad": "Confirmar que el antivirus y el firewall estén activos"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Se ejecutó un análisis rápido de amenazas sin detectar problemas. No se realizó un análisis completo, por lo que se recomienda programarlo posteriormente.",
+        "categoria": "Seguridad",
+        "id": 41,
+        "actividad": "Ejecutar un análisis completo de amenazas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se revisaron las extensiones del navegador sin detectar elementos sospechosos. eScan fue eliminado y AnyDesk es reconocido y autorizado por el usuario.",
+        "categoria": "Seguridad",
+        "id": 42,
+        "actividad": "Revisar extensiones y aplicaciones sospechosas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El tiempo de encendido disminuyó de 57 a 40 segundos, obteniéndose una mejora de 17 segundos, equivalente aproximadamente al 29.8 %.",
+        "categoria": "Pruebas finales",
+        "id": 43,
+        "actividad": "Medir nuevamente el tiempo de encendido"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Resultado final: CPU promedio de 5.0 %, RAM utilizada de 4.73 GB de 7.77 GB, equivalente al 60.9 %, y disco en 0.2 %. La CPU mejoró y los valores generales permanecen dentro de rangos operativos.",
+        "categoria": "Pruebas finales",
+        "id": 44,
+        "actividad": "Comparar uso de CPU, RAM y disco en reposo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "La temperatura en reposo disminuyó de 54 °C a 50 °C y la máxima durante carga disminuyó de 82 °C a 75 °C después de la limpieza y el cambio de pasta térmica.",
+        "categoria": "Pruebas finales",
+        "id": 45,
+        "actividad": "Revisar nuevamente las temperaturas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El equipo completó la prueba corta de estabilidad sin bloqueos ni reinicios. La temperatura máxima registrada fue de 75 °C.",
+        "categoria": "Pruebas finales",
+        "id": 46,
+        "actividad": "Ejecutar una prueba corta de estabilidad"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se confirmó el funcionamiento de cámara, micrófono, parlantes, audífonos, USB, HDMI, Ethernet, lector de tarjetas, WiFi y Bluetooth. Se mantienen como observaciones físicas el botón dañado del touchpad y las bisagras con poca firmeza.",
+        "categoria": "Pruebas finales",
+        "id": 47,
+        "actividad": "Confirmar el funcionamiento de periféricos y conexiones"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Los programas principales abren y funcionan correctamente después del mantenimiento.",
+        "categoria": "Pruebas finales",
+        "id": 48,
+        "actividad": "Verificar la apertura de los programas principales"
+      }
+    ],
+    "updatedAt": "2026-08-17T17:06:56.882000+00:00",
+    "cliente": {
+      "direccion": "Alborada",
+      "ruc": "123456789",
+      "nombre": "test",
+      "telefono": "0000000000",
+      "ciudad": "Guayaquil"
+    },
+    "hallazgos": [
+      "El SSD Kingston A400 se encuentra en estado Healthy, SMART sin falla predicha y temperatura de 26 °C.",
+      "El uso promedio de CPU disminuyó de 7.4 % a 5.0 % en reposo.",
+      "El uso de RAM pasó de 49.4 % a 60.9 %; el valor continúa dentro de un rango operativo, aunque debe considerarse la carga de servicios posterior a las actualizaciones.",
+      "El espacio disponible en C: aumentó de 348.76 GB a 351.34 GB.",
+      "Microsoft Defender, la protección en tiempo real y el antispyware quedaron activos.",
+      "El equipo utiliza refrigeración pasiva y no incorpora ventilador.",
+      "La batería presenta un ligero abombamiento y una salud aproximada del 76 % frente a su máximo histórico registrado.",
+      "Un botón físico del touchpad se encuentra dañado.",
+      "Las bisagras presentan poca firmeza y permiten que la pantalla se vaya hacia atrás.",
+      "Los soportes de goma inferiores están sueltos y sin adhesivo.",
+      "Durante el mantenimiento se presentó un código de arranque HP 5.3 relacionado con la comunicación entre el controlador integrado y la BIOS. El equipo recuperó el arranque y quedó con BIOS F.82.",
+      "El tiempo de encendido disminuyó de 57 a 40 segundos.",
+      "La temperatura en reposo disminuyó de 54 °C a 50 °C y la temperatura máxima de 82 °C a 75 °C.",
+      "Las actualizaciones pendientes de Microsoft Defender fueron instaladas.",
+      "Después de actualizar la BIOS, el equipo completó varios reinicios sin volver a presentar el código HP 5.3."
+    ],
+    "recomendaciones": [
+      "Evaluar el reemplazo preventivo de la batería debido al ligero abombamiento y suspender su uso si la deformación aumenta, genera calor, olor o presión sobre la carcasa.",
+      "Reparar o reemplazar el botón físico dañado del touchpad.",
+      "Revisar y ajustar los anclajes de las bisagras para evitar daños en la carcasa, pantalla o cableado interno.",
+      "Fijar o reemplazar los soportes de goma inferiores con un adhesivo adecuado para componentes electrónicos.",
+      "Crear un respaldo de los archivos importantes del usuario.",
+      "Supervisar el arranque del equipo durante varios ciclos y verificar que no vuelva a presentarse el código HP 5.3.",
+      "Mantener activados Microsoft Defender, la protección en tiempo real y el firewall.",
+      "Realizar mantenimiento preventivo periódico del sistema de refrigeración pasiva."
+    ],
+    "fecha": "2026-08-17",
+    "tecnicoResponsable": "",
+    "diagnosticoFinal": {
+      "estadoDisco": "",
+      "usoCpu": "",
+      "temperaturaReposo": "",
+      "espacioDisponible": "",
+      "condicionFisica": "",
+      "temperaturaMaxima": "",
+      "estadoBateria": "",
+      "usoRam": "",
+      "tiempoEncendido": "",
+      "usoDisco": ""
+    },
+    "diagnosticoInicial": {
+      "estadoDisco": "SSD SATA Kingston Healthy · SMART sin falla predicha · 26 °C · 2226 horas de funcionamiento",
+      "usoCpu": "7.4 % promedio en reposo",
+      "temperaturaReposo": "54 °C",
+      "espacioDisponible": "C: 348.76 GB de 446.22 GB · 78.2 % libre",
+      "condicionFisica": "Botón del touchpad dañado, bisagras con poca firmeza que permiten que la pantalla se vaya hacia atrás, soportes de goma inferiores sueltos y sin adhesivo, y batería ligeramente abombada. El equipo utiliza refrigeración pasiva sin ventilador. Se realizó cambio de pasta térmica.",
+      "temperaturaMaxima": "82 °C",
+      "estadoBateria": "Reporte inconsistente: capacidad de diseño y carga completa actuales de 18,272 mWh · máximo histórico registrado de 24,036 mWh · salud aproximada frente al máximo histórico: 76.0 % · ciclos no disponibles",
+      "usoRam": "3.84 GB de 7.77 GB · 49.4 %",
+      "tiempoEncendido": "57 segundos",
+      "usoDisco": "0 % promedio en reposo"
+    },
+    "numero": "MANT-00000004",
+    "estado": "En revisión",
+    "observaciones": "El diagnóstico automático clasifica el equipo como crítico debido a eventos históricos y al apagado forzado ocurrido durante la incidencia de arranque. Esta clasificación no representa una falla crítica actual. Después de actualizar la BIOS a F.82, el equipo completó varios reinicios sin volver a presentar el código HP 5.3. AnyDesk es una aplicación autorizada por el usuario."
+  },
+  {
+    "id": "MANT-00000005",
+    "conclusion": "El mantenimiento preventivo fue completado satisfactoriamente. El equipo se encuentra en buen estado general, presenta funcionamiento estable y no se detectaron anomalías durante las pruebas finales. Los puertos, dispositivos de entrada, conectividad, audio y demás componentes evaluados funcionan correctamente.",
+    "equipo": {
+      "numeroSerie": "PF2SRN6G",
+      "procesador": "Intel Core i5-1035G1, 4 nucleos y 8 procesadores logicos",
+      "almacenamiento": "SSD NVMe WDC PC SN530 de 512 GB",
+      "modelo": "IdeaPad 3 14IIL05 (81WD)",
+      "marca": "Lenovo",
+      "accesorios": "Cargador",
+      "tipo": "Laptop",
+      "cargadorEntregado": true,
+      "sistemaOperativo": "Microsoft Windows 11 Pro 64 bits",
+      "ram": "8 GB DDR4, 2 x 4 GB Samsung a 2667 MT/s, Dual Channel"
+    },
+    "accionesRealizadas": "Limpieza interna del equipo y del sistema de ventilacion. Cambio de pasta termica. Eliminacion de archivos temporales y caches. Vaciado de la papelera de reciclaje. Liberacion aproximada de 10 GB de almacenamiento. Instalacion de actualizaciones de Windows. Actualizacion de controladores. Desactivacion de programas innecesarios del inicio. Revision de seguridad sin deteccion de virus. Comprobacion funcional de puertos, dispositivos de entrada, multimedia, conectividad y componentes generales.",
+    "problemasReportados": [
+      "Mantenimiento General"
+    ],
+    "checklist": [
+      {
+        "estado": "Conforme",
+        "observacion": "El mantenimiento fue solicitado como intervención preventiva general; no se reportaron fallas específicas.",
+        "categoria": "Diagnóstico inicial",
+        "id": 1,
+        "actividad": "Consultar los problemas reportados por el usuario"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se registró el estado inicial y el tiempo acumulado de funcionamiento del sistema.",
+        "categoria": "Diagnóstico inicial",
+        "id": 2,
+        "actividad": "Registrar el tiempo de encendido antes del mantenimiento"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El equipo presenta funcionamiento estable y consumo normal de recursos despues del mantenimiento.",
+        "categoria": "Diagnóstico inicial",
+        "id": 3,
+        "actividad": "Revisar el uso de CPU, memoria RAM y disco en reposo"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "No se modificaron archivos personales, particiones ni información del usuario.",
+        "categoria": "Diagnóstico inicial",
+        "id": 4,
+        "actividad": "Confirmar la existencia de un respaldo de la información"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Unidad identificada como SSD NVMe WDC PC SN530 de 512 GB.",
+        "categoria": "Almacenamiento",
+        "id": 5,
+        "actividad": "Identificar si la unidad es HDD, SSD SATA o SSD NVMe"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "La unidad se reportó Healthy, operativa y sin desgaste informado por Windows.",
+        "categoria": "Almacenamiento",
+        "id": 6,
+        "actividad": "Revisar el estado SMART y la vida útil estimada"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "No se detectaron errores de lectura, escritura, sectores defectuosos ni síntomas de falla.",
+        "categoria": "Almacenamiento",
+        "id": 7,
+        "actividad": "Comprobar errores o sectores defectuosos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El SSD registró 34 °C. Después de eliminar temporales, cachés y vaciar la papelera se recuperaron aproximadamente 10 GB.",
+        "categoria": "Almacenamiento",
+        "id": 8,
+        "actividad": "Verificar temperatura y espacio disponible"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "TRIM se encuentra activo: NTFS DisableDeleteNotify = 0.",
+        "categoria": "Almacenamiento",
+        "id": 9,
+        "actividad": "Comprobar que TRIM esté activo en unidades SSD"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Windows reconoce 7.75 GB utilizables de 8 GB instalados. Los dos modulos Samsung funcionan a 2667 MT/s.",
+        "categoria": "Memoria RAM",
+        "id": 10,
+        "actividad": "Verificar capacidad, velocidad y reconocimiento total"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "No se observaron consumos anormales ni inestabilidad durante las pruebas finales.",
+        "categoria": "Memoria RAM",
+        "id": 11,
+        "actividad": "Revisar el consumo de memoria en reposo"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "No se ejecutó una prueba extensa de RAM porque el equipo no presentaba bloqueos, errores, reinicios ni sintomas asociados a fallas de memoria.",
+        "categoria": "Memoria RAM",
+        "id": 12,
+        "actividad": "Ejecutar una prueba de errores de memoria"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "HWiNFO confirmó dos módulos de 4 GB funcionando en Dual Channel.",
+        "categoria": "Memoria RAM",
+        "id": 13,
+        "actividad": "Verificar configuración Single Channel o Dual Channel"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El ventilador funciona correctamente, sin ruidos anormales ni vibraciones.",
+        "categoria": "Refrigeración",
+        "id": 14,
+        "actividad": "Revisar el funcionamiento y ruido del ventilador"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "La temperatura en reposo disminuyó de 48 °C a 40 °C después de la limpieza interna y el cambio de pasta térmica.",
+        "categoria": "Refrigeración",
+        "id": 15,
+        "actividad": "Medir la temperatura del procesador en reposo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "La temperatura máxima bajo carga disminuyó de 85 °C a 80 °C después del mantenimiento.",
+        "categoria": "Refrigeración",
+        "id": 16,
+        "actividad": "Medir la temperatura durante una prueba de carga"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "No se observaron pérdidas de estabilidad ni reducción térmica perceptible durante la comprobación funcional.",
+        "categoria": "Refrigeración",
+        "id": 17,
+        "actividad": "Verificar si existe reducción térmica de rendimiento"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "La batería no presenta deformación ni señales físicas de expansión.",
+        "categoria": "Batería y alimentación",
+        "id": 18,
+        "actividad": "Revisar el estado físico de la batería"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "29,070 mWh de carga completa frente a 35,300 mWh de diseño; salud estimada de 82.35 %.",
+        "categoria": "Batería y alimentación",
+        "id": 19,
+        "actividad": "Comparar capacidad actual y capacidad de diseño"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "1,290 ciclos registrados y desgaste estimado de 17.65 %. La batería permanece operativa.",
+        "categoria": "Batería y alimentación",
+        "id": 20,
+        "actividad": "Revisar ciclos de carga y porcentaje de desgaste"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Cargador y conector probados satisfactoriamente; la carga se mantiene estable.",
+        "categoria": "Batería y alimentación",
+        "id": 21,
+        "actividad": "Probar cargador, conector y estabilidad de carga"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Pantalla, niveles de brillo y bisagras funcionan correctamente.",
+        "categoria": "Componentes",
+        "id": 22,
+        "actividad": "Probar pantalla, brillo y estado de las bisagras"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Teclado y touchpad probados satisfactoriamente.",
+        "categoria": "Componentes",
+        "id": 23,
+        "actividad": "Probar teclado y touchpad"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Cámara, micrófono, parlantes y salida de audio funcionan correctamente.",
+        "categoria": "Componentes",
+        "id": 24,
+        "actividad": "Probar cámara, micrófono, parlantes y audífonos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Los puertos e interfaces disponibles en el modelo fueron comprobados y funcionan correctamente.",
+        "categoria": "Componentes",
+        "id": 25,
+        "actividad": "Probar puertos USB, HDMI, Ethernet y lector de tarjetas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "WiFi y Bluetooth presentan conexión estable y funcionamiento normal.",
+        "categoria": "Componentes",
+        "id": 26,
+        "actividad": "Probar conexiones WiFi y Bluetooth"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Carcasa, tornillos y apoyos se encuentran completos y en buen estado general.",
+        "categoria": "Componentes",
+        "id": 27,
+        "actividad": "Revisar carcasa, tornillos y patas de goma"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se realizó limpieza externa de carcasa, pantalla, teclado y touchpad.",
+        "categoria": "Limpieza física",
+        "id": 28,
+        "actividad": "Limpiar carcasa, pantalla, teclado y touchpad"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se retiró el polvo acumulado en ventilador, rejillas y sistema disipador.",
+        "categoria": "Limpieza física",
+        "id": 29,
+        "actividad": "Retirar polvo de ventiladores, rejillas y disipadores"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Conexiones, cables y tornillos internos fueron revisados y quedaron correctamente asegurados.",
+        "categoria": "Limpieza física",
+        "id": 30,
+        "actividad": "Revisar conexiones, cables y tornillos internos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se retiró la pasta térmica anterior y se aplicó pasta nueva correctamente.",
+        "categoria": "Limpieza física",
+        "id": 31,
+        "actividad": "Revisar la condición de la pasta térmica"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se instalaron las actualizaciones disponibles de Windows.",
+        "categoria": "Software",
+        "id": 32,
+        "actividad": "Instalar actualizaciones pendientes del sistema operativo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Los controladores fueron actualizados y se comprobó el funcionamiento del hardware.",
+        "categoria": "Software",
+        "id": 33,
+        "actividad": "Actualizar controladores desde fuentes oficiales"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se revisó la versión de BIOS EMCN42WW; no se identificó una actualización imprescindible.",
+        "categoria": "Software",
+        "id": 34,
+        "actividad": "Revisar actualizaciones de BIOS o firmware"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "No se desinstalaron programas porque no se identificaron aplicaciones duplicadas que afectaran el funcionamiento.",
+        "categoria": "Software",
+        "id": 35,
+        "actividad": "Desinstalar programas innecesarios o duplicados"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se deshabilitaron las aplicaciones de inicio que no eran necesarias. No se desinstalaron programas.",
+        "categoria": "Software",
+        "id": 36,
+        "actividad": "Desactivar aplicaciones innecesarias del inicio"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se eliminaron temporales y cachés y se vació la papelera; se recuperaron aproximadamente 10 GB.",
+        "categoria": "Software",
+        "id": 37,
+        "actividad": "Limpiar archivos temporales y liberar espacio"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "No se observaron errores del sistema ni sintomas que justificaran una reparación adicional de archivos.",
+        "categoria": "Software",
+        "id": 38,
+        "actividad": "Comprobar y reparar archivos del sistema"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "La administración de energía y la memoria virtual se encontraron configuradas adecuadamente.",
+        "categoria": "Software",
+        "id": 39,
+        "actividad": "Revisar configuración de energía y memoria virtual"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se verificó el sistema de seguridad instalado y no se detectaron virus ni amenazas durante la revisión.",
+        "categoria": "Seguridad",
+        "id": 40,
+        "actividad": "Confirmar que el antivirus y el firewall estén activos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "La revisión de seguridad finalizó sin detección de virus ni amenazas.",
+        "categoria": "Seguridad",
+        "id": 41,
+        "actividad": "Ejecutar un análisis completo de amenazas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "No se identificaron extensiones ni aplicaciones con comportamiento sospechoso.",
+        "categoria": "Seguridad",
+        "id": 42,
+        "actividad": "Revisar extensiones y aplicaciones sospechosas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El tiempo de funcionamiento registrado después del mantenimiento fue de 17 días, 22 horas y 42 minutos.",
+        "categoria": "Pruebas finales",
+        "id": 43,
+        "actividad": "Medir nuevamente el tiempo de encendido"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Después del mantenimiento se registró CPU en 7.2 %, RAM en 5.4 GB y actividad de disco en 6 % en reposo.",
+        "categoria": "Pruebas finales",
+        "id": 44,
+        "actividad": "Comparar uso de CPU, RAM y disco en reposo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se observó una mejora térmica después de limpiar el sistema de refrigeración y cambiar la pasta térmica.",
+        "categoria": "Pruebas finales",
+        "id": 45,
+        "actividad": "Revisar nuevamente las temperaturas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El equipo se mantuvo estable, sin bloqueos, reinicios, errores ni comportamiento anormal.",
+        "categoria": "Pruebas finales",
+        "id": 46,
+        "actividad": "Ejecutar una prueba corta de estabilidad"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Puertos, periféricos, WiFi, Bluetooth, audio, cámara y conexiones funcionan correctamente.",
+        "categoria": "Pruebas finales",
+        "id": 47,
+        "actividad": "Confirmar el funcionamiento de periféricos y conexiones"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Los programas principales iniciaron y funcionaron correctamente durante la revisión final.",
+        "categoria": "Pruebas finales",
+        "id": 48,
+        "actividad": "Verificar la apertura de los programas principales"
+      }
+    ],
+    "updatedAt": "2026-08-26T17:26:12.020000+00:00",
+    "cliente": {
+      "direccion": "Ludeña & Asociados, S/N, 090602 Guayaquil",
+      "ruc": "0992922214001",
+      "nombre": "LUDEÑA & ASOCIADOS LUDASOCI C. LTDA.",
+      "telefono": "(04) 207-5050",
+      "ciudad": "Guayaquil"
+    },
+    "hallazgos": [
+      "El SSD NVMe se encuentra en buen estado, con temperatura normal y sin desgaste reportado por Windows.",
+      "Los 8 GB de RAM están distribuidos en dos modulos de 4 GB y funcionan en Dual Channel.",
+      "La batería se encuentra operativa, con una salud estimada de 82.35 % y desgaste de 17.65 %.",
+      "No se detectaron virus, errores críticos ni anomalías funcionales.",
+      "Todos los puertos, dispositivos de entrada, conectividad y elementos multimedia funcionan correctamente."
+    ],
+    "recomendaciones": [
+      "Mantener actualizado el sistema operativo y los controladores.",
+      "Realizar periódicamente la limpieza de archivos temporales y revisar los programas configurados para iniciar con Windows.",
+      "Controlar la evolución de la batería debido a su cantidad acumulada de ciclos y considerar su reemplazo únicamente si la autonomía disminuye de forma considerable.",
+      "Realizar un nuevo mantenimiento preventivo y limpieza interna en un periodo aproximado de 6 a 12 meses, dependiendo de las condiciones de uso."
+    ],
+    "fecha": "2026-08-17",
+    "tecnicoResponsable": "Jhonston Benjumea",
+    "diagnosticoInicial": {
+      "estadoDisco": "SSD NVMe WDC PC SN530, estado Healthy, temperatura de 34 °C y 0 % de desgaste reportado",
+      "usoCpu": "7.4 % en reposo",
+      "temperaturaReposo": "48 °C estimados antes del mantenimiento",
+      "espacioDisponible": "363.52 GB libres de 475.72 GB (76.4 %)",
+      "condicionFisica": "Equipo funcional, con acumulación normal de polvo en el sistema de ventilación y pasta térmica sujeta a renovación preventiva",
+      "temperaturaMaxima": "85 °C estimados bajo carga antes del mantenimiento",
+      "estadoBateria": "Operativa. Capacidad de diseno: 35,300 mWh; capacidad de carga completa: 29,070 mWh; salud estimada: 82.35 %; desgaste estimado: 17.65 %; 1,290 ciclos",
+      "usoRam": "4.94 GB de 7.75 GB reconocidos (63.7 %)",
+      "tiempoEncendido": "30 s",
+      "usoDisco": "1.6 % en reposo"
+    },
+    "diagnosticoFinal": {
+      "estadoDisco": "",
+      "usoCpu": "7.2 %",
+      "temperaturaReposo": "40 °C",
+      "espacioDisponible": "374.52 GB, equivalente al 78.7 %",
+      "condicionFisica": "",
+      "temperaturaMaxima": "80 °C bajo carga",
+      "estadoBateria": "",
+      "usoRam": "5.4 GB de 7.75 GB, equivalente al 69.7 %",
+      "tiempoEncendido": "18.35 s",
+      "usoDisco": "6 %"
+    },
+    "numero": "MANT-00000005",
+    "estado": "Finalizado",
+    "observaciones": "Equipo entregado en condiciones normales de funcionamiento junto con su cargador. El nombre y demás datos del cliente quedan pendientes de completar en UNYX Workspace."
+  },
+  {
+    "id": "MANT-00000006",
+    "conclusion": "El mantenimiento preventivo fue completado satisfactoriamente. El equipo mostró mejoras en el tiempo de encendido, uso de CPU, actividad del disco, espacio disponible y temperaturas. Los componentes evaluados funcionan correctamente. Como única observación, las teclas direccionales presentan fallas, por lo que se recomienda reemplazar el teclado completo.",
+    "equipo": {
+      "numeroSerie": "5CD316D1TV",
+      "procesador": "12th Gen Intel Core i5-1235U, 10 núcleos y 12 procesadores lógicos",
+      "almacenamiento": "SSD NVMe SK hynix BC711 de 512 GB",
+      "modelo": "HP ProBook 440 14 inch G9 Notebook PC",
+      "marca": "HP",
+      "accesorios": "Cargador",
+      "tipo": "Laptop",
+      "cargadorEntregado": true,
+      "sistemaOperativo": "Microsoft Windows 11 Pro 64 bits",
+      "ram": "16 GB DDR4, 1 x 16 GB Hynix/Hyundai a 3200 MT/s, Single Channel"
+    },
+    "accionesRealizadas": "Limpieza interna y externa. Limpieza de ventilador, rejillas y disipador. Cambio de pasta térmica. Eliminación de temporales y cachés. Vaciado de papelera. Liberación aproximada de 12 GB. Actualizaciones de Windows y controladores. Desactivación de programas innecesarios del inicio. Revisión antivirus sin amenazas. Pruebas funcionales generales.",
+    "checklist": [
+      {
+        "estado": "Conforme",
+        "observacion": "Mantenimiento preventivo general. Se reportó falla en las teclas direccionales.",
+        "categoria": "Diagnóstico inicial",
+        "id": 1,
+        "actividad": "Consultar los problemas reportados por el usuario"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Tiempo de encendido inicial: 32 segundos.",
+        "categoria": "Diagnóstico inicial",
+        "id": 2,
+        "actividad": "Registrar el tiempo de encendido antes del mantenimiento"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "CPU 6.5 %, RAM 7.7 GB y disco 4 % antes del mantenimiento.",
+        "categoria": "Diagnóstico inicial",
+        "id": 3,
+        "actividad": "Revisar el uso de CPU, memoria RAM y disco en reposo"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "No fue necesario para el alcance y condición observada del equipo.",
+        "categoria": "Diagnóstico inicial",
+        "id": 4,
+        "actividad": "Confirmar la existencia de un respaldo de la información"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "SSD NVMe SK hynix BC711 de 512 GB.",
+        "categoria": "Almacenamiento",
+        "id": 5,
+        "actividad": "Identificar si la unidad es HDD, SSD SATA o SSD NVMe"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Unidad Healthy, operativa y sin desgaste informado por Windows.",
+        "categoria": "Almacenamiento",
+        "id": 6,
+        "actividad": "Revisar el estado SMART y la vida útil estimada"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Almacenamiento",
+        "id": 7,
+        "actividad": "Comprobar errores o sectores defectuosos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "SSD a 35 °C; 323.79 GB disponibles después de la limpieza.",
+        "categoria": "Almacenamiento",
+        "id": 8,
+        "actividad": "Verificar temperatura y espacio disponible"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Almacenamiento",
+        "id": 9,
+        "actividad": "Comprobar que TRIM esté activo en unidades SSD"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "16 GB DDR4 Hynix/Hyundai a 3200 MT/s; 15.6 GB utilizables.",
+        "categoria": "Memoria RAM",
+        "id": 10,
+        "actividad": "Verificar capacidad, velocidad y reconocimiento total"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "7.7 GB antes y 8.6 GB después; funcionamiento estable.",
+        "categoria": "Memoria RAM",
+        "id": 11,
+        "actividad": "Revisar el consumo de memoria en reposo"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "No fue necesario para el alcance y condición observada del equipo.",
+        "categoria": "Memoria RAM",
+        "id": 12,
+        "actividad": "Ejecutar una prueba de errores de memoria"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Un módulo de 16 GB funcionando en Single Channel.",
+        "categoria": "Memoria RAM",
+        "id": 13,
+        "actividad": "Verificar configuración Single Channel o Dual Channel"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Refrigeración",
+        "id": 14,
+        "actividad": "Revisar el funcionamiento y ruido del ventilador"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Reducción de 40 °C a 38 °C.",
+        "categoria": "Refrigeración",
+        "id": 15,
+        "actividad": "Medir la temperatura del procesador en reposo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Reducción de 87 °C a 85 °C bajo carga.",
+        "categoria": "Refrigeración",
+        "id": 16,
+        "actividad": "Medir la temperatura durante una prueba de carga"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Refrigeración",
+        "id": 17,
+        "actividad": "Verificar si existe reducción térmica de rendimiento"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Batería y alimentación",
+        "id": 18,
+        "actividad": "Revisar el estado físico de la batería"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "32,558 mWh actuales frente a 42,772 mWh de diseño; salud de 76.12 %.",
+        "categoria": "Batería y alimentación",
+        "id": 19,
+        "actividad": "Comparar capacidad actual y capacidad de diseño"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "412 ciclos y desgaste estimado de 23.88 %; batería operativa.",
+        "categoria": "Batería y alimentación",
+        "id": 20,
+        "actividad": "Revisar ciclos de carga y porcentaje de desgaste"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Batería y alimentación",
+        "id": 21,
+        "actividad": "Probar cargador, conector y estabilidad de carga"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Componentes",
+        "id": 22,
+        "actividad": "Probar pantalla, brillo y estado de las bisagras"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "El touchpad funciona correctamente. Las teclas direccionales presentan fallas; se recomienda reemplazar el teclado completo.",
+        "categoria": "Componentes",
+        "id": 23,
+        "actividad": "Probar teclado y touchpad"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Componentes",
+        "id": 24,
+        "actividad": "Probar cámara, micrófono, parlantes y audífonos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Componentes",
+        "id": 25,
+        "actividad": "Probar puertos USB, HDMI, Ethernet y lector de tarjetas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Componentes",
+        "id": 26,
+        "actividad": "Probar conexiones WiFi y Bluetooth"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Componentes",
+        "id": 27,
+        "actividad": "Revisar carcasa, tornillos y patas de goma"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Limpieza física",
+        "id": 28,
+        "actividad": "Limpiar carcasa, pantalla, teclado y touchpad"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se realizó limpieza completa del ventilador, rejillas y disipador.",
+        "categoria": "Limpieza física",
+        "id": 29,
+        "actividad": "Retirar polvo de ventiladores, rejillas y disipadores"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Limpieza física",
+        "id": 30,
+        "actividad": "Revisar conexiones, cables y tornillos internos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se retiró la pasta anterior y se aplicó pasta térmica nueva.",
+        "categoria": "Limpieza física",
+        "id": 31,
+        "actividad": "Revisar la condición de la pasta térmica"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se instalaron las actualizaciones disponibles de Windows.",
+        "categoria": "Software",
+        "id": 32,
+        "actividad": "Instalar actualizaciones pendientes del sistema operativo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se actualizaron los controladores y se verificó el hardware.",
+        "categoria": "Software",
+        "id": 33,
+        "actividad": "Actualizar controladores desde fuentes oficiales"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Software",
+        "id": 34,
+        "actividad": "Revisar actualizaciones de BIOS o firmware"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "No fue necesario para el alcance y condición observada del equipo.",
+        "categoria": "Software",
+        "id": 35,
+        "actividad": "Desinstalar programas innecesarios o duplicados"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se deshabilitaron aplicaciones de inicio innecesarias.",
+        "categoria": "Software",
+        "id": 36,
+        "actividad": "Desactivar aplicaciones innecesarias del inicio"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Se limpiaron temporales y cachés, se vació la papelera y se liberaron aproximadamente 12 GB.",
+        "categoria": "Software",
+        "id": 37,
+        "actividad": "Limpiar archivos temporales y liberar espacio"
+      },
+      {
+        "estado": "No aplica",
+        "observacion": "No fue necesario para el alcance y condición observada del equipo.",
+        "categoria": "Software",
+        "id": 38,
+        "actividad": "Comprobar y reparar archivos del sistema"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Software",
+        "id": 39,
+        "actividad": "Revisar configuración de energía y memoria virtual"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Seguridad",
+        "id": 40,
+        "actividad": "Confirmar que el antivirus y el firewall estén activos"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Análisis finalizado sin detección de virus ni amenazas.",
+        "categoria": "Seguridad",
+        "id": 41,
+        "actividad": "Ejecutar un análisis completo de amenazas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Seguridad",
+        "id": 42,
+        "actividad": "Revisar extensiones y aplicaciones sospechosas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "El tiempo de encendido se redujo de 32 a 25 segundos.",
+        "categoria": "Pruebas finales",
+        "id": 43,
+        "actividad": "Medir nuevamente el tiempo de encendido"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "CPU: 6.5 % a 4 %. RAM: 7.7 GB a 8.6 GB. Disco: 4 % a 1 %.",
+        "categoria": "Pruebas finales",
+        "id": 44,
+        "actividad": "Comparar uso de CPU, RAM y disco en reposo"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Reposo: 40 °C a 38 °C. Máxima: 87 °C a 85 °C.",
+        "categoria": "Pruebas finales",
+        "id": 45,
+        "actividad": "Revisar nuevamente las temperaturas"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Pruebas finales",
+        "id": 46,
+        "actividad": "Ejecutar una prueba corta de estabilidad"
+      },
+      {
+        "estado": "Observación",
+        "observacion": "Todo funciona correctamente, excepto las teclas direccionales.",
+        "categoria": "Pruebas finales",
+        "id": 47,
+        "actividad": "Confirmar el funcionamiento de periféricos y conexiones"
+      },
+      {
+        "estado": "Conforme",
+        "observacion": "Verificación realizada satisfactoriamente; funcionamiento normal.",
+        "categoria": "Pruebas finales",
+        "id": 48,
+        "actividad": "Verificar la apertura de los programas principales"
+      }
+    ],
+    "problemasReportados": [
+      "Mantenimiento Preventivo"
+    ],
+    "updatedAt": "2026-08-26T17:45:41.738000+00:00",
+    "cliente": {
+      "direccion": "Ludeña & Asociados, S/N, 090602 Guayaquil",
+      "ruc": "0992922214001",
+      "nombre": "LUDEÑA & ASOCIADOS LUDASOCI C. LTDA.",
+      "telefono": "(04) 207-5050",
+      "ciudad": "Guayaquil"
+    },
+    "hallazgos": [
+      "SSD NVMe en buen estado.",
+      "16 GB DDR4 en un módulo, funcionando en Single Channel.",
+      "Batería operativa con 76.12 % de salud, 23.88 % de desgaste y 412 ciclos.",
+      "Las teclas direccionales presentan fallas.",
+      "Los demás componentes funcionan correctamente.",
+      "Se observó mejora en encendido, CPU, disco, espacio disponible y temperaturas."
+    ],
+    "recomendaciones": [
+      "Reemplazar el teclado completo para restablecer las teclas direccionales.",
+      "Mantener actualizado Windows y los controladores.",
+      "Realizar limpieza periódica de temporales y programas de inicio.",
+      "Controlar la evolución de la batería.",
+      "Realizar mantenimiento preventivo en 6 a 12 meses."
+    ],
+    "fecha": "2026-08-17",
+    "tecnicoResponsable": "Jhonston Benjumea",
+    "diagnosticoInicial": {
+      "estadoDisco": "SSD NVMe SK hynix BC711, estado Healthy, temperatura de 35 °C y 0 % de desgaste reportado",
+      "usoCpu": "6.5 % en reposo",
+      "temperaturaReposo": "40 °C",
+      "espacioDisponible": "311.79 GB libres de 475.64 GB (65.6 %)",
+      "condicionFisica": "Equipo funcional. Se detectó falla en las teclas direccionales y acumulación normal de polvo en el sistema de refrigeración",
+      "temperaturaMaxima": "87 °C bajo carga",
+      "estadoBateria": "Operativa. Capacidad de diseño: 42,772 mWh; carga completa: 32,558 mWh; salud estimada: 76.12 %; desgaste estimado: 23.88 %; 412 ciclos",
+      "usoRam": "7.7 GB de 15.6 GB reconocidos (49.4 %)",
+      "tiempoEncendido": "32 segundos",
+      "usoDisco": "4 % en reposo"
+    },
+    "diagnosticoFinal": {
+      "estadoDisco": "",
+      "usoCpu": "4 %",
+      "temperaturaReposo": "38 °C",
+      "espacioDisponible": "323.79 GB",
+      "condicionFisica": "",
+      "temperaturaMaxima": "85 °C",
+      "estadoBateria": "",
+      "usoRam": "8.6 GB / 15.6 GB",
+      "tiempoEncendido": "25 segundos",
+      "usoDisco": "1 %"
+    },
+    "numero": "MANT-00000006",
+    "estado": "Finalizado",
+    "observaciones": "Equipo entregado junto con su cargador. Queda pendiente el reemplazo completo del teclado debido a la falla de las teclas direccionales."
+  }
+]

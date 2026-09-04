@@ -1,0 +1,747 @@
+[
+  {
+    "id": "00000036",
+    "fechaInput": "2026-06-11",
+    "fecha": "2026-06-11T00:00:00.000Z",
+    "subtotal": 320,
+    "iva": 48,
+    "notas": "",
+    "total": 368,
+    "updatedAt": "2026-06-11T03:23:50.225000+00:00",
+    "createdAt": "2026-06-11T03:23:50.225000+00:00",
+    "cliente": {
+      "direccion": "Ciudad Millenium, Edificio platinum, II y Av León Febres Cordero Ribadeneyra, Piso 8, Oficina 810",
+      "ruc": "0993380696001",
+      "nombre": "LUXVIAJES AGENCIA DE VIAJES S.A.S.",
+      "telefono": "+593 96 090 6093",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000036",
+    "estado": "emitida",
+    "validezDias": 7,
+    "items": [
+      {
+        "descripcion": "CONTROL DE ACCESO FACIAL HIKVISION",
+        "codigo": "DS-K1T320EFX",
+        "cantidad": 4,
+        "precio": 80
+      }
+    ]
+  },
+  {
+    "id": "00000037",
+    "fechaInput": "2026-06-12",
+    "fecha": "2026-06-12T00:00:00.000Z",
+    "subtotal": 200,
+    "iva": 30,
+    "notas": "Se realiza la instalación física del equipo junto con la instalación del sistema HIK-Connect y se capacita para la configuración de ingreso de usuarios a la plataforma.",
+    "total": 230,
+    "updatedAt": "2026-06-12T18:28:38.689000+00:00",
+    "createdAt": "2026-06-12T18:28:38.689000+00:00",
+    "cliente": {
+      "direccion": "Av Víctor Emilio Estrada 1214 y laureles",
+      "ruc": "0992958219001",
+      "nombre": "RESTAURANT EDDYS-BBQ S.A.",
+      "telefono": "+04 5030239",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000037",
+    "estado": "emitida",
+    "validezDias": 15,
+    "items": [
+      {
+        "descripcion": "CONTROL DE ACCESO FACIAL HIKVISION",
+        "codigo": "DS-K1T320EFX",
+        "cantidad": 2,
+        "precio": 80
+      },
+      {
+        "descripcion": "Servicio de instalación y puesta en marcha",
+        "codigo": "001",
+        "cantidad": 2,
+        "precio": 20
+      }
+    ]
+  },
+  {
+    "id": "00000038",
+    "fechaInput": "2026-06-12",
+    "fecha": "2026-06-12T00:00:00.000Z",
+    "subtotal": 200,
+    "iva": 30,
+    "notas": "Se realiza la instalación física del equipo junto con la instalación del sistema HIK-Connect y se capacita para la configuración de ingreso de usuarios a la plataforma.",
+    "total": 230,
+    "updatedAt": "2026-06-12T18:28:04.889000+00:00",
+    "createdAt": "2026-06-12T18:28:04.889000+00:00",
+    "cliente": {
+      "direccion": "Av Víctor Emilio Estrada 1214 y laureles",
+      "ruc": "0992958219001",
+      "nombre": "RESTAURANT EDDYS-BBQ S.A.",
+      "telefono": "+04 5030239",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000038",
+    "estado": "emitida",
+    "validezDias": 15,
+    "items": [
+      {
+        "descripcion": "CONTROL DE ACCESO FACIAL HIKVISION",
+        "codigo": "DS-K1T320EFX",
+        "cantidad": 2,
+        "precio": 80
+      },
+      {
+        "descripcion": "Servicio de instalación y puesta en marcha",
+        "codigo": "001",
+        "cantidad": 2,
+        "precio": 20
+      }
+    ]
+  },
+  {
+    "id": "00000039",
+    "fechaInput": "2026-06-24",
+    "fecha": "2026-06-24T00:00:00.000Z",
+    "subtotal": 301,
+    "iva": 45.15,
+    "notas": "",
+    "total": 346.15,
+    "updatedAt": "2026-07-29T01:33:17.973000+00:00",
+    "createdAt": "2026-07-29T01:33:17.973000+00:00",
+    "cliente": {
+      "telefono": "+593 96 090 6093",
+      "ruc": "0993380696001",
+      "nombre": "LUXVIAJES AGENCIA DE VIAJES S.A.S.",
+      "direccion": "Ciudad Millenium, Edificio platinum, II y Av León Febres Cordero Ribadeneyra, Piso 8, Oficina 810",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000039",
+    "estado": "emitida",
+    "validezDias": 15,
+    "items": [
+      {
+        "descripcion": "RAM ADATA DDR4 16GB 3200MHZ / SODIMM / 1.2V / PARA LAPTOP",
+        "codigo": "RAM 16GB",
+        "cantidad": 1,
+        "precio": 145
+      },
+      {
+        "descripcion": "Servicio de instalación y puesta en marcha",
+        "codigo": "001",
+        "cantidad": 1,
+        "precio": 8
+      },
+      {
+        "descripcion": "Actualización de File",
+        "codigo": "026",
+        "cantidad": 1,
+        "precio": 15
+      },
+      {
+        "descripcion": "Mantenimiento de equipo: Impresora(s)",
+        "codigo": "025",
+        "cantidad": 1,
+        "precio": 20
+      },
+      {
+        "descripcion": "Cambio de contraseña Kommo",
+        "codigo": "024",
+        "cantidad": 1,
+        "precio": 3
+      },
+      {
+        "descripcion": "Preconfiguración de Biométricos",
+        "codigo": "020",
+        "cantidad": 1,
+        "precio": 10
+      },
+      {
+        "descripcion": "Instalación de Biométrico - Gye",
+        "codigo": "019",
+        "cantidad": 1,
+        "precio": 20
+      },
+      {
+        "descripcion": "Capacitación y asesoría Kommo",
+        "codigo": "021",
+        "cantidad": 1,
+        "precio": 50
+      },
+      {
+        "descripcion": "Configuración de equipos: Laptops",
+        "codigo": "022",
+        "cantidad": 1,
+        "precio": 15
+      },
+      {
+        "descripcion": "Configuración de equipos: Impresoras",
+        "codigo": "022",
+        "cantidad": 1,
+        "precio": 15
+      }
+    ]
+  },
+  {
+    "id": "00000040",
+    "fechaInput": "2026-07-01",
+    "fecha": "2026-07-01T00:00:00.000Z",
+    "subtotal": 35,
+    "iva": 5.25,
+    "notas": "Se sugiere una revisión y mantenimiento de la página web semestralmente. En caso de cambios mayores se realizará una cotización personalizada.",
+    "total": 40.25,
+    "updatedAt": "2026-07-01T05:42:20.464000+00:00",
+    "createdAt": "2026-07-01T05:42:20.464000+00:00",
+    "cliente": {
+      "telefono": "0999289471",
+      "ruc": "1792581931001",
+      "nombre": "HSESERVICES SEGURIDAD SALUD Y AMBIENTE CIA LTDA",
+      "direccion": "QUITO DISTRITO METROPOLITANO / HUGO MONCAYO E11-46 Y GREGORIO MUNGA",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000040",
+    "estado": "emitida",
+    "validezDias": 30,
+    "items": [
+      {
+        "descripcion": "Servicio de Revisión y Mantenimiento de Página Web",
+        "codigo": "006",
+        "cantidad": 1,
+        "precio": 30
+      },
+      {
+        "descripcion": "Servicio Técnico: cambio de número telefónico en página web",
+        "codigo": "007",
+        "cantidad": 1,
+        "precio": 5
+      }
+    ]
+  },
+  {
+    "id": "00000041",
+    "fechaInput": "2026-07-13",
+    "fecha": "2026-07-13T00:00:00.000Z",
+    "subtotal": 30,
+    "iva": 4.5,
+    "notas": "Integración de una línea de WhatsApp con Kommo por medio de Meta Business.",
+    "total": 34.5,
+    "updatedAt": "2026-07-13T17:11:03.704000+00:00",
+    "createdAt": "2026-07-13T17:11:03.704000+00:00",
+    "cliente": {
+      "direccion": "Edificio Esquinero Farmacia Difarmes Piso 2",
+      "ruc": "0992538902001",
+      "nombre": "SERVINCREIBLE S.A.",
+      "telefono": "0997449646",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000041",
+    "estado": "emitida",
+    "validezDias": 15,
+    "items": [
+      {
+        "descripcion": "Servicio Técnico de Software",
+        "codigo": "008",
+        "cantidad": 1,
+        "precio": 30
+      }
+    ]
+  },
+  {
+    "id": "00000042",
+    "fechaInput": "2026-07-13",
+    "fecha": "2026-07-13T00:00:00.000Z",
+    "subtotal": 310,
+    "iva": 46.5,
+    "notas": "Cada una de las implementaciones se las puede trabajar por separado, sin embargo, se sugiere realizar la implementación del botón de pago y la integración a Kommo de manera simultánea.\n\nTiempos estimados:\n- Botón de Pago: 2 semanas.\n- Integración de botón de pago a Kommo: 2 días.\n- Integración de MailerLite a Kommo: 2 días.\n- Integración de blog a página web: 2 días.",
+    "total": 356.5,
+    "updatedAt": "2026-07-13T17:31:55.830000+00:00",
+    "createdAt": "2026-07-13T17:31:55.830000+00:00",
+    "cliente": {
+      "direccion": "Ciudad Millenium, Edificio platinum, II y Av León Febres Cordero Ribadeneyra, Piso 8, Oficina 810",
+      "ruc": "0993380696001",
+      "nombre": "LUXVIAJES AGENCIA DE VIAJES S.A.S.",
+      "telefono": "+593 96 090 6093",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000042",
+    "estado": "emitida",
+    "validezDias": 15,
+    "items": [
+      {
+        "descripcion": "Implementación de Botón de Pago en Web",
+        "codigo": "009",
+        "cantidad": 1,
+        "precio": 100
+      },
+      {
+        "descripcion": "Integración de Botón de Pago en Web a Kommo",
+        "codigo": "010",
+        "cantidad": 1,
+        "precio": 50
+      },
+      {
+        "descripcion": "Integración de MailerLite a Kommo",
+        "codigo": "011",
+        "cantidad": 1,
+        "precio": 80
+      },
+      {
+        "descripcion": "Integración de blog/noticias en página Web",
+        "codigo": "012",
+        "cantidad": 1,
+        "precio": 80
+      }
+    ]
+  },
+  {
+    "id": "00000043",
+    "fechaInput": "2026-07-14",
+    "fecha": "2026-07-14T00:00:00.000Z",
+    "subtotal": 1200,
+    "iva": 180,
+    "notas": "Forma de pago: \n- 30% Al inicio del proyecto.\n- 30% Fase de pruebas finales. \n- 40% En la entrega final.",
+    "total": 1380,
+    "updatedAt": "2026-07-14T20:29:03.919000+00:00",
+    "createdAt": "2026-07-14T20:29:03.919000+00:00",
+    "cliente": {
+      "direccion": "Ciudad Millenium, Edificio platinum, II y Av León Febres Cordero Ribadeneyra, Piso 8, Oficina 810",
+      "ruc": "0993380696001",
+      "nombre": "LUXVIAJES AGENCIA DE VIAJES S.A.S.",
+      "telefono": "+593 96 090 6093",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000043",
+    "estado": "emitida",
+    "validezDias": 30,
+    "items": [
+      {
+        "descripcion": "Diseño y Desarrollo de Módulo de Cotizaciones",
+        "codigo": "013",
+        "cantidad": 1,
+        "precio": 1200
+      }
+    ]
+  },
+  {
+    "id": "00000044",
+    "fechaInput": "2026-07-20",
+    "fecha": "2026-07-20T00:00:00.000Z",
+    "subtotal": 175,
+    "iva": 26.25,
+    "notas": "",
+    "total": 201.25,
+    "updatedAt": "2026-07-27T21:13:56.770000+00:00",
+    "createdAt": "2026-07-27T21:13:56.770000+00:00",
+    "cliente": {
+      "direccion": "Ludeña & Asociados, S/N, 090602 Guayaquil",
+      "ruc": "0992922214001",
+      "nombre": "LUDEÑA & ASOCIADOS LUDASOCI C. LTDA.",
+      "telefono": "(04) 207-5050",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000044",
+    "estado": "emitida",
+    "validezDias": 30,
+    "items": [
+      {
+        "descripcion": "MEMORIA RAM ADATA DDR4 16GB 3200MHZ / SODIMM / 1.2V / PARA LAPTOP",
+        "codigo": "RAM 8GB",
+        "cantidad": 1,
+        "precio": 145
+      },
+      {
+        "descripcion": "Servicio de instalación y puesta en marcha",
+        "codigo": "001",
+        "cantidad": 1,
+        "precio": 10
+      },
+      {
+        "descripcion": "Mantenimiento de Computador",
+        "codigo": "014",
+        "cantidad": 1,
+        "precio": 20
+      }
+    ]
+  },
+  {
+    "id": "00000045",
+    "fechaInput": "2026-07-20",
+    "fecha": "2026-07-20T00:00:00.000Z",
+    "subtotal": 40,
+    "iva": 6,
+    "notas": "",
+    "total": 46,
+    "updatedAt": "2026-07-20T18:55:34.375000+00:00",
+    "createdAt": "2026-07-20T18:55:34.375000+00:00",
+    "cliente": {
+      "direccion": "Ludeña & Asociados, S/N, 090602 Guayaquil",
+      "ruc": "0992922214001",
+      "nombre": "LUDEÑA & ASOCIADOS LUDASOCI C. LTDA.",
+      "telefono": "(04) 207-5050",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000045",
+    "estado": "emitida",
+    "validezDias": 30,
+    "items": [
+      {
+        "descripcion": "Mantenimiento de Computador",
+        "codigo": "014",
+        "cantidad": 2,
+        "precio": 20
+      }
+    ]
+  },
+  {
+    "id": "00000046",
+    "fechaInput": "2026-07-20",
+    "fecha": "2026-07-20T00:00:00.000Z",
+    "subtotal": 570,
+    "iva": 85.5,
+    "notas": "Forma de Pago:\n50% Anticipo\n50% Contraentrega",
+    "total": 655.5,
+    "updatedAt": "2026-07-20T20:23:29.115000+00:00",
+    "createdAt": "2026-07-20T20:23:29.115000+00:00",
+    "cliente": {
+      "direccion": "Edificio Esquinero Farmacia Difarmes Piso 2",
+      "ruc": "0992538902001",
+      "nombre": "SERVINCREIBLE S.A.",
+      "telefono": "0997449646",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000046",
+    "estado": "emitida",
+    "validezDias": 30,
+    "items": [
+      {
+        "descripcion": "Optimización y capacitación de Kommo",
+        "codigo": "015",
+        "cantidad": 1,
+        "precio": 570
+      }
+    ]
+  },
+  {
+    "id": "00000047",
+    "fechaInput": "2026-07-22",
+    "fecha": "2026-07-22T00:00:00.000Z",
+    "subtotal": 200,
+    "iva": 30,
+    "notas": "Consolidación de listado de aproximadamente 1700 equipos e insumos de la empresa en base al inventario de Contífico y a las fichas técnicas de cada uno",
+    "total": 230,
+    "updatedAt": "2026-07-22T19:11:47.852000+00:00",
+    "createdAt": "2026-07-22T19:11:47.852000+00:00",
+    "cliente": {
+      "direccion": "Edificio Esquinero Farmacia Difarmes Piso 2",
+      "ruc": "0992538902001",
+      "nombre": "SERVINCREIBLE S.A.",
+      "telefono": "0997449646",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000047",
+    "estado": "emitida",
+    "validezDias": 30,
+    "items": [
+      {
+        "descripcion": "Análisis de Datos",
+        "codigo": "016",
+        "cantidad": 1,
+        "precio": 200
+      }
+    ]
+  },
+  {
+    "id": "00000048",
+    "fechaInput": "2026-07-23",
+    "fecha": "2026-07-23T00:00:00.000Z",
+    "subtotal": 732.78,
+    "iva": 109.91699999999999,
+    "notas": "",
+    "total": 842.697,
+    "updatedAt": "2026-07-31T15:42:20.987000+00:00",
+    "createdAt": "2026-07-31T15:42:20.987000+00:00",
+    "cliente": {
+      "direccion": "Ludeña & Asociados, S/N, 090602 Guayaquil",
+      "ruc": "0992922214001",
+      "nombre": "LUDEÑA & ASOCIADOS LUDASOCI C. LTDA.",
+      "telefono": "(04) 207-5050",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000048",
+    "estado": "emitida",
+    "validezDias": 30,
+    "items": [
+      {
+        "descripcion": "LAPTOP LENOVO V14 G3-IAP / 14\" FHD / INTEL CORE I5-1235U / 16GB RAM / 256GB SSD",
+        "codigo": "017",
+        "cantidad": 1,
+        "precio": 634.78
+      },
+      {
+        "descripcion": "CAMBIO DE UNIDAD DE ESTADO SOLIDO M.2 NVME KOOTION 512GB / PCIE 3.0 / 2280",
+        "codigo": "027",
+        "cantidad": 1,
+        "precio": 98
+      }
+    ]
+  },
+  {
+    "id": "00000049",
+    "fechaInput": "2026-07-23",
+    "fecha": "2026-07-23T00:00:00.000Z",
+    "subtotal": 660.87,
+    "iva": 99.1305,
+    "notas": "",
+    "total": 760.0005,
+    "updatedAt": "2026-07-23T20:35:17.749000+00:00",
+    "createdAt": "2026-07-23T20:35:17.749000+00:00",
+    "cliente": {
+      "direccion": "Ludeña & Asociados, S/N, 090602 Guayaquil",
+      "ruc": "0992922214001",
+      "nombre": "LUDEÑA & ASOCIADOS LUDASOCI C. LTDA.",
+      "telefono": "(04) 207-5050",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000049",
+    "estado": "emitida",
+    "validezDias": 30,
+    "items": [
+      {
+        "descripcion": "LAPTOP LENOVO V15 G4 ABP AMN / AMD RYZEN R7 7730U / 16GB RAM / SSD 512GB / 15.6\" FHD / GRIS",
+        "codigo": "018",
+        "cantidad": 1,
+        "precio": 660.87
+      }
+    ]
+  },
+  {
+    "id": "00000050",
+    "fechaInput": "2026-07-27",
+    "fecha": "2026-07-27T00:00:00.000Z",
+    "subtotal": 200,
+    "iva": 30,
+    "notas": "",
+    "total": 230,
+    "updatedAt": "2026-08-27T21:24:22.080000+00:00",
+    "createdAt": "2026-07-27T22:19:54.343000+00:00",
+    "cliente": {
+      "telefono": "(04) 207-5050",
+      "ruc": "0992922214001",
+      "nombre": "LUDEÑA & ASOCIADOS LUDASOCI C. LTDA.",
+      "direccion": "Ludeña & Asociados, S/N, 090602 Guayaquil",
+      "ciudad": "Guayaquil"
+    },
+    "numero": "00000050",
+    "estado": "emitida",
+    "validezDias": 30,
+    "items": [
+      {
+        "descripcion": "Reemplazo Teclado para HP ProBook 440 G9",
+        "codigo": "501",
+        "marca": "",
+        "precio": 80,
+        "cantidad": 2
+      },
+      {
+        "descripcion": "Mantenimiento de Computador",
+        "codigo": "014",
+        "marca": "",
+        "precio": 20,
+        "cantidad": 2
+      }
+    ]
+  },
+  {
+    "id": "00000051",
+    "fechaInput": "2026-08-17",
+    "notas": "test nota",
+    "subtotal": 123,
+    "iva": 18.45,
+    "fecha": "2026-08-17T00:00:00.000Z",
+    "total": 141.45,
+    "updatedAt": "2026-08-17T04:31:43.439000+00:00",
+    "createdAt": "2026-08-17T04:31:43.439000+00:00",
+    "validezDias": 30,
+    "numero": "00000051",
+    "estado": "emitida",
+    "cliente": {
+      "direccion": "Alborada",
+      "ruc": "123456789",
+      "nombre": "test",
+      "telefono": "0000000000",
+      "ciudad": "Guayaquil"
+    },
+    "items": [
+      {
+        "descripcion": "producto test",
+        "codigo": "test",
+        "marca": "",
+        "precio": 123,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": "00000052",
+    "fechaInput": "2026-08-17",
+    "notas": "",
+    "subtotal": 123,
+    "iva": 18.45,
+    "fecha": "2026-08-17T00:00:00.000Z",
+    "total": 141.45,
+    "updatedAt": "2026-08-17T17:06:15.295000+00:00",
+    "createdAt": "2026-08-17T17:06:15.295000+00:00",
+    "validezDias": 30,
+    "numero": "00000052",
+    "estado": "emitida",
+    "cliente": {
+      "direccion": "Alborada",
+      "ruc": "123456789",
+      "nombre": "test",
+      "telefono": "0000000000",
+      "ciudad": "Guayaquil"
+    },
+    "items": [
+      {
+        "descripcion": "producto test",
+        "codigo": "test",
+        "marca": "",
+        "precio": 123,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": "00000053",
+    "fechaInput": "2026-08-19",
+    "notas": "",
+    "subtotal": 4110,
+    "iva": 616.5,
+    "fecha": "2026-08-19T00:00:00.000Z",
+    "total": 4726.5,
+    "updatedAt": "2026-08-19T17:13:15.837000+00:00",
+    "createdAt": "2026-08-19T17:13:15.837000+00:00",
+    "validezDias": 30,
+    "numero": "00000053",
+    "estado": "emitida",
+    "cliente": {
+      "direccion": "Edificio Esquinero Farmacia Difarmes Piso 2",
+      "ruc": "0992538902001",
+      "nombre": "SERVINCREIBLE S.A.",
+      "telefono": "0997449646",
+      "ciudad": "Guayaquil"
+    },
+    "items": [
+      {
+        "descripcion": "Subscripción a Kommo Plan Advance 18 meses (+ 7 meses gratis)",
+        "codigo": "028",
+        "marca": "",
+        "precio": 450,
+        "cantidad": 9
+      },
+      {
+        "descripcion": "Automatización Flujo Cobranzas Kommo",
+        "codigo": "029",
+        "marca": "",
+        "precio": 60,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": "00000054",
+    "fechaInput": "2026-08-19",
+    "notas": "Forma de pago:\n- 3 meses ($600/mes)",
+    "subtotal": 1800,
+    "iva": 270,
+    "fecha": "2026-08-19T00:00:00.000Z",
+    "total": 2070,
+    "updatedAt": "2026-08-19T19:23:26.129000+00:00",
+    "createdAt": "2026-08-19T19:23:26.129000+00:00",
+    "validezDias": 30,
+    "numero": "00000054",
+    "estado": "emitida",
+    "cliente": {
+      "direccion": "Urdesa",
+      "ruc": "0992314842001",
+      "nombre": "ALTOSA",
+      "telefono": "+593993183173",
+      "ciudad": "Guayaquil"
+    },
+    "items": [
+      {
+        "descripcion": "Consultoría e Implementación Bot con IA Fase 1 y 2",
+        "codigo": "031",
+        "marca": "",
+        "precio": 1800,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": "00000055",
+    "fechaInput": "2026-08-28",
+    "notas": "- Servicio de instalación de Windows en Mac.\n- Servicio de instalación de software en Plotter.",
+    "subtotal": 55,
+    "iva": 8.25,
+    "fecha": "2026-08-28T00:00:00.000Z",
+    "total": 63.25,
+    "updatedAt": "2026-08-28T21:30:40.144000+00:00",
+    "createdAt": "2026-08-28T21:30:40.144000+00:00",
+    "validezDias": 30,
+    "numero": "00000055",
+    "estado": "emitida",
+    "cliente": {
+      "direccion": "Guayaquil",
+      "ruc": "0993394146001",
+      "nombre": "STAMPACORP ECUADOR S.A.S.",
+      "telefono": "042420096",
+      "ciudad": "Guayaquil"
+    },
+    "items": [
+      {
+        "descripcion": "Instalación de Software",
+        "codigo": "032",
+        "marca": "",
+        "precio": 30,
+        "cantidad": 1
+      },
+      {
+        "descripcion": "Servicio Técnico de Software",
+        "codigo": "008",
+        "marca": "",
+        "precio": 25,
+        "cantidad": 1
+      }
+    ]
+  },
+  {
+    "id": "00000056",
+    "fechaInput": "2026-09-03",
+    "notas": "Seteo de Plataforma Hikvision",
+    "subtotal": 30,
+    "iva": 4.5,
+    "fecha": "2026-09-03T00:00:00.000Z",
+    "total": 34.5,
+    "updatedAt": "2026-09-03T20:19:09.971000+00:00",
+    "createdAt": "2026-09-03T20:19:09.971000+00:00",
+    "validezDias": 30,
+    "numero": "00000056",
+    "estado": "emitida",
+    "cliente": {
+      "direccion": "",
+      "ruc": "0999999999",
+      "nombre": "IRRIGARDEN",
+      "telefono": "",
+      "ciudad": "Guayaquil"
+    },
+    "items": [
+      {
+        "descripcion": "Servicio Técnico de Software",
+        "codigo": "008",
+        "marca": "",
+        "precio": 30,
+        "cantidad": 1
+      }
+    ]
+  }
+]

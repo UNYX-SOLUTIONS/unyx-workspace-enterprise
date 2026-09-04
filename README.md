@@ -138,13 +138,17 @@ En PGAdmin (host `pgadmin`, puerto 5050) agrega un server con:
 | Database | `unyx_workspace` |
 | User | `unyx_user` |
 
-### Variables de entorno
+### Variables de entorno (una sola fuente por app)
 
-| Entorno | Archivo | Uso |
-|---|---|---|
-| Producción (VPS) | `.env.production` (NO versionar) | `deploy:prod`, `migrate:prod`, `seed:prod` |
-| Desarrollo local | `.env.development` (NO versionar) | `pnpm dev` con PostgreSQL local |
-| Plantilla pública | `.env.example` (SÍ versionar) | referencia |
+Siguiendo el patrón del resto de proyectos de la empresa (backend/frontend
+con su propio `.env`):
+
+| Archivo | Uso |
+|---|---|
+| `apps/backend/.env` + `.env.example` | Desarrollo del backend en host (DB local o postgres-unyx) |
+| `apps/frontend/.env` + `.env.example` | Desarrollo del frontend (Vite) |
+| `.env.production` (raíz, NO versionar) | Docker/VPS: `deploy:prod`, `migrate:prod`, `seed:prod` |
+| `.env.example` (raíz, SÍ versionar) | Plantilla de referencia para `.env.production` |
 
 Secretos requeridos en `.env.production`: `UNYX_DB_PASSWORD`, `JWT_SECRET`
 (mín. 32 caracteres) y opcionalmente `SEED_ADMIN_PASSWORD`.

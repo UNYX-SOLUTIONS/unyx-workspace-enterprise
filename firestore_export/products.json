@@ -1,0 +1,282 @@
+[
+  {
+    "id": "24ICnbuwQlf4oJ9NfbWP",
+    "name": "Servicio Técnico: cambio de número telefónico en página web",
+    "createdAt": "2026-07-01T05:36:24.429000+00:00",
+    "price": 5,
+    "updatedAt": "2026-07-01T05:36:38.197000+00:00",
+    "ref": "007"
+  },
+  {
+    "id": "2pCeb9AjwwXAk4oLcfxw",
+    "name": "Análisis de Datos",
+    "createdAt": "2026-07-22T19:10:03.355000+00:00",
+    "price": 200,
+    "updatedAt": "2026-07-22T19:10:03.355000+00:00",
+    "ref": "016"
+  },
+  {
+    "id": "5KKoK37oVTycByxukNNj",
+    "name": "Servicio Técnico de Software",
+    "createdAt": "2026-07-13T17:09:39.029000+00:00",
+    "price": 30,
+    "updatedAt": "2026-07-13T17:09:39.029000+00:00",
+    "ref": "008"
+  },
+  {
+    "id": "64EbYlYWQmpMFIbzmJ9J",
+    "name": "Integración de Botón de Pago en Web a Kommo",
+    "createdAt": "2026-07-13T17:26:47.482000+00:00",
+    "price": 50,
+    "updatedAt": "2026-07-13T17:27:02.511000+00:00",
+    "ref": "010"
+  },
+  {
+    "id": "8UEBth0Eo3WhvTf8ZFJT",
+    "name": "Consultoría Base",
+    "category": "",
+    "brand": "",
+    "createdAt": "2026-08-19T19:22:15.083000+00:00",
+    "price": 200,
+    "updatedAt": "2026-08-19T19:22:15.083000+00:00",
+    "ref": "030"
+  },
+  {
+    "id": "9VIUGmLfTMJiLdRV5w55",
+    "name": "Implementación Bot con IA Fase 1 y 2",
+    "category": "",
+    "brand": "",
+    "createdAt": "2026-08-19T19:22:33.143000+00:00",
+    "price": 1800,
+    "updatedAt": "2026-08-19T19:22:33.143000+00:00",
+    "ref": "031"
+  },
+  {
+    "id": "9b18uIQPT3jeC3zpL0QU",
+    "name": "Implementación de Botón de Pago en Web",
+    "createdAt": "2026-07-13T17:25:58.770000+00:00",
+    "price": 100,
+    "updatedAt": "2026-07-13T17:26:21.316000+00:00",
+    "ref": "009"
+  },
+  {
+    "id": "B7rtMwQprRS4uIdVvxAW",
+    "name": "MEMORIA RAM ADATA DDR4 8GB 3200MHZ SODIMM / AO1P32NC8T1-BBVS / PARA  LAPTOP",
+    "createdAt": "2026-06-24T14:48:24.990000+00:00",
+    "price": 120,
+    "updatedAt": "2026-06-24T14:48:24.990000+00:00",
+    "ref": "RAM 8GB"
+  },
+  {
+    "id": "BKR9gemY7KsySsgo6j80",
+    "name": "Diseño y Desarrollo de Módulo de Cotizaciones",
+    "createdAt": "2026-07-14T20:27:00.971000+00:00",
+    "price": 1200,
+    "updatedAt": "2026-07-14T20:27:00.971000+00:00",
+    "ref": "013"
+  },
+  {
+    "id": "FYUaZmuqm3gIwqQREHyn",
+    "name": "Subscripción a Kommo Plan Advance 18 meses (+ 7 meses gratis)",
+    "createdAt": "2026-08-19T17:01:32.188000+00:00",
+    "price": 450,
+    "updatedAt": "2026-08-19T17:01:32.188000+00:00",
+    "ref": "028"
+  },
+  {
+    "id": "JJxEMg0xm7o31oJLTdlT",
+    "name": "Actualización de File",
+    "createdAt": "2026-07-29T00:47:32.861000+00:00",
+    "price": 15,
+    "updatedAt": "2026-07-29T00:47:32.861000+00:00",
+    "ref": "026"
+  },
+  {
+    "id": "JYZgrUtSCvJW4blIN0UI",
+    "name": "LAPTOP LENOVO V15 G4 ABP AMN / AMD RYZEN R7 7730U / 16GB RAM / SSD 512GB / 15.6\" FHD / GRIS",
+    "createdAt": "2026-07-23T20:23:20.111000+00:00",
+    "price": 646,
+    "updatedAt": "2026-07-23T20:24:05.199000+00:00",
+    "ref": "018"
+  },
+  {
+    "id": "MJAkM7XwOkTXFnlZwol9",
+    "name": "producto test",
+    "category": "",
+    "brand": "",
+    "createdAt": "2026-08-17T04:31:24.057000+00:00",
+    "price": 123,
+    "updatedAt": "2026-08-17T04:31:24.057000+00:00",
+    "ref": "test"
+  },
+  {
+    "id": "Nj048oRrP8qr2BtpD4CZ",
+    "name": "Optimización y capacitación de Kommo",
+    "createdAt": "2026-07-20T20:22:12.660000+00:00",
+    "price": 570,
+    "updatedAt": "2026-07-20T20:22:12.660000+00:00",
+    "ref": "015"
+  },
+  {
+    "id": "P9nCnzoZIQhpa8guMrLk",
+    "name": "INSTALACIÓN DE RACK, ROUTER, SWITCH, CONTROLADOR, ISP, 2 APS, 4 CÁMARAS, CONFIGURACIÓN DE VLANS SEPARADAS, ANCHO DE BANDA Y SEGURIDAD INICIAL",
+    "createdAt": "2026-07-01T05:32:40.535000+00:00",
+    "price": 2118.43,
+    "updatedAt": "2026-07-01T05:32:40.535000+00:00",
+    "ref": "003"
+  },
+  {
+    "id": "Q1jvB1dbEKxANzeStQ3w",
+    "name": "Automatización Kommo",
+    "createdAt": "2026-08-19T17:02:58.525000+00:00",
+    "price": 60,
+    "updatedAt": "2026-08-19T17:02:58.525000+00:00",
+    "ref": "029"
+  },
+  {
+    "id": "U1L3eirOhLnXjShHItJd",
+    "name": "SERVICIO TÉCNICO",
+    "createdAt": "2026-07-01T05:32:23.935000+00:00",
+    "price": 60.87,
+    "updatedAt": "2026-07-01T05:32:23.935000+00:00",
+    "ref": "002"
+  },
+  {
+    "id": "V4awu3NTOjmAwZyJ9GhH",
+    "name": "Instalación de Biométrico",
+    "createdAt": "2026-07-29T00:37:30.746000+00:00",
+    "price": 20,
+    "updatedAt": "2026-07-29T00:37:30.746000+00:00",
+    "ref": "019"
+  },
+  {
+    "id": "Z9EJTzRfjQLI1g5PntDY",
+    "name": "Cambio de contraseña Kommo",
+    "createdAt": "2026-07-29T00:44:44.104000+00:00",
+    "price": 3,
+    "updatedAt": "2026-07-29T00:44:44.104000+00:00",
+    "ref": "024"
+  },
+  {
+    "id": "ZJBlBDe5EkZUczd7rFqs",
+    "name": "Mantenimiento de equipo: Impresora(s)",
+    "createdAt": "2026-07-29T00:46:43.010000+00:00",
+    "price": 20,
+    "updatedAt": "2026-07-29T00:46:43.010000+00:00",
+    "ref": "025"
+  },
+  {
+    "id": "apscM5LTcIqllTq1UaT8",
+    "name": "Servicio de Revisión y Mantenimiento de Página Web",
+    "createdAt": "2026-07-01T05:35:13.961000+00:00",
+    "price": 30,
+    "updatedAt": "2026-07-01T05:35:26.280000+00:00",
+    "ref": "006"
+  },
+  {
+    "id": "cRU7lsiPdGgx5kcebOKe",
+    "name": "Instalación de Software",
+    "category": "",
+    "brand": "",
+    "createdAt": "2026-08-28T21:28:56.389000+00:00",
+    "price": 25,
+    "updatedAt": "2026-08-28T21:28:56.389000+00:00",
+    "ref": "032"
+  },
+  {
+    "id": "eH1wbg07rm7uKub7ksVh",
+    "name": "CONTROL DE ACCESO FACIAL HIKVISION",
+    "ref": "004",
+    "price": 80,
+    "updatedAt": "2026-07-01T05:33:20.863000+00:00",
+    "createdAt": "2026-06-11T03:20:50.070000+00:00"
+  },
+  {
+    "id": "emFPABRPOwWhatQC1BuC",
+    "name": "Servicio de instalación y puesta en marcha",
+    "createdAt": "2026-06-12T18:12:18.516000+00:00",
+    "price": 20,
+    "updatedAt": "2026-06-12T18:12:18.516000+00:00",
+    "ref": "001"
+  },
+  {
+    "id": "eoA5ZLAWQNiXQCOc9JaI",
+    "name": "Preconfiguración de Biométricos",
+    "createdAt": "2026-07-29T00:39:07.885000+00:00",
+    "price": 10,
+    "updatedAt": "2026-07-29T00:39:07.885000+00:00",
+    "ref": "020"
+  },
+  {
+    "id": "gH3qiqt5DlJUb5LgEeTZ",
+    "name": "LAPTOP LENOVO V14 G3-IAP / 14\" FHD / INTEL CORE I5-1235U / 16GB RAM / 256GB SSD",
+    "createdAt": "2026-07-23T20:03:17.879000+00:00",
+    "price": 612,
+    "updatedAt": "2026-07-23T20:23:48.183000+00:00",
+    "ref": "017"
+  },
+  {
+    "id": "hvOnBDru0sjOtYX4M8PG",
+    "name": "Mantenimiento de Computador",
+    "createdAt": "2026-07-20T18:54:47.867000+00:00",
+    "price": 30,
+    "updatedAt": "2026-07-20T18:54:56.954000+00:00",
+    "ref": "014"
+  },
+  {
+    "id": "kj1QvaDVKdA5Z9ahVBrQ",
+    "name": "Reemplazo Teclado para HP ProBook 440 G9",
+    "createdAt": "2026-07-27T22:14:33.677000+00:00",
+    "price": 80,
+    "updatedAt": "2026-07-27T22:15:12.736000+00:00",
+    "ref": "501"
+  },
+  {
+    "id": "p84NHO0xHm8LN7jYNY8o",
+    "name": "SERVICIOS DE IMPLEMENTACIÓN DE SOFTWARE Y SERVICIO TÉCNICO",
+    "createdAt": "2026-07-01T05:33:32.913000+00:00",
+    "price": 2438.57,
+    "updatedAt": "2026-07-01T05:33:32.913000+00:00",
+    "ref": "005"
+  },
+  {
+    "id": "q0kfX6JevzdS4QL4Ygwa",
+    "name": "UNIDAD DE ESTADO SOLIDO M.2 NVME KOOTION 512GB / PCIE 3.0 / 2280",
+    "createdAt": "2026-07-31T15:31:53.253000+00:00",
+    "price": 98,
+    "updatedAt": "2026-07-31T15:31:53.253000+00:00",
+    "ref": "027"
+  },
+  {
+    "id": "thAGQza50EldhIHBRHuU",
+    "name": "Capacitación y asesoría Kommo",
+    "createdAt": "2026-07-29T00:40:14.672000+00:00",
+    "price": 50,
+    "updatedAt": "2026-07-29T00:52:12.797000+00:00",
+    "ref": "021"
+  },
+  {
+    "id": "u2CB6QdbyKP7gt8HDqFo",
+    "name": "Integración de MailerLite a Kommo",
+    "createdAt": "2026-07-13T17:27:26.497000+00:00",
+    "price": 80,
+    "updatedAt": "2026-07-13T17:27:26.497000+00:00",
+    "ref": "011"
+  },
+  {
+    "id": "yCh39UGBbjXJKtNoBnrX",
+    "name": "Integración de blog/noticias en página Web",
+    "createdAt": "2026-07-13T17:27:56.735000+00:00",
+    "price": 80,
+    "updatedAt": "2026-07-13T17:27:56.735000+00:00",
+    "ref": "012"
+  },
+  {
+    "id": "yiBb3DzybMy0JqVahSGb",
+    "name": "Configuración de equipos: Laptops, impresoras y otros",
+    "createdAt": "2026-07-29T00:41:50.883000+00:00",
+    "price": 15,
+    "updatedAt": "2026-07-29T01:29:54.680000+00:00",
+    "ref": "022"
+  }
+]

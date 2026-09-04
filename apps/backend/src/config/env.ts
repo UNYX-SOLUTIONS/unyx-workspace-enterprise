@@ -1,16 +1,9 @@
-import { resolve } from "node:path";
-import dotenv from "dotenv";
+import "dotenv/config";
 import { z } from "zod";
 
-// 1. .env local de la app (apps/backend/.env) — desarrollo
-dotenv.config();
-
-// 2. .env.<entorno> en la raíz del monorepo (desarrollo/producción)
-const nodeEnv = process.env.NODE_ENV || "development";
-dotenv.config({
-  path: resolve(import.meta.dirname, "../../../../.env." + nodeEnv),
-  override: false,
-});
+// Carga el .env de la carpeta actual (apps/backend/.env).
+// En Docker, las variables llegan por el entorno del contenedor
+// (docker compose --env-file .env.production).
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),

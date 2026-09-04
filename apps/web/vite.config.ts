@@ -15,7 +15,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           pdf: ["jspdf", "jspdf-autotable"],
-          canvas: ["html2canvas"],
           vendor: ["react", "react-dom", "react-router-dom", "axios"],
         },
       },

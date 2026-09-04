@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { parseMaintenanceDiagnostic } from "./importMaintenanceDiagnostic";
-import { createMaintenanceChecklist, type ChecklistItem } from "../constants/maintenanceChecklist";
+import { createMaintenanceChecklist } from "../constants/maintenanceChecklist";
 
 const checklist = createMaintenanceChecklist();
 

@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { navigation } from "../../app/navigation";
+import { navigation } from "@/app/navigation";
 
 export interface SidebarProps {
   open?: boolean;

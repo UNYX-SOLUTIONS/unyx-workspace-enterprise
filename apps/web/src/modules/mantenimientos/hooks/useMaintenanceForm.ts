@@ -1,11 +1,10 @@
 import { useMemo, useState, type ChangeEvent } from "react";
-import { createMaintenanceChecklist, type ChecklistItem } from "../constants/maintenanceChecklist";
-import type { EquipmentState } from "../components/EquipmentForm";
-import { getClients, type ClientDto } from "../../clientes/services/clientService";
-import { getMaintenance, type MaintenanceRecord } from "../services/maintenanceService";
-import { parseMaintenanceDiagnostic } from "../utils/importMaintenanceDiagnostic";
-
-const TODAY = () => new Date().toISOString().split("T")[0];
+import { createMaintenanceChecklist, type ChecklistItem } from "@/modules/mantenimientos/constants/maintenanceChecklist";
+import type { EquipmentState } from "@/modules/mantenimientos/components/EquipmentForm";
+import { getClients, type ClientDto } from "@/modules/clientes/services/clientService";
+import { getMaintenance, type MaintenanceRecord } from "@/modules/mantenimientos/services/maintenanceService";
+import { parseMaintenanceDiagnostic } from "@/modules/mantenimientos/utils/importMaintenanceDiagnostic";
+import { normalizeDate, todayIso } from "@/modules/common/utils/dateHelpers";
 
 export interface ClienteFormState {
   nombre: string;
@@ -81,27 +80,9 @@ export function normalizeTextList(value: unknown): string {
   return typeof value === "string" ? value : "";
 }
 
-export function normalizeDate(value: unknown): string {
-  if (!value) return TODAY();
-
-  if (typeof value === "object" && value !== null && "toDate" in value) {
-    const toDate = (value as { toDate: () => Date }).toDate;
-    if (typeof toDate === "function") return toDate().toISOString().split("T")[0];
-  }
-
-  if (typeof value === "object" && value !== null && "seconds" in value) {
-    const seconds = (value as { seconds?: unknown }).seconds;
-    if (typeof seconds === "number") {
-      return new Date(seconds * 1000).toISOString().split("T")[0];
-    }
-  }
-
-  return String(value).slice(0, 10);
-}
-
 export function useMaintenanceForm() {
   const [numero, setNumero] = useState("");
-  const [fecha, setFecha] = useState(TODAY());
+  const [fecha, setFecha] = useState(todayIso());
   const [estado, setEstado] = useState("En revisión");
   const [tecnicoResponsable, setTecnicoResponsable] = useState("");
 
@@ -217,7 +198,7 @@ export function useMaintenanceForm() {
 
   function reset() {
     setNumero("");
-    setFecha(TODAY());
+    setFecha(todayIso());
     setEstado("En revisión");
     setTecnicoResponsable("");
     setCliente({ ...EMPTY_CLIENT });

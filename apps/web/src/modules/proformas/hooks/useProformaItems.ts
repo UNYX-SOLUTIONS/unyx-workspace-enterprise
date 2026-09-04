@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { calculateTotals, type Totals } from "../utils/monetary";
+import { calculateTotals, type Totals } from "@/modules/common/utils/monetary";
 
 export interface ProformaItemState {
   id: string;

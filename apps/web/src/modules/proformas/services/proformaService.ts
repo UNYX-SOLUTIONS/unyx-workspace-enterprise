@@ -1,5 +1,6 @@
-import { api } from "../../../config/api";
+import { api } from "@/config/api";
 import type { ProformaEstado, ProformaInput } from "@unyx/shared-schemas";
+import type { Paginated } from "@unyx/shared-types";
 
 export interface ProformaItemDto {
   id: string;
@@ -42,11 +43,6 @@ export interface PaginationMeta {
   pageSize: number;
   total: number;
   totalPages: number;
-}
-
-export interface Paginated<T> {
-  data: T[];
-  meta: PaginationMeta;
 }
 
 export interface ListOptions {

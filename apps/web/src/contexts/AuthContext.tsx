@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { api } from "../config/api";
+import { api } from "@/config/api";
 
 export interface AuthUser {
   id: string;

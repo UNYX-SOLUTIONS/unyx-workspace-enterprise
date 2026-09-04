@@ -1,11 +1,11 @@
 import { useCallback, useRef, useState } from "react";
 import type { ProformaEstado } from "@unyx/shared-schemas";
-import { useToast } from "../../../hooks/useToast";
-import { getProforma, createProforma, updateProforma } from "../services/proformaService";
-import { generatePdf } from "../utils/generatePdf";
-import { fromCents, validateMonetary } from "../utils/monetary";
-import type { UseProformaForm } from "./useProformaForm";
-import type { UseProformaItems } from "./useProformaItems";
+import { useToast } from "@/hooks/useToast";
+import { getProforma, createProforma, updateProforma } from "@/modules/proformas/services/proformaService";
+import { generatePdf } from "@/modules/proformas/utils/generatePdf";
+import { fromCents, validateMonetary } from "@/modules/common/utils/monetary";
+import type { UseProformaForm } from "@/modules/proformas/hooks/useProformaForm";
+import type { UseProformaItems } from "@/modules/proformas/hooks/useProformaItems";
 
 export interface UseProformaSaveParams {
   form: UseProformaForm;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getProformaStatusMeta, PROFORMA_STATUS_MAP } from "./statusMap";
+import { getProformaStatusMeta, PROFORMA_STATUS_MAP } from "@/modules/common/utils/statusMap";
 
 describe("getProformaStatusMeta", () => {
   it("resuelve los estados del enum", () => {

@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from "express";
 import { ZodError } from "zod";
 import { env } from "../config/env.js";
-import { logger } from "../config/logger.js";
+import { logger } from "../utils/logger.js";
 
 export class AppError extends Error {
   readonly status: number;

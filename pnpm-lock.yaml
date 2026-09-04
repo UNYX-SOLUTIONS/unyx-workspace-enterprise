@@ -8,12 +8,24 @@ importers:
 
   .:
     devDependencies:
+      '@types/node':
+        specifier: ^24.0.0
+        version: 24.13.3
+      globals:
+        specifier: ^16.3.0
+        version: 16.5.0
       prettier:
         specifier: ^3.6.2
         version: 3.9.6
       turbo:
         specifier: ^2.5.5
         version: 2.10.7
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+      typescript-eslint:
+        specifier: ^8.69.0
+        version: 8.69.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
 
   apps/api:
     dependencies:
@@ -102,6 +114,9 @@ importers:
       '@unyx/shared-schemas':
         specifier: workspace:*
         version: link:../../packages/shared-schemas
+      '@unyx/shared-types':
+        specifier: workspace:*
+        version: link:../../packages/shared-types
       axios:
         specifier: ^1.11.0
         version: 1.18.1
@@ -958,6 +973,9 @@ packages:
 
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
+
+  '@types/node@24.13.3':
+    resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
 
   '@types/node@26.4.1':
     resolution: {integrity: sha512-k97ENvZWtvA6yqz5/FS6a7duDgOPEeOQOc2iKS/nY6mX6qJUKtLnWzQS+Xj6tXweyj6ZcTAK2Qecetnvi9nCLA==}
@@ -2384,6 +2402,9 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  undici-types@7.18.2:
+    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
+
   undici-types@8.3.0:
     resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
@@ -3075,6 +3096,10 @@ snapshots:
   '@types/methods@1.1.4': {}
 
   '@types/ms@2.1.0': {}
+
+  '@types/node@24.13.3':
+    dependencies:
+      undici-types: 7.18.2
 
   '@types/node@26.4.1':
     dependencies:
@@ -4569,6 +4594,8 @@ snapshots:
       - supports-color
 
   typescript@5.9.3: {}
+
+  undici-types@7.18.2: {}
 
   undici-types@8.3.0: {}
 

@@ -9,9 +9,10 @@ import {
   Modal,
   LoadingSpinner,
 } from "../../../components/common";
+import { useToast } from "@/hooks/useToast";
 
-import { ClientForm, type ClientFormValues } from "../components/ClientForm";
-import { getInitials } from "../../../utils/stringUtils";
+import { ClientForm, type ClientFormValues } from "@/modules/clientes/components/ClientForm";
+import { getInitials } from "@/utils/stringUtils";
 
 import {
   getClients,
@@ -22,12 +23,14 @@ import {
 } from "../services/clientService";
 
 export default function ClientsPage() {
+  const { showError, showSuccess } = useToast();
   const [search, setSearch] = useState("");
   const [clients, setClients] = useState<ClientDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<ClientDto | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingClientId, setDeletingClientId] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -87,10 +90,13 @@ export default function ClientsPage() {
 
       await refreshClients();
       handleCloseModal();
+      showSuccess(
+        editingClient ? "Cliente actualizado correctamente." : "Cliente creado correctamente."
+      );
     } catch (error) {
       console.error("Error al guardar cliente:", error);
-      window.alert(
-        `Error al guardar cliente:\n${
+      showError(
+        `Error al guardar cliente: ${
           error instanceof Error ? error.message : "Error desconocido"
         }`
       );
@@ -100,15 +106,21 @@ export default function ClientsPage() {
   };
 
   const handleDeleteClient = async (clientId: string) => {
-    if (!window.confirm("¿Deseas eliminar este cliente?")) return;
+    if (deletingClientId !== clientId) {
+      setDeletingClientId(clientId);
+      return;
+    }
 
     try {
       await deleteClient(clientId);
+      setDeletingClientId(null);
       await refreshClients();
+      showSuccess("Cliente eliminado.");
     } catch (error) {
       console.error("Error al eliminar cliente:", error);
-      window.alert(
-        `Error al eliminar cliente:\n${
+      setDeletingClientId(null);
+      showError(
+        `Error al eliminar cliente: ${
           error instanceof Error ? error.message : "Error desconocido"
         }`
       );
@@ -245,7 +257,7 @@ export default function ClientsPage() {
                         onClick={() => handleOpenModal(client)}
                       />
                       <ActionButton
-                        label="Eliminar"
+                        label={deletingClientId === client.id ? "¿Confirmar?" : "Eliminar"}
                         variant="danger"
                         onClick={() => handleDeleteClient(client.id)}
                       />

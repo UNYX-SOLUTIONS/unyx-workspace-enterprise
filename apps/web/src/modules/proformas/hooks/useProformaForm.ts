@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
-import type { ProformaDto } from "../services/proformaService";
-
-const TODAY = () => new Date().toISOString().split("T")[0];
+import { todayIso } from "@/modules/common/utils/dateHelpers";
+import type { ProformaDto } from "@/modules/proformas/services/proformaService";
 
 export interface ClienteFormState {
   nombre: string;
@@ -32,7 +31,7 @@ export type ProformaFormField = "fecha" | "validezDias" | "notas";
 
 export function useProformaForm() {
   const [numero, setNumero] = useState("");
-  const [fecha, setFecha] = useState(TODAY());
+  const [fecha, setFecha] = useState(todayIso());
   const [validezDias, setValidezDias] = useState(30);
   const [notas, setNotas] = useState("");
   const [estado, setEstado] = useState("BORRADOR");
@@ -66,7 +65,7 @@ export function useProformaForm() {
 
   const loadProforma = useCallback((data: Pick<ProformaDto, "numero" | "fecha" | "validezDias" | "notas" | "estado" | "cliente">) => {
     setNumero(data.numero || "");
-    setFecha(data.fecha ? String(data.fecha).slice(0, 10) : TODAY());
+    setFecha(data.fecha ? String(data.fecha).slice(0, 10) : todayIso());
     setValidezDias(Number(data.validezDias || 30));
     setNotas(data.notas || "");
     setEstado(data.estado || "BORRADOR");
@@ -82,7 +81,7 @@ export function useProformaForm() {
 
   const reset = useCallback((nextNumero: string) => {
     setNumero(nextNumero || "");
-    setFecha(TODAY());
+    setFecha(todayIso());
     setValidezDias(30);
     setNotas("");
     setEstado("BORRADOR");

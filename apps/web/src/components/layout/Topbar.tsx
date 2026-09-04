@@ -1,6 +1,6 @@
-import SearchBar from "./SearchBar";
-import NotificationButton from "./NotificationButton";
-import UserMenu from "./UserMenu";
+import SearchBar from "@/components/layout/SearchBar";
+import NotificationButton from "@/components/layout/NotificationButton";
+import UserMenu from "@/components/layout/UserMenu";
 
 export interface TopbarProps {
   onMenuClick: () => void;

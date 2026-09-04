@@ -1,5 +1,5 @@
-import type { ChecklistItem } from "../constants/maintenanceChecklist";
-import type { EquipmentState } from "../components/EquipmentForm";
+import type { ChecklistItem } from "@/modules/mantenimientos/constants/maintenanceChecklist";
+import type { EquipmentState } from "@/modules/mantenimientos/components/EquipmentForm";
 
 export interface ImportedDiagnostic {
   diagnostic: Record<string, unknown>;

@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { Card, Modal } from "../../../components/common";
-import { useToast } from "../../../hooks/useToast";
-import { ProductForm } from "../../productos/components/ProductForm";
-import { addProduct, getProducts, type ProductView } from "../../productos/services/productService";
-import { formatCurrency, lineTotalCents } from "../utils/monetary";
-import type { UseProformaItems } from "../hooks/useProformaItems";
+import { Card, Modal } from "@/components/common";
+import { useToast } from "@/hooks/useToast";
+import { ProductForm } from "@/modules/productos/components/ProductForm";
+import { addProduct, getProducts, type ProductView } from "@/modules/productos/services/productService";
+import { formatCurrency, lineTotalCents } from "@/modules/common/utils/monetary";
+import type { UseProformaItems } from "@/modules/proformas/hooks/useProformaItems";
 
 export interface ProformaItemsTableProps {
   items: UseProformaItems;

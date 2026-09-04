@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "type-check": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "lint": "eslint src",
@@ -14,6 +15,7 @@
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
     "@unyx/shared-schemas": "workspace:*",
+    "@unyx/shared-types": "workspace:*",
     "axios": "^1.11.0",
     "i18next": "^25.3.2",
     "jspdf": "^3.0.1",

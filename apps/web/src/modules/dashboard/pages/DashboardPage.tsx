@@ -1,4 +1,4 @@
-import PageHeader from "../../../components/common/PageHeader";
+import PageHeader from "@/components/common/PageHeader";
 
 const metrics = [
   ["Proformas", "0"],

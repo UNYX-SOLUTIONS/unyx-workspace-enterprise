@@ -1,7 +1,8 @@
 import jsPDF from "jspdf";
 import autoTable, { type UserOptions } from "jspdf-autotable";
 
-import logo from "../../../assets/logos/logo.png";
+import logo from "@/assets/logos/logo.png";
+import { formatDate } from "@/modules/common/utils/dateHelpers";
 
 const COMPANY = {
   name: "UNYX SOLUTIONS S.A.S.",
@@ -67,17 +68,6 @@ const getBase64Image = (url: string): Promise<string> =>
     image.onerror = () => reject(new Error("No se pudo cargar el logotipo."));
     image.src = url;
   });
-
-const formatDate = (date: unknown): string => {
-  if (!date) return "";
-  const parsed = new Date(`${String(date).slice(0, 10)}T12:00:00`);
-  if (Number.isNaN(parsed.getTime())) return "";
-  return parsed.toLocaleDateString("es-EC", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-};
 
 const safe = (value: unknown): string => String(value ?? "");
 

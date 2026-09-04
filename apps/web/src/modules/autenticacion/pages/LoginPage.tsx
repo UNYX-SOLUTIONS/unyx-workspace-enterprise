@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Navigate, useNavigate } from "react-router-dom";
 
-import { useAuth } from "../../../hooks/useAuth";
-import { useToast } from "../../../hooks/useToast";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/useToast";
 
-import ActionButton from "../../../components/common/ActionButton";
-import InputField from "../../../components/common/InputField";
+import ActionButton from "@/components/common/ActionButton";
+import InputField from "@/components/common/InputField";
 
 interface LoginFormValues {
   email: string;

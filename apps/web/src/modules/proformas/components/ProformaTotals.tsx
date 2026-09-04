@@ -1,5 +1,5 @@
-import { Card } from "../../../components/common";
-import { IVA_RATE_PERCENT, formatCurrency, type Totals } from "../utils/monetary";
+import { Card } from "@/components/common";
+import { IVA_RATE_PERCENT, formatCurrency, type Totals } from "@/modules/common/utils/monetary";
 
 export interface ProformaTotalsProps {
   totals: Totals;

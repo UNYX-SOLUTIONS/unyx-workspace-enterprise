@@ -1,13 +1,13 @@
 import { useCallback, useRef, useState } from "react";
-import { useToast } from "../../../hooks/useToast";
+import { useToast } from "@/hooks/useToast";
 import {
   createMaintenance,
   updateMaintenance,
   previewNextMaintenanceNumber,
   type MaintenanceDto,
 } from "../services/maintenanceService";
-import { generateMaintenancePdf } from "../utils/generateMaintenancePdf";
-import type { UseMaintenanceForm } from "./useMaintenanceForm";
+import { generateMaintenancePdf } from "@/modules/mantenimientos/utils/generateMaintenancePdf";
+import type { UseMaintenanceForm } from "@/modules/mantenimientos/hooks/useMaintenanceForm";
 
 export interface UseMaintenanceSaveParams {
   form: UseMaintenanceForm;

@@ -1,4 +1,4 @@
-import { api } from "../../../config/api";
+import { api } from "@/config/api";
 import type { MaintenanceEstado } from "@unyx/shared-schemas";
 
 export interface MaintenanceRecord {

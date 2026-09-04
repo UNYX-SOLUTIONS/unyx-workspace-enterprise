@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { Card, InputField, Modal } from "../../../components/common";
-import { useToast } from "../../../hooks/useToast";
-import { ClientForm } from "../../clientes/components/ClientForm";
-import { addClient, getClients, type ClientDto } from "../../clientes/services/clientService";
-import type { UseProformaForm } from "../hooks/useProformaForm";
+import { Card, InputField, Modal } from "@/components/common";
+import { useToast } from "@/hooks/useToast";
+import { ClientForm } from "@/modules/clientes/components/ClientForm";
+import { addClient, getClients, type ClientDto } from "@/modules/clientes/services/clientService";
+import type { UseProformaForm } from "@/modules/proformas/hooks/useProformaForm";
 
 export interface ProformaFormProps {
   form: UseProformaForm;

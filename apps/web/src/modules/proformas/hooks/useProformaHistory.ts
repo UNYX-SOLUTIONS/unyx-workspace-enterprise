@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useTransition } from "react";
-import { listProformas, type ProformaDto } from "../services/proformaService";
+import { listProformas, type ProformaDto } from "@/modules/proformas/services/proformaService";
 
 export interface UseProformaHistory {
   proformas: ProformaDto[];

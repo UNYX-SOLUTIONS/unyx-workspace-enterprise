@@ -8,8 +8,9 @@ import {
   Modal,
   PageHeader,
 } from "../../../components/common";
+import { useToast } from "@/hooks/useToast";
 
-import { ProductForm, type ProductFormValues } from "../components/ProductForm";
+import { ProductForm, type ProductFormValues } from "@/modules/productos/components/ProductForm";
 
 import {
   addProduct,
@@ -20,12 +21,14 @@ import {
 } from "../services/productService";
 
 export default function ProductsPage() {
+  const { showError, showSuccess } = useToast();
   const [products, setProducts] = useState<ProductView[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<ProductView | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [search, setSearch] = useState("");
+  const [deletingProductId, setDeletingProductId] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -89,10 +92,15 @@ export default function ProductsPage() {
       await refreshProducts();
       setIsModalOpen(false);
       setEditingProduct(null);
+      showSuccess(
+        editingProduct
+          ? "Producto actualizado correctamente."
+          : "Producto creado correctamente."
+      );
     } catch (error) {
       console.error("Error al guardar producto:", error);
-      window.alert(
-        `Error al guardar el producto:\n${
+      showError(
+        `Error al guardar el producto: ${
           error instanceof Error ? error.message : "Error desconocido"
         }`
       );
@@ -102,17 +110,21 @@ export default function ProductsPage() {
   }
 
   async function handleDeleteProduct(productId: string) {
-    const confirmed = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
-
-    if (!confirmed) return;
+    if (deletingProductId !== productId) {
+      setDeletingProductId(productId);
+      return;
+    }
 
     try {
       await deleteProduct(productId);
+      setDeletingProductId(null);
       await refreshProducts();
+      showSuccess("Producto eliminado.");
     } catch (error) {
       console.error("Error al eliminar producto:", error);
-      window.alert(
-        `Error al eliminar el producto:\n${
+      setDeletingProductId(null);
+      showError(
+        `Error al eliminar el producto: ${
           error instanceof Error ? error.message : "Error desconocido"
         }`
       );
@@ -241,7 +253,7 @@ export default function ProductsPage() {
                         onClick={() => handleOpenModal(product)}
                       />
                       <ActionButton
-                        label="Eliminar"
+                        label={deletingProductId === product.id ? "¿Confirmar?" : "Eliminar"}
                         variant="danger"
                         onClick={() => handleDeleteProduct(product.id)}
                       />

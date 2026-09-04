@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getInitials } from "./stringUtils";
+import { getInitials } from "@/utils/stringUtils";
 
 describe("getInitials", () => {
   it("toma la primera letra de la primera y última palabra", () => {

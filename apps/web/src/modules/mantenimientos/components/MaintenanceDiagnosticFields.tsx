@@ -1,5 +1,5 @@
-import InputField from "../../../components/common/InputField";
-import type { DiagnosticState } from "../hooks/useMaintenanceForm";
+import InputField from "@/components/common/InputField";
+import type { DiagnosticState } from "@/modules/mantenimientos/hooks/useMaintenanceForm";
 
 export interface TextAreaProps {
   label: string;

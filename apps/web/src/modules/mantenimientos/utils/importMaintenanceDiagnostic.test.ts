@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { parseMaintenanceDiagnostic } from "./importMaintenanceDiagnostic";
-import { createMaintenanceChecklist } from "../constants/maintenanceChecklist";
+import { parseMaintenanceDiagnostic } from "@/modules/mantenimientos/utils/importMaintenanceDiagnostic";
+import { createMaintenanceChecklist } from "@/modules/mantenimientos/constants/maintenanceChecklist";
 
 const checklist = createMaintenanceChecklist();
 

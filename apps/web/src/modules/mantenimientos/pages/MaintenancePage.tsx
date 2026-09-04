@@ -1,23 +1,25 @@
 import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import Card from "../../../components/common/Card";
-import InputField from "../../../components/common/InputField";
-import PageHeader from "../../../components/common/PageHeader";
+import Card from "@/components/common/Card";
+import InputField from "@/components/common/InputField";
+import PageHeader from "@/components/common/PageHeader";
+import { useToast } from "@/hooks/useToast";
 
-import { EquipmentForm } from "../components/EquipmentForm";
-import { MaintenanceChecklist } from "../components/MaintenanceChecklist";
+import { EquipmentForm } from "@/modules/mantenimientos/components/EquipmentForm";
+import { MaintenanceChecklist } from "@/modules/mantenimientos/components/MaintenanceChecklist";
 import {
   DiagnosticFields,
   TextArea,
 } from "../components/MaintenanceDiagnosticFields";
 
-import { useMaintenanceForm } from "../hooks/useMaintenanceForm";
-import { useMaintenanceSave } from "../hooks/useMaintenanceSave";
+import { useMaintenanceForm } from "@/modules/mantenimientos/hooks/useMaintenanceForm";
+import { useMaintenanceSave } from "@/modules/mantenimientos/hooks/useMaintenanceSave";
 
 export default function MaintenancePage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { showError, showSuccess } = useToast();
 
   const selectedMaintenanceNumber =
     (location.state as { selectedMaintenanceNumber?: string } | null)
@@ -119,13 +121,13 @@ export default function MaintenancePage() {
           try {
             const imported = await form.importDiagnostic(event);
             if (imported) {
-              window.alert(
+              showSuccess(
                 "Diagnóstico importado correctamente. Revise los campos pendientes antes de guardar."
               );
             }
           } catch (error) {
             console.error("Error importando diagnóstico:", error);
-            window.alert(
+            showError(
               error instanceof Error
                 ? error.message
                 : "No fue posible importar el archivo JSON."

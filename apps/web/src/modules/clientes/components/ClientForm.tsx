@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 
-import { InputField, LoadingSpinner } from "../../../components/common";
+import { InputField, LoadingSpinner } from "@/components/common";
 
 export interface ClientFormValues {
   nombre: string;

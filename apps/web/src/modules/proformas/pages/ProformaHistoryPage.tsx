@@ -8,22 +8,19 @@ import {
   PageHeader,
   SummaryCard,
 } from "../../../components/common";
-import { getProformaStatusMeta } from "../../common/utils/statusMap";
-import { useProformaHistory } from "../hooks/useProformaHistory";
-import { generatePdf } from "../utils/generatePdf";
-import { formatCurrency } from "../utils/monetary";
-import type { ProformaDto } from "../services/proformaService";
+import { useToast } from "@/hooks/useToast";
+import { getDateTimestamp } from "@/modules/common/utils/dateHelpers";
+import { formatCurrency } from "@/modules/common/utils/monetary";
+import { getProformaStatusMeta } from "@/modules/common/utils/statusMap";
+import ProformaStatusBadge from "@/modules/proformas/components/ProformaStatusBadge";
+import { useProformaHistory } from "@/modules/proformas/hooks/useProformaHistory";
+import { generatePdf } from "@/modules/proformas/utils/generatePdf";
+import type { ProformaDto } from "@/modules/proformas/services/proformaService";
 
 type SortKey = "numero" | "cliente" | "fecha" | "estado" | "total";
 
 function toDisplayCents(value: unknown): number {
   return Math.round(Number(value || 0) * 100);
-}
-
-function getDateTimestamp(dateValue: unknown): number {
-  if (!dateValue) return 0;
-  const timestamp = new Date(String(dateValue)).getTime();
-  return Number.isNaN(timestamp) ? 0 : timestamp;
 }
 
 function getQuotationNumber(value: unknown): number {
@@ -51,6 +48,7 @@ function getSortValue(proforma: ProformaDto, key: SortKey): string | number {
 
 export default function ProformaHistoryPage() {
   const navigate = useNavigate();
+  const { showError } = useToast();
   const {
     proformas,
     total,
@@ -121,7 +119,7 @@ export default function ProformaHistoryPage() {
       await generatePdf(proforma);
     } catch (pdfError) {
       const message = pdfError instanceof Error ? pdfError.message : "Error desconocido";
-      window.alert(`Error al generar el PDF:\n${message}`);
+      showError(`Error al generar el PDF: ${message}`);
     } finally {
       setGeneratingPdfNumber(null);
     }
@@ -137,7 +135,6 @@ export default function ProformaHistoryPage() {
       getProformaStatusMeta(proforma.estado).label,
       formatCurrency(toDisplayCents(proforma.total)),
     ]);
-
     const csv = [header, ...rows]
       .map((row) => row.map((cell) => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(","))
       .join("\n");
@@ -258,13 +255,11 @@ export default function ProformaHistoryPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#d1d8e3]">
-                  {sortedProformas.map((proforma) => {
-                    const statusMeta = getProformaStatusMeta(proforma.estado);
-                    return (
-                      <tr
-                        key={proforma.id || proforma.numero}
-                        className="bg-white transition-colors hover:bg-[#f3f7ff]"
-                      >
+                  {sortedProformas.map((proforma) => (
+                    <tr
+                      key={proforma.id || proforma.numero}
+                      className="bg-white transition-colors hover:bg-[#f3f7ff]"
+                    >
                         <td className="px-4 py-4 sm:px-6">
                           <button
                             type="button"
@@ -288,11 +283,7 @@ export default function ProformaHistoryPage() {
                             : "Sin fecha"}
                         </td>
                         <td className="px-4 py-4 sm:px-6">
-                          <span
-                            className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase ${statusMeta.badge}`}
-                          >
-                            {statusMeta.label}
-                          </span>
+                          <ProformaStatusBadge status={proforma.estado} />
                         </td>
                         <td className="hidden px-4 py-4 text-right font-extrabold text-[#111827] sm:table-cell sm:px-6">
                           {formatCurrency(toDisplayCents(proforma.total))}
@@ -312,8 +303,7 @@ export default function ProformaHistoryPage() {
                           </div>
                         </td>
                       </tr>
-                    );
-                  })}
+                    ))}
 
                   {sortedProformas.length === 0 && (
                     <tr>

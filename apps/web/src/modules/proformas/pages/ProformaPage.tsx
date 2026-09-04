@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Card, InputField, PageHeader } from "../../../components/common";
-import { useToast } from "../../../hooks/useToast";
+import { Card, InputField, PageHeader } from "@/components/common";
+import { useToast } from "@/hooks/useToast";
 
-import ProformaActions from "../components/ProformaActions";
-import ProformaForm from "../components/ProformaForm";
-import ProformaItemsTable from "../components/ProformaItemsTable";
-import ProformaTotals from "../components/ProformaTotals";
+import ProformaActions from "@/modules/proformas/components/ProformaActions";
+import ProformaForm from "@/modules/proformas/components/ProformaForm";
+import ProformaItemsTable from "@/modules/proformas/components/ProformaItemsTable";
+import ProformaTotals from "@/modules/proformas/components/ProformaTotals";
 
-import { useProformaForm } from "../hooks/useProformaForm";
-import { useProformaItems } from "../hooks/useProformaItems";
-import { useProformaSave } from "../hooks/useProformaSave";
+import { useProformaForm } from "@/modules/proformas/hooks/useProformaForm";
+import { useProformaItems } from "@/modules/proformas/hooks/useProformaItems";
+import { useProformaSave } from "@/modules/proformas/hooks/useProformaSave";
 
-import { previewNextProformaNumber } from "../services/proformaService";
+import { previewNextProformaNumber } from "@/modules/proformas/services/proformaService";
 
 export default function ProformaPage() {
   const { numero: routeNumero } = useParams<{ numero?: string }>();

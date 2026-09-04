@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import PageHeader from "../../../components/common/PageHeader";
-import ActionButton from "../../../components/common/ActionButton";
+import PageHeader from "@/components/common/PageHeader";
+import ActionButton from "@/components/common/ActionButton";
+import { useToast } from "@/hooks/useToast";
+import { formatDate, getDateTimestamp } from "@/modules/common/utils/dateHelpers";
+import { getMaintenanceStatusMeta } from "@/modules/common/utils/statusMap";
 
-import { getMaintenances, type MaintenanceRecord } from "../services/maintenanceService";
-import { generateMaintenancePdf } from "../utils/generateMaintenancePdf";
+import { getMaintenances, type MaintenanceRecord } from "@/modules/mantenimientos/services/maintenanceService";
+import { generateMaintenancePdf } from "@/modules/mantenimientos/utils/generateMaintenancePdf";
 
 type SortKey = "numero" | "fecha" | "cliente" | "equipo" | "serie" | "estado";
 
@@ -13,23 +16,6 @@ function getMaintenanceNumber(value: unknown): number {
   const numbers = String(value || "").match(/\d+/g);
   if (!numbers) return 0;
   return Number(numbers.join("")) || 0;
-}
-
-function getDateTimestamp(value: unknown): number {
-  if (!value) return 0;
-
-  if (typeof value === "object" && value !== null && "toDate" in value) {
-    const toDate = (value as { toDate: () => Date }).toDate;
-    if (typeof toDate === "function") return toDate().getTime();
-  }
-
-  if (typeof value === "object" && value !== null && "seconds" in value) {
-    const seconds = (value as { seconds?: unknown }).seconds;
-    if (typeof seconds === "number") return seconds * 1000;
-  }
-
-  const timestamp = new Date(String(value)).getTime();
-  return Number.isNaN(timestamp) ? 0 : timestamp;
 }
 
 function getSortValue(maintenance: MaintenanceRecord, key: SortKey): string | number {
@@ -71,57 +57,9 @@ function getSortValue(maintenance: MaintenanceRecord, key: SortKey): string | nu
   }
 }
 
-function formatDate(value: unknown): string {
-  if (!value) return "Sin fecha";
-
-  let date: Date;
-
-  if (typeof value === "object" && value !== null && "toDate" in value) {
-    const toDate = (value as { toDate: () => Date }).toDate;
-    date = toDate();
-  } else if (typeof value === "object" && value !== null && "seconds" in value) {
-    const seconds = (value as { seconds?: unknown }).seconds;
-    date = new Date((typeof seconds === "number" ? seconds : 0) * 1000);
-  } else {
-    const normalizedValue = String(value).slice(0, 10);
-    date = new Date(`${normalizedValue}T12:00:00`);
-  }
-
-  if (Number.isNaN(date.getTime())) {
-    return "Fecha inválida";
-  }
-
-  return date.toLocaleDateString("es-EC", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-}
-
-function getStatusClasses(status: unknown): string {
-  const normalizedStatus = String(status || "").trim().toLowerCase();
-
-  if (normalizedStatus === "entregado") {
-    return "border-[#86c7a5] bg-[#e4f7ed] !text-[#17603d]";
-  }
-
-  if (normalizedStatus === "finalizado") {
-    return "border-[#91b7eb] bg-[#e5eeff] !text-[#174a8b]";
-  }
-
-  if (normalizedStatus === "en mantenimiento") {
-    return "border-[#f1b77e] bg-[#fff0df] !text-[#8a4307]";
-  }
-
-  if (normalizedStatus === "en revisión") {
-    return "border-[#c4b5e8] bg-[#f0ebff] !text-[#59409b]";
-  }
-
-  return "border-[#c7c6cb] bg-[#f3f4f6] !text-[#374151]";
-}
-
 export default function MaintenanceHistoryPage() {
   const navigate = useNavigate();
+  const { showError } = useToast();
 
   const [maintenances, setMaintenances] = useState<MaintenanceRecord[]>([]);
   const [search, setSearch] = useState("");
@@ -262,8 +200,8 @@ export default function MaintenanceHistoryPage() {
     } catch (pdfError) {
       console.error("Error generando informe de mantenimiento:", pdfError);
 
-      window.alert(
-        `No fue posible generar el informe PDF.\n${
+      showError(
+        `No fue posible generar el informe PDF: ${
           pdfError instanceof Error ? pdfError.message : "Error desconocido"
         }`
       );
@@ -421,7 +359,7 @@ export default function MaintenanceHistoryPage() {
                       </td>
 
                       <td className="px-4 py-4 font-medium !text-[#374151]">
-                        {formatDate(maintenance.fecha)}
+                        {formatDate(maintenance.fecha, "Sin fecha")}
                       </td>
 
                       <td className="px-4 py-4">
@@ -467,13 +405,11 @@ export default function MaintenanceHistoryPage() {
 
                       <td className="px-4 py-4">
                         <span
-                          className={`
-                            inline-flex rounded-full border
-                            px-3 py-1 text-xs font-bold
-                            ${getStatusClasses(maintenance.estado)}
-                          `}
+                          className={`inline-flex rounded-full border px-3 py-1 text-xs font-bold ${
+                            getMaintenanceStatusMeta(String(maintenance.estado || "")).badge
+                          }`}
                         >
-                          {String(maintenance.estado || "Sin estado")}
+                          {getMaintenanceStatusMeta(String(maintenance.estado || "")).label}
                         </span>
                       </td>
 

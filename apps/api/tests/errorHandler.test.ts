@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../src/config/env.js", () => ({
-  env: { NODE_ENV: "production" },
+  env: { NODE_ENV: "production", LOG_LEVEL: "info" },
 }));
 
 import { type NextFunction, type Request, type Response } from "express";

@@ -8,7 +8,8 @@ services:
     container_name: unyx-web
     restart: unless-stopped
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     networks:
       - unyx-network
     healthcheck:
@@ -37,6 +38,8 @@ services:
 
       REDIS_URL: redis://redis:6379
 
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -57,6 +60,9 @@ services:
     image: postgres:16-alpine
     container_name: unyx-postgres
     restart: unless-stopped
+
+    ports:
+      - "5432:5432"
 
     environment:
       POSTGRES_DB: ${POSTGRES_DB}

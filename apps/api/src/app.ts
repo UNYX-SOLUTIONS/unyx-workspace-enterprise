@@ -4,7 +4,7 @@ import helmet from "helmet";
 import { pinoHttp } from "pino-http";
 import rateLimit from "express-rate-limit";
 import { env } from "./config/env.js";
-import { logger } from "./config/logger.js";
+import { logger } from "./utils/logger.js";
 import { healthRouter } from "./modules/health/health.routes.js";
 import { authRouter } from "./modules/auth/auth.routes.js";
 import { proformasRouter } from "./modules/proformas/proformas.routes.js";

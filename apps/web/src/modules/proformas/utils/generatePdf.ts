@@ -1,7 +1,8 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-import logo from "../../../assets/logos/logo.png";
+import logo from "@/assets/logos/logo.png";
+import { formatDate, resolveDate } from "@/modules/common/utils/dateHelpers";
 
 const COMPANY = {
   nombre: "UNYX SOLUTIONS S.A.S.",
@@ -37,33 +38,6 @@ export interface PdfProformaData {
   subtotal?: unknown;
   iva?: unknown;
   total?: unknown;
-}
-
-function resolveDate(value: unknown): Date | null {
-  if (!value) return null;
-
-  if (typeof value === "object" && value !== null && "toDate" in value) {
-    const toDate = (value as { toDate: () => Date }).toDate;
-    if (typeof toDate === "function") return toDate();
-  }
-
-  if (typeof value === "object" && value !== null && "seconds" in value) {
-    const seconds = (value as { seconds?: unknown }).seconds;
-    if (typeof seconds === "number") return new Date(seconds * 1000);
-  }
-
-  const date = new Date(String(value));
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
-function formatDate(value: unknown): string {
-  const date = resolveDate(value);
-  if (!date) return "";
-  return date.toLocaleDateString("es-EC", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
 }
 
 function getExpirationDate(value: unknown, days = 30): string {

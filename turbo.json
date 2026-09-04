@@ -13,6 +13,12 @@
         "dist/**"
       ]
     },
+    "type-check": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": []
+    },
     "lint": {
       "dependsOn": [
         "^lint"
@@ -21,9 +27,6 @@
     "test": {
       "dependsOn": [
         "^build"
-      ],
-      "outputs": [
-        "coverage/**"
       ]
     }
   }

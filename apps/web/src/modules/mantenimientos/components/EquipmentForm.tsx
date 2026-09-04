@@ -1,4 +1,4 @@
-import InputField from "../../../components/common/InputField";
+import InputField from "@/components/common/InputField";
 
 export interface EquipmentState {
   tipo: string;

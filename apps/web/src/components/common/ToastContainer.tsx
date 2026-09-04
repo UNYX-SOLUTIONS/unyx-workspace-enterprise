@@ -1,5 +1,5 @@
-import { useToast } from "../../hooks/useToast";
-import type { ToastType } from "../../contexts/ToastContext";
+import { useToast } from "@/hooks/useToast";
+import type { ToastType } from "@/contexts/ToastContext";
 
 const typeStyles: Record<ToastType, string> = {
   success: "border-green-300 bg-green-700",

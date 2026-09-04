@@ -172,8 +172,34 @@ bash infrastructure/scripts/backup-db.sh   # guarda en ./backups/*.sql.gz
 ### HTTPS en producción
 
 El contenedor `unyx-frontend` (nginx) es el punto de entrada en el puerto 80.
-Para TLS con certbot, monta los certificados y usa la plantilla
-`infrastructure/nginx/nginx.https.conf` como base de su `nginx.conf`.
+Para TLS con certbot en el VPS:
+
+1. Apunta el DNS `workspace.unyxsolutions.com` a la IP del VPS.
+2. Obtén certificados (desde el VPS, con el puerto 80 libre):
+
+   ```bash
+   mkdir -p /var/www/certbot
+   docker run --rm -p 80:80 -v /var/www/certbot:/var/www/certbot \
+     -v /etc/letsencrypt:/etc/letsencrypt \
+     certbot/certbot certonly --standalone \
+     -d workspace.unyxsolutions.com \
+     --email <tu-correo> --agree-tos --no-eff-email
+   ```
+
+3. Monta certificados y la config HTTPS en `unyx-frontend` agregando al
+   servicio `frontend` del compose:
+
+   ```yaml
+       volumes:
+         - /etc/letsencrypt:/etc/letsencrypt:ro
+         - /var/www/certbot:/var/www/certbot:ro
+         - ./infrastructure/nginx/nginx.https.conf:/etc/nginx/conf.d/default.conf:ro
+       ports:
+         - "80:80"
+         - "443:443"
+   ```
+
+4. `docker compose --env-file .env.production up -d frontend`
 
 ## Migración desde Firestore (histórico)
 

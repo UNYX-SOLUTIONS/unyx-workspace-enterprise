@@ -47,12 +47,12 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="grid min-h-screen place-items-center bg-slate-100 p-4">
+    <main className="grid min-h-screen! place-items-center! bg-slate-100! p-4!">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-sm space-y-4 rounded-xl bg-white p-6 shadow"
+        className="w-full max-w-sm! space-y-4! rounded-xl! bg-white! p-6! shadow!"
       >
-        <h1 className="text-2xl font-bold">UNYX Workspace</h1>
+        <h1 className="text-2xl! font-bold! text-gray-950!">UNYX Workspace</h1>
 
         <InputField
           label="Correo"

@@ -121,8 +121,10 @@ Reglas:
 # 1. Red compartida (una sola vez para toda la empresa)
 docker network create empresa-network
 
-# 2. PostgreSQL del Proyecto B
+# 2. PostgreSQL del Proyecto B (--restart unless-stopped para sobrevivir
+#    reinicios del host/Docker)
 docker run -d --name postgres-unyx --network empresa-network \
+  --restart unless-stopped \
   -e POSTGRES_DB=unyx_workspace \
   -e POSTGRES_USER=unyx_user \
   -e POSTGRES_PASSWORD=<secret> \

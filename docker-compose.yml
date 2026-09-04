@@ -2,10 +2,10 @@ services:
   web:
     build:
       context: .
-      dockerfile: apps/web/Dockerfile
+      dockerfile: apps/frontend/Dockerfile
       args:
         VITE_API_URL: ${VITE_API_URL}
-    container_name: unyx-web
+    container_name: unyx-frontend
     restart: unless-stopped
     depends_on:
       api:
@@ -22,8 +22,8 @@ services:
   api:
     build:
       context: .
-      dockerfile: apps/api/Dockerfile
-    container_name: unyx-api
+      dockerfile: apps/backend/Dockerfile
+    container_name: unyx-backend
     restart: unless-stopped
 
     environment:

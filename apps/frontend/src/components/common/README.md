@@ -3,7 +3,7 @@
 Ubicación recomendada:
 
 ```text
-apps/web/src/components/common/
+apps/frontend/src/components/common/
 ```
 
 Puedes importar cada componente directamente:

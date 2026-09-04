@@ -27,7 +27,7 @@ importers:
         specifier: ^8.69.0
         version: 8.69.0(eslint@9.39.5(jiti@2.7.0))(typescript@5.9.3)
 
-  apps/api:
+  apps/backend:
     dependencies:
       '@prisma/client':
         specifier: ^6.13.0
@@ -106,7 +106,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@26.4.1)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.23.13)
 
-  apps/web:
+  apps/frontend:
     dependencies:
       '@hookform/resolvers':
         specifier: ^5.2.1

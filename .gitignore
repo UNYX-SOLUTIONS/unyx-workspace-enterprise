@@ -16,6 +16,12 @@ dist-ssr/
 **/.env
 **/.env.*
 !**/.env.example
+apps/backend/.env
+apps/frontend/.env
+!apps/backend/.env.example
+!apps/frontend/.env.example
+.env.local
+.env.*.local
 
 # Logs
 logs/

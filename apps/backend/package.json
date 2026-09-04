@@ -1,5 +1,5 @@
 {
-  "name": "@unyx/api",
+  "name": "@unyx/backend",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
     "test": "vitest run",
+    "env:copy": "node -e \"import('node:fs').then(fs => { if (!fs.existsSync('.env')) fs.copyFileSync('.env.example', '.env'); })\"",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",

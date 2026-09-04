@@ -1,4 +1,4 @@
-/apps/web/ @unyx/frontend-team
-/apps/api/ @unyx/backend-team
+/apps/frontend/ @unyx/frontend-team
+/apps/backend/ @unyx/backend-team
 /packages/ @unyx/architecture-team
 /infrastructure/ @unyx/devops-team

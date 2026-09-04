@@ -25,7 +25,7 @@ Formatos aceptados por el script:
 ## 2. Aplicar la migración de base de datos
 
 ```bash
-cd apps/api
+cd apps/backend
 pnpm prisma:deploy
 ```
 
@@ -34,7 +34,7 @@ El Dockerfile de la API ejecuta este paso automáticamente al arrancar.
 ## 3. Crear el seed (usuarios y secuencia)
 
 ```bash
-cd apps/api
+cd apps/backend
 pnpm prisma:seed
 ```
 
@@ -51,7 +51,7 @@ al ejecutar el seed.
 ## 4. Migrar los datos de Firestore
 
 ```bash
-cd apps/api
+cd apps/backend
 $env:FIRESTORE_EXPORT_DIR = "../firestore-export"   # PowerShell
 # export FIRESTORE_EXPORT_DIR="../firestore-export"  # sh
 pnpm exec tsx prisma/migrate-firestore.ts

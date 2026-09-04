@@ -99,7 +99,7 @@ knitr::kable(verificacion, caption = "Verificación ejecutada en máquina local"
    creación de proformas, generación de PDF y persistencia de datos tras
    `docker compose down`.
 2. Ejecutar la migración de datos históricos con
-   `apps/api/prisma/migrate-firestore.ts` si quedan datos en Firestore
+   `apps/backend/prisma/migrate-firestore.ts` si quedan datos en Firestore
    (guía en `MIGRACION-FIRESTORE.md`).
 3. HTTPS en producción: dominio + certificados certbot con la plantilla
    `infrastructure/nginx/nginx.https.conf`.
@@ -109,7 +109,7 @@ knitr::kable(verificacion, caption = "Verificación ejecutada en máquina local"
 
 ## Alcance
 
-- Repositorio completo: `apps/api`, `apps/web`, `packages/*`,
+- Repositorio completo: `apps/backend`, `apps/frontend`, `packages/*`,
   `infrastructure/*`, `.github/*`, configuración raíz
   (`docker-compose.yml`, `turbo.json`, `pnpm-workspace.yaml`).
 - Commit auditado: `390333d` (rama de trabajo actual, historial de 5 commits).
@@ -131,8 +131,8 @@ knitr::kable(verificacion, caption = "Verificación ejecutada en máquina local"
 | Comando        | Resultado | Detalle                                                                 |
 |----------------|-----------|-------------------------------------------------------------------------|
 | `pnpm build`   | OK        | El web compila (con advertencia de chunk de 1.59 MB). La API es no-op.   |
-| `pnpm lint`    | FALLA     | `@unyx/api` y `@unyx/web`: ESLint 9 no encuentra `eslint.config.js`.     |
-| `pnpm test`    | FALLA     | `@unyx/web`: "No test files found, exiting with code 1".                 |
+| `pnpm lint`    | FALLA     | `@unyx/backend` y `@unyx/frontend`: ESLint 9 no encuentra `eslint.config.js`.     |
+| `pnpm test`    | FALLA     | `@unyx/frontend`: "No test files found, exiting with code 1".                 |
 
 En resumen: **1 de 3 comandos de calidad pasa**. El lint está roto en todo el
 monorepo y la suite de pruebas no puede ejecutarse a nivel raíz.
@@ -200,7 +200,7 @@ Observaciones inmediatas:
 ## Desviaciones graves
 
 **A-DEV-1 — Doble modelo de datos sin sincronizar (Crítico).**
-`apps/api/prisma/schema.prisma` modela `User`, `Client`, `Product`,
+`apps/backend/prisma/schema.prisma` modela `User`, `Client`, `Product`,
 `Proforma`, `ProformaItem` y `Maintenance` en PostgreSQL, pero el frontend no
 usa la API para nada de esto: `proformaService.js`, `clientService.js`,
 `productService.js` y `maintenanceService.js` leen y escriben directamente
@@ -210,7 +210,7 @@ sistemas paralelos, y el sistema "real" (el que usa la aplicación) es
 Firebase, que no aparece en la infraestructura declarada.
 
 **A-DEV-2 — API en estado embrionario.**
-De las 6 rutas montadas en `apps/api/src/app.js`, tres (`clientes`,
+De las 6 rutas montadas en `apps/backend/src/app.js`, tres (`clientes`,
 `productos`, `mantenimientos`) son stubs que devuelven `[]`, `auth` es
 ficticio y `proformas` solo implementa un `GET` sin paginación ni validación.
 
@@ -219,7 +219,7 @@ Cálculo de IVA (15%), totales y numeración correlativa de proformas y
 mantenimientos viven en el navegador. Cualquier modificación depende del
 cliente y no hay garantía de integridad servidor.
 
-# Backend (apps/api)
+# Backend (apps/backend)
 
 ## Estado
 
@@ -262,11 +262,11 @@ verbosos en producción; tampoco hay logueo estructurado ni niveles.
 para impedir fuerza bruta.
 
 **B-9 — Sin migraciones ni seed (Alto).** No existe
-`apps/api/prisma/migrations`. El Dockerfile ejecuta
+`apps/backend/prisma/migrations`. El Dockerfile ejecuta
 `prisma migrate deploy` al arrancar: con una base vacía el contenedor de la
 API no llegará a levantar. Tampoco hay `seed.js` para el usuario inicial.
 
-# Frontend (apps/web)
+# Frontend (apps/frontend)
 
 ## Estado
 
@@ -402,15 +402,15 @@ auditadas.
 
 | # | Hallazgo | Severidad | Ubicación |
 |---|----------|-----------|-----------|
-| S-1 | Login sin contraseña; JWT de rol ADMIN para cualquier correo | Crítico | `apps/api/src/modules/auth/auth.routes.js` |
-| S-2 | Autenticación simulada en el cliente; usuario ADMIN hardcodeado | Crítico | `apps/web/src/contexts/AuthContext.jsx` |
-| S-3 | Ninguna ruta protegida; `requireAuth` sin usar | Crítico | `apps/api/src/app.js`, `middleware/auth.js` |
-| S-4 | Acceso directo a Firestore desde el navegador; reglas no auditables | Crítico | `apps/web/src/modules/*/services/*` |
-| S-5 | Fuga de mensajes de error internos al cliente | Alto | `apps/api/src/middleware/errorHandler.js` |
-| S-6 | Claves de Firebase embebidas en el bundle (por diseño de Vite, pero sin reglas de seguridad verificadas) | Alto | `apps/web/src/lib/firebase.js` |
+| S-1 | Login sin contraseña; JWT de rol ADMIN para cualquier correo | Crítico | `apps/backend/src/modules/auth/auth.routes.js` |
+| S-2 | Autenticación simulada en el cliente; usuario ADMIN hardcodeado | Crítico | `apps/frontend/src/contexts/AuthContext.jsx` |
+| S-3 | Ninguna ruta protegida; `requireAuth` sin usar | Crítico | `apps/backend/src/app.js`, `middleware/auth.js` |
+| S-4 | Acceso directo a Firestore desde el navegador; reglas no auditables | Crítico | `apps/frontend/src/modules/*/services/*` |
+| S-5 | Fuga de mensajes de error internos al cliente | Alto | `apps/backend/src/middleware/errorHandler.js` |
+| S-6 | Claves de Firebase embebidas en el bundle (por diseño de Vite, pero sin reglas de seguridad verificadas) | Alto | `apps/frontend/src/lib/firebase.js` |
 | S-7 | Placeholder de secreto débil en `.env.example` (`change_this_in_production`, supera el mínimo de 16 caracteres y pasaría la validación de Zod) | Medio | `.env.example` |
-| S-8 | Sin límite específico en login (fuerza bruta futura) | Medio | `apps/api/src/app.js` |
-| S-9 | CORS configurado solo para un origen; correcto, pero revisar si se agregan orígenes dinámicos | Bajo | `apps/api/src/config/env.js` |
+| S-8 | Sin límite específico en login (fuerza bruta futura) | Medio | `apps/backend/src/app.js` |
+| S-9 | CORS configurado solo para un origen; correcto, pero revisar si se agregan orígenes dinámicos | Bajo | `apps/backend/src/config/env.js` |
 | S-10 | Datos sensibles de negocio en repositorio de PDFs (RUC, teléfono, correo corporativo) hardcodeados | Bajo | `generatePdf.js`, `generateMaintenancePdf.js`, `ProformaPage.jsx` |
 
 Aspectos positivos: helmet, CORS explícito, rate limiting global, validación
@@ -461,9 +461,9 @@ normalización de datos en los servicios.
 # DevOps, CI e Infraestructura
 
 **D-1 — Build Docker del frontend sin claves de Firebase (Crítico).**
-`apps/web/Dockerfile` no recibe las variables `VITE_FIREBASE_*` como ARG y
+`apps/frontend/Dockerfile` no recibe las variables `VITE_FIREBASE_*` como ARG y
 `docker-compose.yml` solo pasa `VITE_API_URL`. El `.dockerignore` excluye
-`.env` (incluido `apps/web/.env`). Resultado: el bundle se genera con las
+`.env` (incluido `apps/frontend/.env`). Resultado: el bundle se genera con las
 claves en `undefined` y `initializeApp` lanza error en el navegador; la
 aplicación desplegada con Docker queda **rota en runtime**.
 
@@ -502,7 +502,7 @@ post-deploy.
 # Paquetes compartidos
 
 - `@unyx/shared-schemas`: esquemas Zod correctos (cliente, ítem, proforma),
-  pero **no se importan ni en `apps/api` ni en `apps/web`** (ambos lo
+  pero **no se importan ni en `apps/backend` ni en `apps/frontend`** (ambos lo
   declaran como dependencia). La validación se duplica manualmente en los
   servicios de Firestore y no existe en la API.
 - `@unyx/shared-types`: solo comentarios JSDoc, sin valor real.
@@ -634,10 +634,10 @@ barplot(conteo[levels(hallazgos$Severidad)],
 2. Deshabilitar el acceso directo a Firestore hasta definir reglas de
    seguridad estrictas y versionarlas (`firestore.rules`).
 3. Pasar las claves `VITE_FIREBASE_*` (o eliminarlas si se migra a la API)
-   como build args en `docker-compose.yml` y `apps/web/Dockerfile`.
+   como build args en `docker-compose.yml` y `apps/frontend/Dockerfile`.
 4. Crear la primera migración de Prisma (`prisma migrate dev`) y un seed con
    usuario administrador; verificar que `docker compose up` levante.
-5. Crear `eslint.config.js` en `apps/api` y `apps/web` usando
+5. Crear `eslint.config.js` en `apps/backend` y `apps/frontend` usando
    `@unyx/eslint-config`; hacer pasar `pnpm lint`.
 6. Hacer pasar `pnpm test` (aunque sea con un test smoke del web) e incluir
    `lint` en CI.
@@ -712,23 +712,23 @@ requieren infraestructura real, listadas en esa misma sección.
 
 | Archivo | Problema principal |
 |---------|--------------------|
-| `apps/api/src/modules/auth/auth.routes.js` | Login ficticio, rol ADMIN fijo |
-| `apps/api/src/middleware/auth.js` | Definido pero sin uso |
-| `apps/api/src/middleware/errorHandler.js` | Fuga de `error.message` |
-| `apps/api/src/modules/{clientes,productos,mantenimientos}/*.routes.js` | Stubs |
-| `apps/api/prisma/` | Sin migraciones ni seed |
-| `apps/api/Dockerfile` | `migrate deploy` sin migraciones; `--no-frozen-lockfile` |
-| `apps/web/src/main.jsx` | Proveedores de contexto sin montar |
-| `apps/web/src/app/router.jsx` | Sin ruta `/login`; sin `ProtectedRoute` |
-| `apps/web/src/contexts/AuthContext.jsx` | Autenticación simulada |
-| `apps/web/src/lib/firebase.js` | `addEventListener;` muerto; duplicado |
-| `apps/web/src/modules/*/services/*` | Acceso directo a Firestore |
-| `apps/web/src/modules/mantenimientos/utils/diagnosticImport.js` | Stub roto |
-| `apps/web/src/modules/proformas/pages/ProformaPage.jsx` | Monolito; flotantes; número editable |
-| `apps/web/src/modules/mantenimientos/pages/MaintenancePage.jsx` | Monolito 1133 líneas |
-| `apps/web/src/modules/proformas/utils/generatePdf.js` | Datos corporativos hardcodeados |
-| `apps/web/src/modules/mantenimientos/utils/generateMaintenancePdf.js` | Duplicación de COMPANY |
-| `apps/web/Dockerfile` | Sin claves Firebase en build |
+| `apps/backend/src/modules/auth/auth.routes.js` | Login ficticio, rol ADMIN fijo |
+| `apps/backend/src/middleware/auth.js` | Definido pero sin uso |
+| `apps/backend/src/middleware/errorHandler.js` | Fuga de `error.message` |
+| `apps/backend/src/modules/{clientes,productos,mantenimientos}/*.routes.js` | Stubs |
+| `apps/backend/prisma/` | Sin migraciones ni seed |
+| `apps/backend/Dockerfile` | `migrate deploy` sin migraciones; `--no-frozen-lockfile` |
+| `apps/frontend/src/main.jsx` | Proveedores de contexto sin montar |
+| `apps/frontend/src/app/router.jsx` | Sin ruta `/login`; sin `ProtectedRoute` |
+| `apps/frontend/src/contexts/AuthContext.jsx` | Autenticación simulada |
+| `apps/frontend/src/lib/firebase.js` | `addEventListener;` muerto; duplicado |
+| `apps/frontend/src/modules/*/services/*` | Acceso directo a Firestore |
+| `apps/frontend/src/modules/mantenimientos/utils/diagnosticImport.js` | Stub roto |
+| `apps/frontend/src/modules/proformas/pages/ProformaPage.jsx` | Monolito; flotantes; número editable |
+| `apps/frontend/src/modules/mantenimientos/pages/MaintenancePage.jsx` | Monolito 1133 líneas |
+| `apps/frontend/src/modules/proformas/utils/generatePdf.js` | Datos corporativos hardcodeados |
+| `apps/frontend/src/modules/mantenimientos/utils/generateMaintenancePdf.js` | Duplicación de COMPANY |
+| `apps/frontend/Dockerfile` | Sin claves Firebase en build |
 | `packages/eslint-config/` | Nunca utilizado por las apps |
 | `.github/workflows/ci.yml` | Sin lint; `--no-frozen-lockfile` |
 | `turbo.json` | `test` depende de `^build`; API sin outputs |

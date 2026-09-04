@@ -1,5 +1,5 @@
 {
-  "name": "@unyx/web",
+  "name": "@unyx/frontend",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
     "lint": "eslint src",
-    "test": "vitest run"
+    "test": "vitest run",
+    "env:copy": "node -e \"import('node:fs').then(fs => { if (!fs.existsSync('.env')) fs.copyFileSync('.env.example', '.env'); })\""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

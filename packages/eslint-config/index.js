@@ -3,6 +3,9 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export const baseConfig = [
+  {
+    ignores: ["**/dist/**", "**/node_modules/**", "**/coverage/**", "**/prisma/**"],
+  },
   js.configs.recommended,
   {
     languageOptions: {

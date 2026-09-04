@@ -11,7 +11,7 @@ COPY pnpm-lock.yaml ./
 COPY turbo.json ./
 
 # Package.json necesarios para resolver el workspace
-COPY apps/web/package.json ./apps/web/package.json
+COPY apps/frontend/package.json ./apps/frontend/package.json
 
 COPY packages/shared-schemas/package.json ./packages/shared-schemas/package.json
 COPY packages/shared-types/package.json ./packages/shared-types/package.json
@@ -20,14 +20,14 @@ COPY packages/shared-types/package.json ./packages/shared-types/package.json
 RUN pnpm install --frozen-lockfile
 
 # Código fuente
-COPY apps/web ./apps/web
+COPY apps/frontend ./apps/frontend
 COPY packages ./packages
 
 # Compilar paquetes compartidos (tipos para el typecheck del web)
 RUN pnpm --filter @unyx/shared-schemas --filter @unyx/shared-types build
 
 # Build del frontend (typecheck + bundle)
-RUN pnpm --filter @unyx/web build
+RUN pnpm --filter @unyx/frontend build
 
 
 # ==========================================
@@ -35,9 +35,9 @@ RUN pnpm --filter @unyx/web build
 # ==========================================
 FROM nginx:alpine
 
-COPY --from=builder /workspace/apps/web/dist /usr/share/nginx/html
+COPY --from=builder /workspace/apps/frontend/dist /usr/share/nginx/html
 
-COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
+COPY apps/frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 

@@ -70,7 +70,7 @@ en host; el contenedor de la API usa su propia URL interna hacia `postgres`.
 ### Migraciones y datos
 
 ```bash
-cd apps/api
+cd apps/backend
 pnpm prisma:migrate   # prisma migrate dev (desarrollo)
 pnpm prisma:deploy    # aplica migraciones pendientes
 pnpm prisma:seed      # usuarios admin/demo + secuencias
@@ -125,9 +125,9 @@ infrastructure/
 
 ## Regla de arquitectura
 
-- Código exclusivo de un módulo: `apps/web/src/modules/<modulo>`
+- Código exclusivo de un módulo: `apps/frontend/src/modules/<modulo>`
 - Código reutilizable: `src/components`, `src/hooks`, `src/modules/common`
 - Frontend y backend se comunican únicamente mediante HTTP (JWT en `Authorization`)
 - No importar archivos internos del backend desde el frontend
-- Imports del frontend con alias `@/` (apunta a `apps/web/src`)
+- Imports del frontend con alias `@/` (apunta a `apps/frontend/src`)
 - Validación con `@unyx/shared-schemas` en ambos lados

@@ -1,0 +1,14 @@
+FROM node:22-alpine
+WORKDIR /workspace
+RUN corepack enable
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
+COPY apps/backend/package.json apps/backend/package.json
+COPY packages/shared-schemas/package.json packages/shared-schemas/package.json
+RUN pnpm install --frozen-lockfile
+COPY apps/backend apps/backend
+COPY packages packages
+RUN pnpm --filter @unyx/shared-schemas build
+RUN pnpm --filter @unyx/backend prisma:generate
+RUN pnpm --filter @unyx/backend build
+EXPOSE 3000
+CMD ["sh", "-c", "pnpm --filter @unyx/backend prisma:deploy && pnpm --filter @unyx/backend prisma:seed && pnpm --filter @unyx/backend start"]

@@ -4,7 +4,11 @@
   "packageManager": "pnpm@10.13.1",
   "scripts": {
     "dev": "turbo dev",
+    "dev:backend": "pnpm --filter @unyx/backend dev",
+    "dev:frontend": "pnpm --filter @unyx/frontend dev",
     "build": "turbo build",
+    "build:backend": "pnpm --filter @unyx/backend build",
+    "build:frontend": "pnpm --filter @unyx/frontend build",
     "type-check": "turbo type-check",
     "lint": "turbo lint",
     "test": "turbo test",

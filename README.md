@@ -82,7 +82,7 @@ El contenedor de la API ejecuta `prisma:deploy` + `prisma:seed` al arrancar
 **Usuario inicial:** `admin@unyxsolutions.com` / `Admin123!` (cambiar en
 producción con `SEED_ADMIN_PASSWORD`).
 
-## Docker
+## Docker (local)
 
 ```bash
 docker compose up -d --build
@@ -90,17 +90,84 @@ docker compose up -d --build
 
 Aplicación: `http://localhost` · API: `http://localhost/api/health`.
 
-Servicios: `web` (nginx estático), `api` (Express compilado), `postgres`
-(datos persistentes en volumen), `redis` (preparado) y `nginx` (proxy
-reverso). Todos con healthchecks; `web` espera a que `api` esté saludable.
+## Despliegue en el VPS global (Proyecto B)
 
-## HTTPS (producción)
+El proyecto convive en el VPS central de la empresa junto a otros proyectos:
 
-Usa la plantilla `infrastructure/nginx/nginx.https.conf`:
+```text
+VPS Global
+├── pgadmin (puerto 5050)          → administra TODAS las bases
+├── postgres-unyx (5432)           → PostgreSQL de UNYX (Proyecto B)
+├── postgres-proyecto-c (5433)     → Proyecto C
+├── postgres-proyecto-d (5434)     → Proyecto D
+└── [empresa-network]              → red Docker externa compartida
+     ├── unyx-backend  (3000)
+     ├── unyx-frontend (80, proxy /api → backend)
+     └── unyx-redis
+```
 
-1. Genera certificados con certbot (Let's Encrypt).
-2. Renombra `server_name` con tu dominio.
-3. Monta el archivo y los certificados en el servicio `nginx` del compose.
+Reglas:
+
+- **PostgreSQL es externo al proyecto**: el contenedor `postgres-unyx` lo
+  crea el administrador del VPS. El proyecto NO define servicio postgres.
+- Todos los contenedores del proyecto usan la red externa `empresa-network`.
+- **Las migraciones NO corren automáticamente en el contenedor**: se aplican
+  desde CI/CD o manualmente con `pnpm migrate:prod` / `pnpm seed:prod`
+  (idempotentes) o con `infrastructure/scripts/deploy.sh`.
+
+### Configuración previa (administrador del VPS)
+
+```bash
+# 1. Red compartida (una sola vez para toda la empresa)
+docker network create empresa-network
+
+# 2. PostgreSQL del Proyecto B
+docker run -d --name postgres-unyx --network empresa-network \
+  -e POSTGRES_DB=unyx_workspace \
+  -e POSTGRES_USER=unyx_user \
+  -e POSTGRES_PASSWORD=<secret> \
+  -p 5432:5432 postgres:16-alpine
+```
+
+En PGAdmin (host `pgadmin`, puerto 5050) agrega un server con:
+
+| Campo | Valor |
+|---|---|
+| Host | `postgres-unyx` |
+| Port | `5432` |
+| Database | `unyx_workspace` |
+| User | `unyx_user` |
+
+### Variables de entorno
+
+| Entorno | Archivo | Uso |
+|---|---|---|
+| Producción (VPS) | `.env.production` (NO versionar) | `deploy:prod`, `migrate:prod`, `seed:prod` |
+| Desarrollo local | `.env.development` (NO versionar) | `pnpm dev` con PostgreSQL local |
+| Plantilla pública | `.env.example` (SÍ versionar) | referencia |
+
+Secretos requeridos en `.env.production`: `UNYX_DB_PASSWORD`, `JWT_SECRET`
+(mín. 32 caracteres) y opcionalmente `SEED_ADMIN_PASSWORD`.
+
+### Despliegue
+
+```bash
+pnpm deploy:prod    # build + up con .env.production
+pnpm migrate:prod   # prisma migrate deploy (dentro de la red, idempotente)
+pnpm seed:prod      # usuarios admin/demo + secuencias (idempotente)
+
+# o todo junto:
+bash infrastructure/scripts/deploy.sh
+
+# Respaldo de la base:
+bash infrastructure/scripts/backup-db.sh   # guarda en ./backups/*.sql.gz
+```
+
+### HTTPS en producción
+
+El contenedor `unyx-frontend` (nginx) es el punto de entrada en el puerto 80.
+Para TLS con certbot, monta los certificados y usa la plantilla
+`infrastructure/nginx/nginx.https.conf` como base de su `nginx.conf`.
 
 ## Migración desde Firestore (histórico)
 

@@ -94,16 +94,22 @@ knitr::kable(verificacion, caption = "Verificación ejecutada en máquina local"
 
 ## Pendientes operativos (requieren infraestructura real)
 
-1. `pnpm docker:up` completo (Docker daemon no disponible en la máquina de
-   auditoría): verificar login con `admin@unyxsolutions.com` / `Admin123!`,
-   creación de proformas, generación de PDF y persistencia de datos tras
-   `docker compose down`.
-2. Ejecutar la migración de datos históricos con
-   `apps/backend/prisma/migrate-firestore.ts` si quedan datos en Firestore
-   (guía en `MIGRACION-FIRESTORE.md`).
+1. ~~`pnpm docker:up` completo~~ — **VERIFICADO (2026-09-04)** contra la
+   arquitectura del VPS global (red externa `empresa-network` +
+   `postgres-unyx`): stack sano (backend/frontend/redis healthy), login con
+   `admin@unyxsolutions.com` / `Admin123!`, proformas con numeración
+   automática e IVA exacto, persistencia en `postgres-unyx` y suite e2e
+   Playwright completa (5/5).
+2. ~~Migración de datos históricos con `apps/backend/prisma/migrate-firestore.ts`~~ —
+   **VERIFICADA** con fixtures contra la base real: clientes, productos,
+   proformas y mantenimientos migrados preservando números, con secuencias
+   continuando correctamente.
 3. HTTPS en producción: dominio + certificados certbot con la plantilla
-   `infrastructure/nginx/nginx.https.conf`.
-4. Pruebas e2e (Playwright) cuando el stack esté disponible en CI.
+   `infrastructure/nginx/nginx.https.conf` (el punto de entrada TLS es el
+   contenedor `unyx-frontend`).
+4. ~~Pruebas e2e (Playwright)~~ — **IMPLEMENTADAS Y VERIFICADAS**: suite en
+   `apps/frontend/tests-e2e` (login, historial y creación completa de
+   proforma) ejecutada contra el stack Docker.
 
 # Alcance y metodología
 

@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "lint": "eslint src",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "env:copy": "node -e \"import('node:fs').then(fs => { if (!fs.existsSync('.env')) fs.copyFileSync('.env.example', '.env'); })\""
   },
   "dependencies": {
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/vite": "^4.1.11",
     "@types/node": "^26.4.1",
     "@types/react": "^19.1.9",

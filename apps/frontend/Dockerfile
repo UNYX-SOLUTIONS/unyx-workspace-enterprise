@@ -4,6 +4,12 @@ WORKDIR /workspace
 
 RUN corepack enable
 
+# Build args de entorno (inyectados como variables Vite en el build)
+ARG VITE_API_URL
+ARG VITE_APP_NAME
+ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_APP_NAME=${VITE_APP_NAME}
+
 # Archivos principales del monorepo
 COPY package.json ./
 COPY pnpm-workspace.yaml ./

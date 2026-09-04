@@ -23,7 +23,7 @@ app.use("/api", rateLimit({ windowMs: 60_000, limit: 300 }));
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60_000,
-  limit: 10,
+  limit: env.LOGIN_RATE_LIMIT_MAX,
   message: { error: "Demasiados intentos de inicio de sesión", code: "TOO_MANY_REQUESTS" },
 });
 

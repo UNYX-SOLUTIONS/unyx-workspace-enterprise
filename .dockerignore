@@ -1,7 +1,26 @@
+# Dependencies
 node_modules
-.pnpm-store
-.git
+**/node_modules
+
+# Builds
 dist
-coverage
+**/dist
+dist-ssr
+**/dist-ssr
+**/.turbo
+
+# Git
+.git
+**/.git
+
+# Environment
 .env
+**/.env
+*.local
+
+# Logs
 *.log
+
+# Coverage
+coverage
+**/coverage

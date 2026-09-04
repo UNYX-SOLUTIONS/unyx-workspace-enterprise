@@ -13,6 +13,9 @@
     "lint": "turbo lint",
     "test": "turbo test",
     "format": "prettier --write .",
+    "deploy:prod": "docker compose --env-file .env.production up -d --build",
+    "migrate:prod": "docker compose --env-file .env.production run --rm backend pnpm --filter @unyx/backend prisma:deploy",
+    "seed:prod": "docker compose --env-file .env.production run --rm backend pnpm --filter @unyx/backend prisma:seed",
     "docker:up": "docker compose up -d --build",
     "docker:down": "docker compose down",
     "docker:logs": "docker compose logs -f"

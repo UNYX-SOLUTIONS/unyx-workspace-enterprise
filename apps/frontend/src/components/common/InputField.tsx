@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes } from "react";
+import { useId, type InputHTMLAttributes } from "react";
 
 export interface InputFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -18,7 +18,8 @@ export default function InputField({
   name,
   ...props
 }: InputFieldProps) {
-  const inputId = id || name;
+  const generatedId = useId();
+  const inputId = id || name || `input-${generatedId}`;
 
   return (
     <div className={`space-y-2 ${className}`}>

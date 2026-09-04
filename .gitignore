@@ -13,15 +13,13 @@ dist-ssr/
 .env
 .env.*
 !.env.example
+.env.development
+.env.production
+.env.local
+.env.*.local
 **/.env
 **/.env.*
 !**/.env.example
-apps/backend/.env
-apps/frontend/.env
-!apps/backend/.env.example
-!apps/frontend/.env.example
-.env.local
-.env.*.local
 
 # Logs
 logs/

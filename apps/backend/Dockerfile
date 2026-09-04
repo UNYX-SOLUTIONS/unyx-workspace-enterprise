@@ -11,4 +11,6 @@ RUN pnpm --filter @unyx/shared-schemas build
 RUN pnpm --filter @unyx/backend prisma:generate
 RUN pnpm --filter @unyx/backend build
 EXPOSE 3000
-CMD ["sh", "-c", "pnpm --filter @unyx/backend prisma:deploy && pnpm --filter @unyx/backend prisma:seed && pnpm --filter @unyx/backend start"]
+# Las migraciones y el seed NO se ejecutan aquí: se aplican desde CI/CD
+# o manualmente (pnpm migrate:prod / pnpm seed:prod) contra postgres-unyx.
+CMD ["sh", "-c", "pnpm --filter @unyx/backend start"]

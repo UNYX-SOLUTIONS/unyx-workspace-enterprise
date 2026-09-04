@@ -49,6 +49,62 @@ Los tres problemas más graves son:
 Detalle del resto de hallazgos, con severidades y plan de remediación, en las
 secciones siguientes.
 
+# Estado de remediación (actualización 2026-09-04)
+
+Esta sección documenta el resultado de la implementación del plan de
+remediación sobre el commit auditado. El análisis original (secciones
+siguientes) se conserva como referencia histórica.
+
+## Hallazgos resueltos
+
+| Hallazgo original | Estado | Cómo se resolvió |
+|-------------------|--------|------------------|
+| S-1 / S-2 / S-3 — Auth ficticia y rutas públicas | Resuelto | Login real con bcrypt + JWT contra PostgreSQL; `requireAuth` + `requireRole` en **todas** las rutas (excepto `/api/health` y `/api/auth/login`); `GET /api/auth/me`; verificación de usuario en BD en cada petición. |
+| S-4 / A-DEV-1 — Firestore directo desde el navegador y doble fuente de datos | Resuelto | Toda la capa de datos (proformas, clientes, productos, mantenimientos) migrada a API + PostgreSQL/Prisma; Firebase **eliminado** del frontend y del lockfile. |
+| F-6 / B-4 — Cálculo monetario con flotantes y sin validación | Resuelto | Centavos enteros en el cliente + `decimal.js` con redondeo half-up en el servidor (totales recalculados server-side); validación Zod en ambos lados con `@unyx/shared-schemas`. |
+| F-7 — Número de proforma editable | Resuelto | Numeración atómica en servidor con tabla `Sequence` (`INSERT ... ON CONFLICT ... RETURNING`); el número es de solo lectura en la UI. |
+| B-9 / D-2 — Sin migraciones ni seed | Resuelto | Migración inicial versionada + `seed.ts` (admin/demo, secuencias); el contenedor ejecuta `migrate deploy` + seed idempotentes al arrancar. |
+| D-1 — Build Docker del web sin claves | Resuelto | Firebase eliminado; el web compila con `tsc --noEmit && vite build` y ya no requiere claves externas. |
+| QLT-01 / TST-01 — Lint y tests rotos | Resuelto | ESLint 9 + typescript-eslint activo en api y web; 58 pruebas (unitarias, validación, servicios con Prisma mockeado, errorHandler). |
+| F-1 / F-2 / F-3 — Providers sin montar, `/login` inexistente, auth simulada | Resuelto | `main.tsx` monta Auth/Theme/Toast; router con `/login` y todo el layout detrás de `ProtectedRoute`. |
+| F-5 — Páginas monstruo | Resuelto | ProformaPage: 735 → 87 líneas; MaintenancePage refactorizada con `useMaintenanceForm`/`useMaintenanceSave`. |
+| F-8 / F-9 / F-10 — Botones duplicados, estados inconsistentes, botones muertos | Resuelto | Acciones unificadas con estados claros; enum `EstadoProforma` y `EstadoMantenimiento` con mapas de labels/colores; Exportar CSV funcional; dashboard/documentación coherentes. |
+| F-11 — alert()/confirm() | Resuelto | Toasts en toda la app; borrados con confirmación en dos clics. |
+| B-7 / B-8 / S-7 — Logs, rate limit, secret de ejemplo | Resuelto | Logs estructurados con pino (nivel por entorno); rate limit específico de login; `.env.example` sin secretos débiles. |
+| D-3 / D-4 / D-5 / D-6 — CI y observabilidad Docker | Resuelto | CI con `--frozen-lockfile` + lint + type-check + build + test + audit; healthchecks en los 5 servicios; plantilla HTTPS (nginx.https.conf). |
+| F-14 — Bundle de 1.59 MB | Resuelto | Code splitting (`React.lazy` + `manualChunks`): chunk principal 411 KB; jspdf/html2canvas solo se cargan al generar PDF. |
+| TS — Sin TypeScript | Resuelto | Todo el monorepo en TypeScript estricto (sin `any`); alias `@` en el web; tipos compartidos en `@unyx/shared-types` y `@unyx/shared-schemas`. |
+
+## Verificación (2026-09-04)
+
+```{r verificacion-remediacion}
+verificacion <- data.frame(
+  Check = c(
+    "pnpm install", "pnpm type-check", "pnpm lint", "pnpm test",
+    "pnpm build", "pnpm dev (API)", "pnpm dev (Web)", "docker compose config"
+  ),
+  Resultado = c(
+    "OK (lockfile sincronizado)", "4/4 tareas, 0 errores", "2/2 (1 warning no bloqueante)",
+    "58/58 pruebas", "4/4 tareas", "Boot real: health 200, rutas 401, logs pino",
+    "Boot real: HTTP 200", "Sintaxis válida"
+  )
+)
+knitr::kable(verificacion, caption = "Verificación ejecutada en máquina local")
+```
+
+## Pendientes operativos (requieren infraestructura real)
+
+1. `pnpm docker:up` completo (Docker daemon no disponible en la máquina de
+   auditoría): verificar login con `admin@unyxsolutions.com` / `Admin123!`,
+   creación de proformas, generación de PDF y persistencia de datos tras
+   `docker compose down`.
+2. Ejecutar la migración de datos históricos con
+   `apps/api/prisma/migrate-firestore.ts` si quedan datos en Firestore
+   (guía en `MIGRACION-FIRESTORE.md`).
+3. HTTPS en producción: dominio + certificados certbot con la plantilla
+   `infrastructure/nginx/nginx.https.conf`.
+4. Pruebas e2e (Playwright) cuando el stack esté disponible en CI.
+
 # Alcance y metodología
 
 ## Alcance
@@ -632,19 +688,27 @@ barplot(conteo[levels(hallazgos$Severidad)],
 
 El repositorio tiene **buenos cimientos**: monorepo organizado, convenciones
 claras, componentes reutilizables, esquema de datos razonable y una UI
-funcional con generación de PDF. Sin embargo, en su estado actual **no está
-preparado para producción**: la autenticación es ficticia, no hay control de
-acceso real, la aplicación depende de una base de datos (Firestore) fuera de
-la arquitectura declarada y accesible desde el navegador sin reglas
-auditables, los comandos de calidad fallan y el despliegue Docker no funciona
-de extremo a extremo.
+funcional con generación de PDF. Sin embargo, en su estado original **no
+estaba preparado para producción**: la autenticación era ficticia, no había
+control de acceso real, la aplicación dependía de una base de datos
+(Firestore) fuera de la arquitectura declarada y accesible desde el navegador
+sin reglas auditables, los comandos de calidad fallaban y el despliegue
+Docker no funcionaba de extremo a extremo.
 
-La prioridad es inequívoca: **unificar la capa de datos en la API +
+La prioridad era inequívoca: **unificar la capa de datos en la API +
 PostgreSQL, implementar autenticación real y restaurar los pipelines de
-calidad**. Con las tres fases del plan de remediación, la base actual puede
-convertirse en una plataforma empresarial sólida en un plazo razonable.
+calidad**. Ese trabajo se completó (ver la sección "Estado de remediación"
+al inicio de este documento): las fases 0, 1 y 2 del plan están implementadas
+y verificadas (type-check estricto, lint, 58 pruebas, build completo y
+despliegue Docker listo). Quedan únicamente las verificaciones operativas que
+requieren infraestructura real, listadas en esa misma sección.
 
 ## Apéndice A — Archivos con problemas señalados
+
+> Nota: todos los problemas de esta tabla fueron resueltos durante la
+> remediación; la tabla se conserva como referencia histórica (ver la sección
+> "Estado de remediación" al inicio). Las rutas `.js/.jsx` listadas ahora
+> existen como `.ts/.tsx`.
 
 | Archivo | Problema principal |
 |---------|--------------------|

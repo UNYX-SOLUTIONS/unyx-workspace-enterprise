@@ -84,10 +84,24 @@ CREATE TABLE "ProformaItem" (
 CREATE TABLE "Maintenance" (
     "id" TEXT NOT NULL,
     "numero" TEXT NOT NULL,
+    "sequenceNumber" INTEGER NOT NULL,
+    "fecha" TIMESTAMP(3) NOT NULL,
     "estado" "EstadoMantenimiento" NOT NULL DEFAULT 'EN_REVISION',
-    "diagnostico" JSONB,
+    "tecnicoResponsable" TEXT,
+    "cliente" JSONB,
+    "equipo" JSONB,
+    "problemasReportados" TEXT[],
+    "diagnosticoInicial" JSONB,
+    "diagnosticoFinal" JSONB,
     "checklist" JSONB,
+    "accionesRealizadas" TEXT,
+    "hallazgos" TEXT[],
+    "recomendaciones" TEXT[],
+    "conclusion" TEXT,
+    "observaciones" TEXT,
     "notas" TEXT,
+    "deletedAt" TIMESTAMP(3),
+    "createdById" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -115,10 +129,14 @@ CREATE UNIQUE INDEX "Proforma_sequenceNumber_key" ON "Proforma"("sequenceNumber"
 
 CREATE UNIQUE INDEX "Maintenance_numero_key" ON "Maintenance"("numero");
 
+CREATE UNIQUE INDEX "Maintenance_sequenceNumber_key" ON "Maintenance"("sequenceNumber");
+
 -- AddForeignKey
 ALTER TABLE "Proforma" ADD CONSTRAINT "Proforma_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE "Proforma" ADD CONSTRAINT "Proforma_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE "Maintenance" ADD CONSTRAINT "Maintenance_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE "ProformaItem" ADD CONSTRAINT "ProformaItem_proformaId_fkey" FOREIGN KEY ("proformaId") REFERENCES "Proforma"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 

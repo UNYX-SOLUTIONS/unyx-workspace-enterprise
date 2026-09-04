@@ -10,4 +10,15 @@ export default defineConfig({
       "/api": "http://localhost:3000",
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          pdf: ["jspdf", "jspdf-autotable"],
+          canvas: ["html2canvas"],
+          vendor: ["react", "react-dom", "react-router-dom", "axios"],
+        },
+      },
+    },
+  },
 });

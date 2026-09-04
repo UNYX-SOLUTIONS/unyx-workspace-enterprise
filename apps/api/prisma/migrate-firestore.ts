@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -163,17 +163,103 @@ async function migrateProformas(proformas) {
   return created;
 }
 
+const MAINTENANCE_STATE_MAP: Record<string, string> = {
+  "en revisión": "EN_REVISION",
+  "en revision": "EN_REVISION",
+  "en mantenimiento": "EN_MANTENIMIENTO",
+  "finalizado": "FINALIZADO",
+  "entregado": "ENTREGADO",
+};
+
+function toJson(value: unknown): Prisma.InputJsonValue | undefined {
+  return value === undefined || value === null ? undefined : (value as Prisma.InputJsonValue);
+}
+
+function toStringArray(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item || "").trim()).filter(Boolean);
+  }
+  if (typeof value === "string" && value.trim()) {
+    return value
+      .split("\n")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+  return [];
+}
+
+async function migrateMaintenances(maintenances: Record<string, unknown>[]) {
+  const sorted = [...maintenances].sort((first, second) => {
+    const firstNumber = Number(String(first.numero || "").replace(/\D/g, "")) || 0;
+    const secondNumber = Number(String(second.numero || "").replace(/\D/g, "")) || 0;
+    return firstNumber - secondNumber;
+  });
+
+  let created = 0;
+  let maxSequence = 0;
+
+  for (const maintenance of sorted) {
+    const numero = String(maintenance.numero || "").trim();
+    if (!numero) continue;
+
+    const existing = await prisma.maintenance.findUnique({ where: { numero } });
+    if (existing) continue;
+
+    const sequenceNumber = Number(String(numero).replace(/\D/g, "")) || 0;
+    maxSequence = Math.max(maxSequence, sequenceNumber);
+
+    const estado =
+      MAINTENANCE_STATE_MAP[String(maintenance.estado || "").trim().toLowerCase()] ||
+      "EN_REVISION";
+
+    await prisma.maintenance.create({
+      data: {
+        numero,
+        sequenceNumber,
+        fecha: toDate(maintenance.fecha),
+        estado: estado as Prisma.EstadoMantenimiento,
+        tecnicoResponsable: String(maintenance.tecnicoResponsable || "").trim() || null,
+        cliente: toJson(maintenance.cliente),
+        equipo: toJson(maintenance.equipo),
+        problemasReportados: toStringArray(maintenance.problemasReportados),
+        diagnosticoInicial: toJson(maintenance.diagnosticoInicial),
+        diagnosticoFinal: toJson(maintenance.diagnosticoFinal),
+        checklist: toJson(maintenance.checklist),
+        accionesRealizadas: String(maintenance.accionesRealizadas || "").trim() || null,
+        hallazgos: toStringArray(maintenance.hallazgos),
+        recomendaciones: toStringArray(maintenance.recomendaciones),
+        conclusion: String(maintenance.conclusion || "").trim() || null,
+        observaciones: String(maintenance.observaciones || "").trim() || null,
+      },
+    });
+
+    created += 1;
+  }
+
+  if (maxSequence > 0) {
+    await prisma.sequence.upsert({
+      where: { key: "mantenimiento" },
+      update: { value: maxSequence },
+      create: { key: "mantenimiento", value: maxSequence },
+    });
+  }
+
+  return created;
+}
+
 async function main() {
   const clients = readExport("clients");
   const products = readExport("products");
   const proformas = readExport("proformas");
+  const maintenances = readExport("mantenimientos");
 
   const migratedClients = await migrateClients(clients);
   const migratedProducts = await migrateProducts(products);
   const migratedProformas = await migrateProformas(proformas);
+  const migratedMaintenances = await migrateMaintenances(maintenances);
 
   console.log(
-    `Migración completada: ${migratedClients} clientes, ${migratedProducts} productos, ${migratedProformas} proformas.`
+    `Migración completada: ${migratedClients} clientes, ${migratedProducts} productos, ${migratedProformas} proformas, ${migratedMaintenances} mantenimientos.`
   );
 }
 

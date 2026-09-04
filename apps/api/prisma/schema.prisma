@@ -29,14 +29,15 @@ enum EstadoMantenimiento {
 }
 
 model User {
-  id           String     @id @default(cuid())
-  email        String     @unique
-  passwordHash String
-  name         String
-  role         UserRole   @default(COMERCIAL)
-  proformas    Proforma[]
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  id            String        @id @default(cuid())
+  email         String        @unique
+  passwordHash  String
+  name          String
+  role          UserRole      @default(COMERCIAL)
+  proformas     Proforma[]
+  mantenimientos Maintenance[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 model Client {
@@ -102,14 +103,29 @@ model ProformaItem {
 }
 
 model Maintenance {
-  id        String              @id @default(cuid())
-  numero    String              @unique
-  estado    EstadoMantenimiento @default(EN_REVISION)
-  diagnostico Json?
-  checklist Json?
-  notas     String?
-  createdAt DateTime            @default(now())
-  updatedAt DateTime            @updatedAt
+  id                  String              @id @default(cuid())
+  numero              String              @unique
+  sequenceNumber      Int                 @unique
+  fecha               DateTime
+  estado              EstadoMantenimiento @default(EN_REVISION)
+  tecnicoResponsable  String?
+  cliente             Json?
+  equipo              Json?
+  problemasReportados String[]
+  diagnosticoInicial  Json?
+  diagnosticoFinal    Json?
+  checklist           Json?
+  accionesRealizadas  String?
+  hallazgos           String[]
+  recomendaciones     String[]
+  conclusion          String?
+  observaciones       String?
+  notas               String?
+  deletedAt           DateTime?
+  createdById         String?
+  createdBy           User?               @relation(fields: [createdById], references: [id])
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
 }
 
 model Sequence {

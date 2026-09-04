@@ -1,6 +1,7 @@
 import { type NextFunction, type Request, type Response } from "express";
 import { ZodError } from "zod";
 import { env } from "../config/env.js";
+import { logger } from "../config/logger.js";
 
 export class AppError extends Error {
   readonly status: number;
@@ -44,7 +45,7 @@ export function errorHandler(
   res: Response,
   _next: NextFunction
 ) {
-  console.error("[error]", error);
+  logger.error({ err: error }, "error no controlado");
 
   if (error instanceof ZodError) {
     return res.status(400).json({

@@ -12,7 +12,8 @@ Desde la consola de Firebase (Firestore Database → "Import/Export" o
 firestore-export/
 ├── clients.json
 ├── products.json
-└── proformas.json
+├── proformas.json
+└── mantenimientos.json
 ```
 
 Formatos aceptados por el script:
@@ -64,8 +65,13 @@ El script:
    el cliente, los ítems, los totales y mapeando el estado
    (`borrador` → BORRADOR, `emitida` → EMITIDA, `aceptada` → ACEPTADA,
    `cerrada` → CERRADA).
-4. Ajusta la secuencia `proforma` al número máximo migrado, de modo que las
-   nuevas proformas continúen la numeración sin colisiones.
+4. Crea mantenimientos ordenados por número, preservando el número original
+   (`MANT-00000001`), el cliente, el equipo, los diagnósticos, el checklist
+   y mapeando el estado (`En revisión` → EN_REVISION, `En mantenimiento` →
+   EN_MANTENIMIENTO, `Finalizado` → FINALIZADO, `Entregado` → ENTREGADO).
+5. Ajusta las secuencias `proforma` y `mantenimiento` al número máximo
+   migrado, de modo que los nuevos registros continúen la numeración sin
+   colisiones.
 
 Es idempotente: puede ejecutarse varias veces; los registros ya migrados se
 omiten.

@@ -15,7 +15,6 @@
     "@hookform/resolvers": "^5.2.1",
     "@unyx/shared-schemas": "workspace:*",
     "axios": "^1.11.0",
-    "firebase": "^12.0.0",
     "i18next": "^25.3.2",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",

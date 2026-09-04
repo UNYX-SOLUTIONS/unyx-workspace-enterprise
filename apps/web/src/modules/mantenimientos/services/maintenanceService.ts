@@ -1,15 +1,5 @@
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  orderBy,
-  query,
-  runTransaction,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
-import { db } from "../../../lib/firebase";
+import { api } from "../../../config/api";
+import type { MaintenanceEstado } from "@unyx/shared-schemas";
 
 export interface MaintenanceRecord {
   id?: string;
@@ -17,63 +7,136 @@ export interface MaintenanceRecord {
   [key: string]: unknown;
 }
 
-const COLLECTION_NAME = "mantenimientos";
-const COUNTER_REF = doc(db, "counters", "mantenimientos");
-
-const formatNumber = (value: number) => `MANT-${String(value).padStart(8, "0")}`;
-
-export async function previewNextMaintenanceNumber(): Promise<string> {
-  const snapshot = await getDoc(COUNTER_REF);
-  const current = snapshot.exists() ? Number(snapshot.data().current || 0) : 0;
-  return formatNumber(current + 1);
+export interface MaintenanceDto {
+  id: string;
+  numero: string;
+  sequenceNumber: number;
+  fecha: string;
+  estado: MaintenanceEstado;
+  tecnicoResponsable?: string | null;
+  cliente?: Record<string, unknown> | null;
+  equipo?: Record<string, unknown> | null;
+  problemasReportados: string[];
+  diagnosticoInicial?: Record<string, string> | null;
+  diagnosticoFinal?: Record<string, string> | null;
+  checklist?: Array<Record<string, unknown>> | null;
+  accionesRealizadas?: string | null;
+  hallazgos: string[];
+  recomendaciones: string[];
+  conclusion?: string | null;
+  observaciones?: string | null;
+  notas?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-export async function saveMaintenance(maintenance: MaintenanceRecord): Promise<string> {
-  if (!maintenance?.numero) throw new Error("El mantenimiento no tiene número.");
+const ESTADO_TO_ENUM: Record<string, MaintenanceEstado> = {
+  "En revisión": "EN_REVISION",
+  "En mantenimiento": "EN_MANTENIMIENTO",
+  "Finalizado": "FINALIZADO",
+  "Entregado": "ENTREGADO",
+};
 
-  await runTransaction(db, async (transaction) => {
-    const counterSnapshot = await transaction.get(COUNTER_REF);
-    const current = counterSnapshot.exists()
-      ? Number(counterSnapshot.data().current || 0)
-      : 0;
-    const numericNumber = Number(String(maintenance.numero).replace(/\D/g, ""));
+const ENUM_TO_ESTADO: Record<MaintenanceEstado, string> = {
+  EN_REVISION: "En revisión",
+  EN_MANTENIMIENTO: "En mantenimiento",
+  FINALIZADO: "Finalizado",
+  ENTREGADO: "Entregado",
+};
 
-    transaction.set(
-      doc(db, COLLECTION_NAME, maintenance.numero),
-      { ...maintenance, updatedAt: serverTimestamp() },
-      { merge: true }
-    );
+function toEnum(estado: unknown): MaintenanceEstado {
+  if (typeof estado === "string") {
+    const mapped = ESTADO_TO_ENUM[estado];
+    if (mapped) return mapped;
+    const direct = estado.toUpperCase();
+    if (direct in ENUM_TO_ESTADO) return direct as MaintenanceEstado;
+  }
+  return "EN_REVISION";
+}
 
-    if (numericNumber > current) {
-      transaction.set(COUNTER_REF, { current: numericNumber }, { merge: true });
-    }
-  });
+function toRecord(dto: MaintenanceDto): MaintenanceRecord {
+  return {
+    ...dto,
+    estado: ENUM_TO_ESTADO[dto.estado] ?? dto.estado,
+  };
+}
 
-  return maintenance.numero;
+function buildPayload(maintenance: MaintenanceRecord): Record<string, unknown> {
+  const {
+    id: _id,
+    numero: _numero,
+    sequenceNumber: _sequenceNumber,
+    createdAt: _createdAt,
+    updatedAt: _updatedAt,
+    ...rest
+  } = maintenance;
+
+  return {
+    ...rest,
+    estado: toEnum(maintenance.estado),
+  };
+}
+
+export async function previewNextMaintenanceNumber(): Promise<string> {
+  const { data } = await api.get<{ numero: string }>("/mantenimientos/numero-siguiente");
+  return data.numero;
+}
+
+export async function createMaintenance(maintenance: MaintenanceRecord): Promise<MaintenanceDto> {
+  const { data } = await api.post<MaintenanceDto>("/mantenimientos", buildPayload(maintenance));
+  return data;
+}
+
+export async function updateMaintenance(
+  numeroOrId: string,
+  maintenance: MaintenanceRecord
+): Promise<MaintenanceDto> {
+  const { data } = await api.put<MaintenanceDto>(
+    `/mantenimientos/${encodeURIComponent(numeroOrId)}`,
+    buildPayload(maintenance)
+  );
+  return data;
+}
+
+export async function saveMaintenance(maintenance: MaintenanceRecord): Promise<MaintenanceDto> {
+  if (maintenance.id) {
+    return updateMaintenance(maintenance.id, maintenance);
+  }
+  return createMaintenance(maintenance);
 }
 
 export async function getMaintenance(number: string): Promise<MaintenanceRecord | null> {
-  const snapshot = await getDoc(doc(db, COLLECTION_NAME, number));
-  return snapshot.exists()
-    ? ({ id: snapshot.id, ...snapshot.data() } as MaintenanceRecord)
-    : null;
+  try {
+    const { data } = await api.get<MaintenanceDto>(`/mantenimientos/${encodeURIComponent(number)}`);
+    return toRecord(data);
+  } catch (error) {
+    const status = (error as { response?: { status?: number } })?.response?.status;
+    if (status === 404) return null;
+    throw error;
+  }
 }
 
 export async function getMaintenances(): Promise<MaintenanceRecord[]> {
-  const maintenanceQuery = query(
-    collection(db, COLLECTION_NAME),
-    orderBy("fecha", "desc")
-  );
-  const snapshot = await getDocs(maintenanceQuery);
-  return snapshot.docs.map(
-    (item) => ({ id: item.id, ...item.data() }) as MaintenanceRecord
-  );
+  const { data } = await api.get<{ data: MaintenanceDto[] }>("/mantenimientos", {
+    params: { page: 1, pageSize: 200 },
+  });
+  return data.data.map(toRecord);
 }
 
-export async function updateMaintenanceStatus(number: string, status: string): Promise<void> {
-  await setDoc(
-    doc(db, COLLECTION_NAME, number),
-    { estado: status, updatedAt: serverTimestamp() },
-    { merge: true }
+export async function updateMaintenanceStatus(
+  numeroOrId: string,
+  status: string
+): Promise<MaintenanceDto> {
+  const { data } = await api.put<MaintenanceDto>(
+    `/mantenimientos/${encodeURIComponent(numeroOrId)}`,
+    { estado: toEnum(status) }
   );
+  return data;
+}
+
+export async function deleteMaintenance(numeroOrId: string): Promise<{ id: string; numero: string }> {
+  const { data } = await api.delete<{ id: string; numero: string }>(
+    `/mantenimientos/${encodeURIComponent(numeroOrId)}`
+  );
+  return data;
 }

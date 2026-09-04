@@ -36,7 +36,13 @@ async function main() {
     create: { key: "proforma", value: 0 },
   });
 
-  console.log("Seed completado: usuarios admin/demo y secuencia 'proforma' creados.");
+  await prisma.sequence.upsert({
+    where: { key: "mantenimiento" },
+    update: {},
+    create: { key: "mantenimiento", value: 0 },
+  });
+
+  console.log("Seed completado: usuarios admin/demo y secuencias 'proforma' y 'mantenimiento' creados.");
 }
 
 main()

@@ -7,11 +7,16 @@ dist/
 **/dist/
 dist-ssr/
 **/dist-ssr/
+.turbo/
 
 # Environment variables
 .env
 .env.*
 !.env.example
+.env.development
+.env.production
+.env.local
+.env.*.local
 **/.env
 **/.env.*
 !**/.env.example

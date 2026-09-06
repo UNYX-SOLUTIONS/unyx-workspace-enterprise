@@ -13,98 +13,220 @@ app.unyxsolutions.com/productos
 ## Tecnologías
 
 ### Frontend
-- React + Vite
-- React Router
+- React 19 + Vite 7 + TypeScript (strict)
+- React Router (rutas con code splitting)
 - Tailwind CSS
 - React Hook Form + Zod
-- Axios
+- Axios (interceptor JWT)
 - i18next
-- Contextos de autenticación, tema y notificaciones
+- Contextos de autenticación, tema y notificaciones (toasts)
 
 ### Backend
-- Node.js + Express
-- Prisma ORM
-- PostgreSQL
-- JWT
-- Zod
-- Helmet, CORS y rate limiting
+- Node.js + Express 5 + TypeScript (strict)
+- Prisma ORM + PostgreSQL
+- JWT (bcrypt) con verificación de usuario en BD
+- Zod (esquemas compartidos en `@unyx/shared-schemas`)
+- Helmet, CORS, rate limiting (global + login)
+- Logs estructurados con pino
 
 ### Infraestructura
 - pnpm workspaces
 - Turborepo
-- Docker Compose
-- Nginx
-- Redis preparado
-- GitHub Actions
+- Docker Compose (web, api, postgres, redis, nginx) con healthchecks
+- Nginx (plantilla HTTPS con Let's Encrypt incluida)
+- GitHub Actions (lint + type-check + build + test + audit)
 
 ## Inicio rápido
 
 ```bash
 cp .env.example .env
 pnpm install
-pnpm dev
+pnpm build          # compila paquetes compartidos + apps
+pnpm dev            # web: http://localhost:5173 · api: http://localhost:3000
 ```
 
-Frontend: `http://localhost:5173`  
-API: `http://localhost:3000/api/health`
+La API necesita una base PostgreSQL. Opciones:
 
-## Docker
+- Solo la base en Docker: `docker compose up -d postgres` (expone 5432) y
+  `pnpm dev` en el host.
+- Todo en Docker: `pnpm docker:up`.
+
+La variable `DATABASE_URL` de `.env` apunta a `localhost:5432` para desarrollo
+en host; el contenedor de la API usa su propia URL interna hacia `postgres`.
+
+## Comandos
+
+| Comando               | Descripción                                          |
+|-----------------------|------------------------------------------------------|
+| `pnpm dev`            | Arranca api (tsx watch) y web (vite) en paralelo     |
+| `pnpm build`          | Compila shared-* + api (tsc) + web (tsc + vite)      |
+| `pnpm type-check`     | Typecheck estricto de api y web                       |
+| `pnpm lint`           | ESLint + typescript-eslint en api y web               |
+| `pnpm test`           | Vitest: unitarias + validación + servicios            |
+| `pnpm docker:up`      | `docker compose up -d --build` (migra y seedea solo)  |
+| `pnpm docker:down`    | Detiene los contenedores (los datos persisten)        |
+| `pnpm docker:logs`    | Logs en vivo de todos los servicios                   |
+
+### Migraciones y datos
+
+```bash
+cd apps/backend
+pnpm prisma:migrate   # prisma migrate dev (desarrollo)
+pnpm prisma:deploy    # aplica migraciones pendientes
+pnpm prisma:seed      # usuarios admin/demo + secuencias
+```
+
+El contenedor de la API ejecuta `prisma:deploy` + `prisma:seed` al arrancar
+(ambos idempotentes).
+
+**Usuario inicial:** `admin@unyxsolutions.com` / `Admin123!` (cambiar en
+producción con `SEED_ADMIN_PASSWORD`).
+
+## Docker (local)
 
 ```bash
 docker compose up -d --build
 ```
 
-Aplicación: `http://localhost`
+Aplicación: `http://localhost` · API: `http://localhost/api/health`.
 
-## Migración del proyecto actual
+## Despliegue en el VPS global (Proyecto B)
 
-Mueve tus archivos existentes así:
+El proyecto convive en el VPS central de la empresa junto a otros proyectos:
 
 ```text
-ProformPage.jsx
-→ apps/web/src/modules/proformas/pages/ProformaPage.jsx
-
-HistoryPage.jsx
-→ apps/web/src/modules/proformas/pages/ProformaHistoryPage.jsx
-
-proformaService.js
-→ apps/web/src/modules/proformas/services/proformaService.js
-
-generatePdf.js
-→ apps/web/src/modules/proformas/utils/generatePdf.js
-
-MaintenancePage.jsx
-→ apps/web/src/modules/mantenimientos/pages/MaintenancePage.jsx
-
-maintenanceService.js
-→ apps/web/src/modules/mantenimientos/services/maintenanceService.js
-
-generateMaintenancePdf.js
-→ apps/web/src/modules/mantenimientos/utils/generateMaintenancePdf.js
-
-ClientsPage.jsx
-→ apps/web/src/modules/clientes/pages/ClientsPage.jsx
-
-ProductsPage.jsx
-→ apps/web/src/modules/productos/pages/ProductsPage.jsx
+VPS Global
+├── pgadmin (puerto 5050)          → administra TODAS las bases
+├── postgres-unyx (5432)           → PostgreSQL de UNYX (Proyecto B)
+├── postgres-proyecto-c (5433)     → Proyecto C
+├── postgres-proyecto-d (5434)     → Proyecto D
+└── [empresa-network]              → red Docker externa compartida
+     ├── unyx-backend  (3000)
+     ├── unyx-frontend (80, proxy /api → backend)
+     └── unyx-redis
 ```
 
-Los componentes compartidos deben ir en:
+Reglas:
 
-```text
-apps/web/src/components/common
-apps/web/src/components/layout
+- **PostgreSQL es externo al proyecto**: el contenedor `postgres-unyx` lo
+  crea el administrador del VPS. El proyecto NO define servicio postgres.
+- Todos los contenedores del proyecto usan la red externa `empresa-network`.
+- **Las migraciones NO corren automáticamente en el contenedor**: se aplican
+  desde CI/CD o manualmente con `pnpm migrate:prod` / `pnpm seed:prod`
+  (idempotentes) o con `infrastructure/scripts/deploy.sh`.
+
+### Configuración previa (administrador del VPS)
+
+```bash
+# 1. Red compartida (una sola vez para toda la empresa)
+docker network create empresa-network
+
+# 2. PostgreSQL del Proyecto B (--restart unless-stopped para sobrevivir
+#    reinicios del host/Docker)
+docker run -d --name postgres-unyx --network empresa-network \
+  --restart unless-stopped \
+  -e POSTGRES_DB=unyx_workspace \
+  -e POSTGRES_USER=unyx_user \
+  -e POSTGRES_PASSWORD=<secret> \
+  -p 5432:5432 postgres:16-alpine
 ```
 
-La configuración de Firebase debe permanecer en:
+En PGAdmin (host `pgadmin`, puerto 5050) agrega un server con:
+
+| Campo | Valor |
+|---|---|
+| Host | `postgres-unyx` |
+| Port | `5432` |
+| Database | `unyx_workspace` |
+| User | `unyx_user` |
+
+### Variables de entorno (una sola fuente por app)
+
+Siguiendo el patrón del resto de proyectos de la empresa (backend/frontend
+con su propio `.env`):
+
+| Archivo | Uso |
+|---|---|
+| `apps/backend/.env` + `.env.example` | Desarrollo del backend en host (DB local o postgres-unyx) |
+| `apps/frontend/.env` + `.env.example` | Desarrollo del frontend (Vite) |
+| `.env.production` (raíz, NO versionar) | Docker/VPS: `deploy:prod`, `migrate:prod`, `seed:prod` |
+| `.env.example` (raíz, SÍ versionar) | Plantilla de referencia para `.env.production` |
+
+Secretos requeridos en `.env.production`: `UNYX_DB_PASSWORD`, `JWT_SECRET`
+(mín. 32 caracteres) y opcionalmente `SEED_ADMIN_PASSWORD`.
+
+### Despliegue
+
+```bash
+pnpm deploy:prod    # build + up con .env.production
+pnpm migrate:prod   # prisma migrate deploy (dentro de la red, idempotente)
+pnpm seed:prod      # usuarios admin/demo + secuencias (idempotente)
+
+# o todo junto:
+bash infrastructure/scripts/deploy.sh
+
+# Respaldo de la base:
+bash infrastructure/scripts/backup-db.sh   # guarda en ./backups/*.sql.gz
+```
+
+### HTTPS en producción
+
+El contenedor `unyx-frontend` (nginx) es el punto de entrada en el puerto 80.
+Para TLS con certbot en el VPS:
+
+1. Apunta el DNS `workspace.unyxsolutions.com` a la IP del VPS.
+2. Obtén certificados (desde el VPS, con el puerto 80 libre):
+
+   ```bash
+   mkdir -p /var/www/certbot
+   docker run --rm -p 80:80 -v /var/www/certbot:/var/www/certbot \
+     -v /etc/letsencrypt:/etc/letsencrypt \
+     certbot/certbot certonly --standalone \
+     -d workspace.unyxsolutions.com \
+     --email <tu-correo> --agree-tos --no-eff-email
+   ```
+
+3. Monta certificados y la config HTTPS en `unyx-frontend` agregando al
+   servicio `frontend` del compose:
+
+   ```yaml
+       volumes:
+         - /etc/letsencrypt:/etc/letsencrypt:ro
+         - /var/www/certbot:/var/www/certbot:ro
+         - ./infrastructure/nginx/nginx.https.conf:/etc/nginx/conf.d/default.conf:ro
+       ports:
+         - "80:80"
+         - "443:443"
+   ```
+
+4. `docker compose --env-file .env.production up -d frontend`
+
+## Migración desde Firestore (histórico)
+
+El código anterior usaba Firestore. Si aún quedan datos por migrar, sigue
+`MIGRACION-FIRESTORE.md` (export JSON + `pnpm exec tsx prisma/migrate-firestore.ts`).
+
+## Estructura
 
 ```text
-apps/web/src/config/firebase.js
+apps/
+├── web/                 Frontend React + TypeScript (módulos por dominio)
+└── api/                 Backend Express + TypeScript + Prisma
+packages/
+├── shared-types/        Tipos compartidos
+├── shared-schemas/      Esquemas Zod compartidos (con tipos inferidos)
+└── eslint-config/       ESLint 9 + typescript-eslint
+infrastructure/
+├── nginx/               Proxy reverso (HTTP + plantilla HTTPS)
+├── database/            Notas de BD
+└── scripts/             deploy.sh
 ```
 
 ## Regla de arquitectura
 
-- Código exclusivo de un módulo: `apps/web/src/modules/<modulo>`
-- Código reutilizable en varios módulos: `components`, `hooks`, `services`, `utils`
-- Frontend y backend se comunican únicamente mediante HTTP
+- Código exclusivo de un módulo: `apps/frontend/src/modules/<modulo>`
+- Código reutilizable: `src/components`, `src/hooks`, `src/modules/common`
+- Frontend y backend se comunican únicamente mediante HTTP (JWT en `Authorization`)
 - No importar archivos internos del backend desde el frontend
+- Imports del frontend con alias `@/` (apunta a `apps/frontend/src`)
+- Validación con `@unyx/shared-schemas` en ambos lados

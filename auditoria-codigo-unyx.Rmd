@@ -1,0 +1,740 @@
+---
+title: "Auditoría de Código — UNYX Workspace Enterprise"
+subtitle: "Revisión senior de arquitectura, seguridad, calidad, pruebas y DevOps"
+author: "Auditoría técnica independiente"
+date: "2026-09-03"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    number_sections: true
+    code_folding: hide
+    theme: flatly
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+# Resumen ejecutivo
+
+UNYX Workspace Enterprise es un monorepo pnpm + Turborepo con una aplicación web
+React (Vite) y una API Express 5 + Prisma + PostgreSQL. La **estructura y las
+convenciones** son buenas (modular por dominio, componentes comunes, esquemas
+compartidos, Docker Compose, CI), pero el proyecto se encuentra en una fase
+temprana con **fallas críticas de seguridad y de coherencia arquitectónica** que
+impiden considerar la plataforma lista para producción.
+
+Los tres problemas más graves son:
+
+1. **Autenticación y autorización inexistentes en la práctica.** La API emite
+   tokens JWT para cualquier correo, sin contraseña y con rol `ADMIN`
+   fijo; el frontend ni siquiera consume ese endpoint y crea un usuario
+   ficticio en `localStorage`. El middleware `requireAuth` está escrito pero
+   **no se aplica a ninguna ruta**.
+2. **Doble fuente de verdad de datos.** El frontend escribe y lee directamente
+   Firestore (Firebase) desde el navegador, mientras el backend modela los
+   mismos datos en PostgreSQL/Prisma. Esto viola la regla de arquitectura del
+   propio README ("frontend y backend se comunican únicamente mediante HTTP")
+   y deja la seguridad de los datos en manos de reglas de Firestore que no
+   están en el repositorio y, por tanto, no se pueden auditar.
+3. **Pipelines de calidad rotos.** `pnpm lint` falla (ESLint 9 sin archivo de
+   configuración), `pnpm test` falla (el paquete web no tiene ninguna prueba)
+   y la API no tiene migraciones de Prisma, por lo que `prisma migrate deploy`
+   (que se ejecuta al arrancar el contenedor) fallará contra una base vacía.
+   Además, el build Docker del frontend no recibe las claves de Firebase y
+   la aplicación quedaría rota en despliegue.
+
+Detalle del resto de hallazgos, con severidades y plan de remediación, en las
+secciones siguientes.
+
+# Estado de remediación (actualización 2026-09-04)
+
+Esta sección documenta el resultado de la implementación del plan de
+remediación sobre el commit auditado. El análisis original (secciones
+siguientes) se conserva como referencia histórica.
+
+## Hallazgos resueltos
+
+| Hallazgo original | Estado | Cómo se resolvió |
+|-------------------|--------|------------------|
+| S-1 / S-2 / S-3 — Auth ficticia y rutas públicas | Resuelto | Login real con bcrypt + JWT contra PostgreSQL; `requireAuth` + `requireRole` en **todas** las rutas (excepto `/api/health` y `/api/auth/login`); `GET /api/auth/me`; verificación de usuario en BD en cada petición. |
+| S-4 / A-DEV-1 — Firestore directo desde el navegador y doble fuente de datos | Resuelto | Toda la capa de datos (proformas, clientes, productos, mantenimientos) migrada a API + PostgreSQL/Prisma; Firebase **eliminado** del frontend y del lockfile. |
+| F-6 / B-4 — Cálculo monetario con flotantes y sin validación | Resuelto | Centavos enteros en el cliente + `decimal.js` con redondeo half-up en el servidor (totales recalculados server-side); validación Zod en ambos lados con `@unyx/shared-schemas`. |
+| F-7 — Número de proforma editable | Resuelto | Numeración atómica en servidor con tabla `Sequence` (`INSERT ... ON CONFLICT ... RETURNING`); el número es de solo lectura en la UI. |
+| B-9 / D-2 — Sin migraciones ni seed | Resuelto | Migración inicial versionada + `seed.ts` (admin/demo, secuencias); el contenedor ejecuta `migrate deploy` + seed idempotentes al arrancar. |
+| D-1 — Build Docker del web sin claves | Resuelto | Firebase eliminado; el web compila con `tsc --noEmit && vite build` y ya no requiere claves externas. |
+| QLT-01 / TST-01 — Lint y tests rotos | Resuelto | ESLint 9 + typescript-eslint activo en api y web; 58 pruebas (unitarias, validación, servicios con Prisma mockeado, errorHandler). |
+| F-1 / F-2 / F-3 — Providers sin montar, `/login` inexistente, auth simulada | Resuelto | `main.tsx` monta Auth/Theme/Toast; router con `/login` y todo el layout detrás de `ProtectedRoute`. |
+| F-5 — Páginas monstruo | Resuelto | ProformaPage: 735 → 87 líneas; MaintenancePage refactorizada con `useMaintenanceForm`/`useMaintenanceSave`. |
+| F-8 / F-9 / F-10 — Botones duplicados, estados inconsistentes, botones muertos | Resuelto | Acciones unificadas con estados claros; enum `EstadoProforma` y `EstadoMantenimiento` con mapas de labels/colores; Exportar CSV funcional; dashboard/documentación coherentes. |
+| F-11 — alert()/confirm() | Resuelto | Toasts en toda la app; borrados con confirmación en dos clics. |
+| B-7 / B-8 / S-7 — Logs, rate limit, secret de ejemplo | Resuelto | Logs estructurados con pino (nivel por entorno); rate limit específico de login; `.env.example` sin secretos débiles. |
+| D-3 / D-4 / D-5 / D-6 — CI y observabilidad Docker | Resuelto | CI con `--frozen-lockfile` + lint + type-check + build + test + audit; healthchecks en los 5 servicios; plantilla HTTPS (nginx.https.conf). |
+| F-14 — Bundle de 1.59 MB | Resuelto | Code splitting (`React.lazy` + `manualChunks`): chunk principal 411 KB; jspdf/html2canvas solo se cargan al generar PDF. |
+| TS — Sin TypeScript | Resuelto | Todo el monorepo en TypeScript estricto (sin `any`); alias `@` en el web; tipos compartidos en `@unyx/shared-types` y `@unyx/shared-schemas`. |
+
+## Verificación (2026-09-04)
+
+```{r verificacion-remediacion}
+verificacion <- data.frame(
+  Check = c(
+    "pnpm install", "pnpm type-check", "pnpm lint", "pnpm test",
+    "pnpm build", "pnpm dev (API)", "pnpm dev (Web)", "docker compose config"
+  ),
+  Resultado = c(
+    "OK (lockfile sincronizado)", "4/4 tareas, 0 errores", "2/2 (1 warning no bloqueante)",
+    "58/58 pruebas", "4/4 tareas", "Boot real: health 200, rutas 401, logs pino",
+    "Boot real: HTTP 200", "Sintaxis válida"
+  )
+)
+knitr::kable(verificacion, caption = "Verificación ejecutada en máquina local")
+```
+
+## Pendientes operativos (requieren infraestructura real)
+
+1. ~~`pnpm docker:up` completo~~ — **VERIFICADO (2026-09-04)** contra la
+   arquitectura del VPS global (red externa `empresa-network` +
+   `postgres-unyx`): stack sano (backend/frontend/redis healthy), login con
+   `admin@unyxsolutions.com` / `Admin123!`, proformas con numeración
+   automática e IVA exacto, persistencia en `postgres-unyx` y suite e2e
+   Playwright completa (5/5).
+2. ~~Migración de datos históricos con `apps/backend/prisma/migrate-firestore.ts`~~ —
+   **VERIFICADA** con fixtures contra la base real: clientes, productos,
+   proformas y mantenimientos migrados preservando números, con secuencias
+   continuando correctamente.
+3. HTTPS en producción: dominio + certificados certbot con la plantilla
+   `infrastructure/nginx/nginx.https.conf` (el punto de entrada TLS es el
+   contenedor `unyx-frontend`).
+4. ~~Pruebas e2e (Playwright)~~ — **IMPLEMENTADAS Y VERIFICADAS**: suite en
+   `apps/frontend/tests-e2e` (login, historial y creación completa de
+   proforma) ejecutada contra el stack Docker.
+
+# Alcance y metodología
+
+## Alcance
+
+- Repositorio completo: `apps/backend`, `apps/frontend`, `packages/*`,
+  `infrastructure/*`, `.github/*`, configuración raíz
+  (`docker-compose.yml`, `turbo.json`, `pnpm-workspace.yaml`).
+- Commit auditado: `390333d` (rama de trabajo actual, historial de 5 commits).
+- Fecha de la auditoría: 2026-09-03.
+
+## Metodología
+
+1. Lectura completa del código fuente (118 archivos, excluidos
+   `node_modules` y artefactos).
+2. Verificación ejecutable del estado del repositorio: `pnpm lint`,
+   `pnpm test` y `pnpm build`.
+3. Análisis por capas: arquitectura, backend, frontend, capa de datos,
+   seguridad, calidad, pruebas, DevOps/CI y paquetes compartidos.
+4. Clasificación de hallazgos por severidad (Crítico / Alto / Medio / Bajo)
+   y plan de remediación por fases.
+
+## Resultados verificados en máquina
+
+| Comando        | Resultado | Detalle                                                                 |
+|----------------|-----------|-------------------------------------------------------------------------|
+| `pnpm build`   | OK        | El web compila (con advertencia de chunk de 1.59 MB). La API es no-op.   |
+| `pnpm lint`    | FALLA     | `@unyx/backend` y `@unyx/frontend`: ESLint 9 no encuentra `eslint.config.js`.     |
+| `pnpm test`    | FALLA     | `@unyx/frontend`: "No test files found, exiting with code 1".                 |
+
+En resumen: **1 de 3 comandos de calidad pasa**. El lint está roto en todo el
+monorepo y la suite de pruebas no puede ejecutarse a nivel raíz.
+
+# Panorama general
+
+## Estructura
+
+```text
+unyx-workspace-enterprise/
+├── apps/
+│   ├── api/          Backend Express 5 + Prisma + PostgreSQL
+│   └── web/          Frontend React 19 + Vite 7 + Tailwind 4
+├── packages/
+│   ├── shared-types/        Tipos compartidos (JSDoc, vacío)
+│   ├── shared-schemas/      Esquemas Zod compartidos
+│   └── eslint-config/       Configuración ESLint (sin uso)
+├── infrastructure/
+│   ├── nginx/         Proxy reverso
+│   ├── database/      Notas de BD
+│   └── scripts/       deploy.sh
+├── .github/           CI (ci.yml, docker.yml) y CODEOWNERS
+├── docker-compose.yml
+├── pnpm-workspace.yaml
+└── turbo.json
+```
+
+La distribución por módulos del frontend (`modules/<dominio>/{pages,
+components, services, utils}`) es correcta y consistente. El backend replica
+el mismo patrón de módulos por dominio.
+
+## Inventario de archivos
+
+```{r inventario}
+archivos <- data.frame(
+  Extension = c(".jsx", ".js", ".gitkeep", ".json", ".svg", ".conf",
+                ".css", ".md", ".png", ".yml", ".env", ".html", ".prisma", ".sh"),
+  Cantidad  = c(40, 37, 15, 5, 4, 2, 2, 2, 2, 2, 1, 1, 1, 1)
+)
+knitr::kable(archivos, caption = "Archivos por extensión (118 en total, sin node_modules/dist)")
+```
+
+Observaciones inmediatas:
+
+- **15 archivos `.gitkeep`** indican módulos planificados aún vacíos
+  (`inventario`, `proyectos`, `usuarios`, subcarpetas de servicios).
+- **Cero archivos de prueba** en el frontend y un único test (`health.test.js`)
+  en la API.
+- **Cero archivos `eslint.config.*`**: la configuración compartida
+  `@unyx/eslint-config` existe pero ningún paquete la referencia.
+- **Sin carpeta de migraciones de Prisma** y sin `seed.js`.
+
+# Arquitectura
+
+## Lo que funciona bien
+
+- Separación limpia frontend/backend/paquetes/infraestructura en monorepo.
+- Convención de módulos por dominio, componentes comunes (`components/common`)
+  y de layout (`components/layout`) reutilizados de forma consistente.
+- Esquemas Zod compartidos en `packages/shared-schemas` (aunque sin consumo
+  real, ver sección de paquetes).
+- Configuración de entorno tipada con Zod en la API (`src/config/env.js`),
+  que valida al arranque.
+
+## Desviaciones graves
+
+**A-DEV-1 — Doble modelo de datos sin sincronizar (Crítico).**
+`apps/backend/prisma/schema.prisma` modela `User`, `Client`, `Product`,
+`Proforma`, `ProformaItem` y `Maintenance` en PostgreSQL, pero el frontend no
+usa la API para nada de esto: `proformaService.js`, `clientService.js`,
+`productService.js` y `maintenanceService.js` leen y escriben directamente
+Firestore desde el navegador. El README declara explícitamente:
+"Frontend y backend se comunican únicamente mediante HTTP". Hoy existen dos
+sistemas paralelos, y el sistema "real" (el que usa la aplicación) es
+Firebase, que no aparece en la infraestructura declarada.
+
+**A-DEV-2 — API en estado embrionario.**
+De las 6 rutas montadas en `apps/backend/src/app.js`, tres (`clientes`,
+`productos`, `mantenimientos`) son stubs que devuelven `[]`, `auth` es
+ficticio y `proformas` solo implementa un `GET` sin paginación ni validación.
+
+**A-DEV-3 — Reglas de negocio en el cliente.**
+Cálculo de IVA (15%), totales y numeración correlativa de proformas y
+mantenimientos viven en el navegador. Cualquier modificación depende del
+cliente y no hay garantía de integridad servidor.
+
+# Backend (apps/backend)
+
+## Estado
+
+La API es un esqueleto correcto en estilo (ESM, separación app/server,
+env validado con Zod, error handler central) pero casi sin lógica de negocio.
+
+## Hallazgos
+
+**B-1 — Login ficticio (Crítico).** `src/modules/auth/auth.routes.js` acepta
+cualquier `email`, no verifica contraseña (no existe el concepto), no consulta
+la base de datos y firma un JWT con `{ id: "demo", email, role: "ADMIN" }`.
+Cualquier persona obtiene un token de administrador con solo conocer el
+endpoint. `bcryptjs` está declarado en `package.json` pero no se usa.
+
+**B-2 — `requireAuth` nunca se aplica (Crítico).**
+`src/middleware/auth.js` implementa correctamente la verificación JWT, pero
+ninguna ruta lo monta. `GET /api/proformas` (única ruta con datos) es pública.
+
+**B-3 — Rutas stub (Alto).** `clientes.routes.js`, `productos.routes.js` y
+`mantenimientos.routes.js` devuelven `res.json([])` sin leer Prisma.
+
+**B-4 — Sin validación de entrada (Alto).** `shared-schemas` existe pero no se
+importa en la API. El `POST /api/auth/login` solo comprueba que exista
+`email`. No hay validación Zod en ninguna ruta.
+
+**B-5 — Fuga de información en errores (Alto).**
+`src/middleware/errorHandler.js` responde con `error.message` sin filtrar en
+`NODE_ENV=production`. Un error de Prisma puede exponer SQL, esquema o
+detalles internos al cliente.
+
+**B-6 — Sin paginación (Alto).** `GET /api/proformas` ejecuta
+`prisma.proforma.findMany` con `include` de cliente e ítems, sin límites. Con
+un volumen real esto devuelve el dataset completo en cada petición.
+
+**B-7 — Morgan en modo dev siempre (Medio).** `morgan("dev")` escribe logs
+verbosos en producción; tampoco hay logueo estructurado ni niveles.
+
+**B-8 — Rate limit global sin matices (Medio).** 300 req/min por IP para todo
+`/api`; un endpoint de login real necesitaría un límite mucho más estricto
+para impedir fuerza bruta.
+
+**B-9 — Sin migraciones ni seed (Alto).** No existe
+`apps/backend/prisma/migrations`. El Dockerfile ejecuta
+`prisma migrate deploy` al arrancar: con una base vacía el contenedor de la
+API no llegará a levantar. Tampoco hay `seed.js` para el usuario inicial.
+
+# Frontend (apps/frontend)
+
+## Estado
+
+Interfaz funcional y visualmente cuidada para proformas, clientes, productos
+y mantenimientos, con generación de PDF en el navegador (jsPDF). El código es
+legible, pero las páginas centrales son muy grandes y existen múltiples piezas
+muertas.
+
+## Hallazgos
+
+**F-1 — Proveedores nunca montados (Alto).** `main.jsx` renderiza `<App />`
+sin envolverlo en `AuthProvider`, `ThemeProvider` ni `ToastProvider`. Los tres
+contextos están implementados y exportados, pero ningún consumidor recibe un
+proveedor. `useToast()` devuelve `null` (el valor por defecto de
+`createContext(null)`) y `ToastContainer` fallaría si llegara a montarse.
+`ProtectedRoute` usa `useAuth()` y tampoco se usa en el router.
+
+**F-2 — `/login` no existe en el router (Alto).**
+`LoginPage.jsx` (único uso real de `react-hook-form`) no está enrutado.
+`ProtectedRoute` redirige a una ruta inexistente. La aplicación entra directa
+al dashboard sin autenticación.
+
+**F-3 — Autenticación simulada en el cliente (Crítico).**
+`contexts/AuthContext.jsx` crea `{ id: "demo", email, role: "ADMIN" }` y lo
+guarda en `localStorage`, sin llamar a `/api/auth/login` ni almacenar token.
+`src/config/api.js` sí tiene el interceptor de axios que añade el token
+`unyx_token`, pero **ningún servicio usa esa instancia de axios**: los
+servicios reales usan Firestore.
+
+**F-4 — Código muerto y roto (Medio).**
+- `src/lib/firebase.js` termina con la expresión `addEventListener;`
+  (línea 16): código residual sin efecto.
+- `src/lib/firebase.js` duplica `src/config/firebase.js`; los servicios
+  importan `lib`, `config` no lo usa nadie.
+- `modules/mantenimientos/utils/diagnosticImport.js` es un stub que lanza
+  `throw new Error("Copia aquí tu implementación...")`, mientras la
+  implementación real vive en `importMaintenanceDiagnostic.js` (que sí se
+  importa).
+- `ProtectedRoute.jsx`, `DataTable.jsx`, `InfoBadge.jsx`,
+  `SkeletonLoader.jsx` no se usan en ninguna página.
+- Doble CSS: `src/index.css` y `src/styles/index.css`; solo se importa el
+  segundo, y ambos contienen estilos base duplicados/con conflictos.
+
+**F-5 — Páginas monstruo (Medio).** `ProformaPage.jsx` (735 líneas) y
+`MaintenancePage.jsx` (1133 líneas) concentran estado, validación, búsquedas
+y render. Sin hooks de extracción son difíciles de testear y mantener.
+
+**F-6 — Cálculo monetario con flotantes (Alto).**
+`ProformaPage.jsx` calcula `iva = subtotal * 0.15` con `Number`. Los valores
+monetarios (precios, subtotales, IVA) se manejan en punto flotante, lo que
+produce errores de redondeo conocidos en JS. En la BD PostgreSQL el modelo usa
+`Decimal(12,2)` correctamente, pero la capa que escribe hoy (Firestore) guarda
+números crudos del cliente.
+
+**F-7 — Número de proforma editable y doc-id = número (Alto).**
+En `proformaService.js` el id del documento Firestore es el número de
+proforma. El número es editable por el usuario en la UI, por lo que se puede
+sobrescribir una proforma existente (el guardado usa `set(..., { merge:
+true })`) o crear duplicados. `previewNextProformaNumber()` no es atómico:
+dos usuarios pueden ver el mismo siguiente número (el contador solo se
+protege dentro de la transacción de guardado).
+
+**F-8 — Botones duplicados y comportamiento confuso (Medio).** En
+`ProformaPage` los tres botones ("Emitir", "Generar PDF", "Guardar") invocan
+la misma función `guardar`, que siempre guarda **y** genera el PDF.
+
+**F-9 — Estados inconsistentes entre UI y datos (Medio).** El estado guardado
+es `"emitida"` (minúsculas), mientras `StatusBadge` espera `"Emitida"` y los
+resúmenes de `ProformaHistoryPage` cuentan `"aceptada"`/`"borrador"`. Los
+badges caen en el estilo por defecto.
+
+**F-10 — Botones decorativos sin función (Bajo).** "Filtrar" y "Exportar" en
+`ProformaHistoryPage`, `ClientsPage` y `ProductsPage` no hacen nada. El
+dashboard muestra métricas hardcodeadas en 0. `SettingsPage` es un
+placeholder.
+
+**F-11 — UX de errores con alert()/confirm() (Medio).** Toda la comunicación
+de errores y confirmaciones usa `window.alert`/`confirm`, pese a existir un
+sistema de toasts implementado (`ToastContext`) que no se usa.
+
+**F-12 — `key={index}` en ítems de proforma (Bajo).** Usar índices como key
+en listas editables/eliminables puede producir errores de render al eliminar
+elementos intermedios.
+
+**F-13 — Accesibilidad parcial (Medio).** Varios inputs sin `label`
+asociado (`SearchBar`, campos de búsqueda), botones sin `type` en formularios
+y tablas con `aria-sort` correcto pero sin `caption`/`role` de tabla
+completos.
+
+**F-14 — Bundle de 1.59 MB sin code splitting (Medio).** El build incluye
+Firebase completo, jsPDF y html2canvas en un único chunk. Vite lo advierte;
+falta `React.lazy`/rutas dinámicas o `manualChunks`.
+
+# Capa de datos
+
+## PostgreSQL + Prisma
+
+- Esquema correcto y razonable para el dominio: `User` (con `UserRole`),
+  `Client`, `Product`, `Proforma`, `ProformaItem`, `Maintenance`.
+- `ProformaItem.product` es opcional y sin `onDelete` definido; al borrar un
+  producto, los ítems históricos mantienen la referencia colgante (`productId`
+  sin producto). Para auditoría histórica esto puede ser deseable, pero debería
+  ser una decisión explícita.
+- `Maintenance` no tiene relación con `Client` ni con `User` (técnico), aunque
+  el frontend guarda cliente y técnico dentro del JSON.
+- `estado` de `Maintenance` es `String` libre en vez de enum; el frontend usa
+  cuatro estados ("En revisión", "En mantenimiento", "Finalizado", "Entregado")
+  sin validación de dominio.
+- **Sin migraciones ni seed** (ver B-9): el esquema no se puede reproducir
+  desde cero con los comandos existentes.
+
+## Firestore (no declarado)
+
+- Es la base de datos real de la aplicación hoy: colecciones `clients`,
+  `products`, `proformas`, `mantenimientos` y `counters`.
+- El acceso se hace **directamente desde el navegador** con credenciales
+  públicas (`VITE_FIREBASE_*`). La seguridad depende de las reglas de
+  Firestore, que **no están en el repositorio** y por tanto no son auditables.
+  Si las reglas son abiertas, cualquier persona con las claves (públicas por
+  diseño) puede leer y modificar todos los datos.
+- Los esquemas de Firestore (por ejemplo `clients` vs `Client` de Prisma)
+  divergen del modelo PostgreSQL (`ref/name/price` vs `codigo/nombre/precio`).
+
+## Recomendación
+
+Unificar en **una sola fuente de verdad**: la API Express + PostgreSQL, con el
+frontend consumiendo únicamente HTTP (como declara el README). Firebase puede
+conservarse para autenticación (Firebase Auth) o eliminarse; lo que no es
+defendible es el acceso directo a Firestore desde el navegador sin reglas
+auditadas.
+
+# Seguridad
+
+| # | Hallazgo | Severidad | Ubicación |
+|---|----------|-----------|-----------|
+| S-1 | Login sin contraseña; JWT de rol ADMIN para cualquier correo | Crítico | `apps/backend/src/modules/auth/auth.routes.js` |
+| S-2 | Autenticación simulada en el cliente; usuario ADMIN hardcodeado | Crítico | `apps/frontend/src/contexts/AuthContext.jsx` |
+| S-3 | Ninguna ruta protegida; `requireAuth` sin usar | Crítico | `apps/backend/src/app.js`, `middleware/auth.js` |
+| S-4 | Acceso directo a Firestore desde el navegador; reglas no auditables | Crítico | `apps/frontend/src/modules/*/services/*` |
+| S-5 | Fuga de mensajes de error internos al cliente | Alto | `apps/backend/src/middleware/errorHandler.js` |
+| S-6 | Claves de Firebase embebidas en el bundle (por diseño de Vite, pero sin reglas de seguridad verificadas) | Alto | `apps/frontend/src/lib/firebase.js` |
+| S-7 | Placeholder de secreto débil en `.env.example` (`change_this_in_production`, supera el mínimo de 16 caracteres y pasaría la validación de Zod) | Medio | `.env.example` |
+| S-8 | Sin límite específico en login (fuerza bruta futura) | Medio | `apps/backend/src/app.js` |
+| S-9 | CORS configurado solo para un origen; correcto, pero revisar si se agregan orígenes dinámicos | Bajo | `apps/backend/src/config/env.js` |
+| S-10 | Datos sensibles de negocio en repositorio de PDFs (RUC, teléfono, correo corporativo) hardcodeados | Bajo | `generatePdf.js`, `generateMaintenancePdf.js`, `ProformaPage.jsx` |
+
+Aspectos positivos: helmet, CORS explícito, rate limiting global, validación
+de variables de entorno con Zod, `.env` correctamente ignorado en git (los
+archivos `.env` reales **no** están versionados).
+
+# Calidad de código
+
+**Positivo:** nombres descriptivos, componentes reutilizables, limpieza de
+suscripciones con flags `isMounted`, uso de `useMemo` para filtros/orden y
+normalización de datos en los servicios.
+
+**Negativo:**
+
+- Duplicación notable:
+  - Constantes `COMPANY` duplicadas en `generatePdf.js` y
+    `generateMaintenancePdf.js` (y valores repetidos en `ProformaPage.jsx`).
+  - Helpers de fechas (`resolveDate`, `getDateTimestamp`, `formatDate`,
+    `normalizeDate`) reimplementados en al menos 4 archivos.
+  - Inicialización de Firebase duplicada (`config/firebase.js` vs
+    `lib/firebase.js`).
+  - CSS base duplicado (`index.css` vs `styles/index.css`).
+- Sin formateador automático aplicado de forma consistente: `navigation.js`,
+  `Sidebar.jsx`, `Topbar.jsx`, `UserMenu.jsx` y otros archivos no siguen el
+  estilo Prettier del resto. Existe el script `format` en la raíz pero
+  claramente no se ejecuta.
+- Sin alias de rutas (`@/...`); los imports relativos con 4 niveles
+  (`../../../components/common`) son frágiles; el README de componentes
+  incluso sugiere el alias que no está configurado.
+- Código muerto en `lib/firebase.js` (`addEventListener;`), stub roto en
+  `diagnosticImport.js`, componentes sin uso.
+- Sin TypeScript: un proyecto "enterprise" con 77 archivos JS/JSX y paquetes
+  de tipos JSDoc vacíos pierde la red de seguridad de tipos en los contratos
+  entre módulos.
+
+# Pruebas
+
+- **API:** 1 solo test (`GET /api/health`), correcto con Vitest + Supertest.
+- **Web:** cero archivos de prueba. `pnpm test` falla a nivel repositorio.
+- Sin pruebas de: servicios (Firestore), generación de PDF, normalización de
+  datos, cálculo de IVA/totales, importador de diagnósticos
+  (`importMaintenanceDiagnostic.js`, que es lógica compleja con corrección de
+  mojibake y merge de checklists) ni componentes.
+- Sin configuración de cobertura ni umbrales.
+- `turbo.json` hace que `test` dependa de `^build` (innecesario para Vitest
+  puro y más lento).
+
+# DevOps, CI e Infraestructura
+
+**D-1 — Build Docker del frontend sin claves de Firebase (Crítico).**
+`apps/frontend/Dockerfile` no recibe las variables `VITE_FIREBASE_*` como ARG y
+`docker-compose.yml` solo pasa `VITE_API_URL`. El `.dockerignore` excluye
+`.env` (incluido `apps/frontend/.env`). Resultado: el bundle se genera con las
+claves en `undefined` y `initializeApp` lanza error en el navegador; la
+aplicación desplegada con Docker queda **rota en runtime**.
+
+**D-2 — API Docker sin migraciones (Crítico).** El `CMD` ejecuta
+`prisma migrate deploy` pero no hay migraciones en la imagen; con una base
+vacía el contenedor falla al arrancar (ver B-9).
+
+**D-3 — Instalaciones no reproducibles (Medio).** El Dockerfile de la API y
+el workflow de CI usan `--no-frozen-lockfile` (el del web usa
+`--frozen-lockfile`; inconsistencia). Las versiones declaradas en
+`package.json` difieren de las instaladas (p. ej. `turbo ^2.5.5` vs 2.10.7,
+`eslint ^9.31.0` vs 9.39.5), señal de lockfile regenerado sin revisar.
+
+**D-4 — Sin TLS (Medio).** Nginx expone el puerto 80 sin configuración HTTPS
+ni cabeceras de seguridad adicionales. Para un sistema con datos de clientes
+y facturación proforma es un requisito.
+
+**D-5 — Sin healthchecks en servicios de aplicación (Medio).** Solo Postgres
+tiene healthcheck; `web`, `api` y `nginx` no. `depends_on` del api usa
+`service_healthy` para postgres (correcto) pero `service_started` para redis.
+
+**D-6 — CI no bloquea lint (Medio).** `ci.yml` ejecuta `build` y `test`, pero
+no `lint`. Si se arregla el lint, debería entrar en el pipeline. Tampoco hay
+análisis de seguridad (SAST/auditoría de dependencias).
+
+**D-7 — `docker.yml` solo manual (Bajo).** El build de imágenes Docker se
+dispara con `workflow_dispatch`, sin publicar imágenes ni ejecutar en PR.
+
+**D-8 — `deploy.sh` mínimo (Bajo).** Sin respaldos, sin migraciones
+explícitas (depende del CMD del contenedor), sin verificación de salud
+post-deploy.
+
+**D-9 — CODEOWNERS no verificable (Bajo).** Referencia equipos
+`@unyx/frontend-team`, etc., que pueden no existir en la organización.
+
+# Paquetes compartidos
+
+- `@unyx/shared-schemas`: esquemas Zod correctos (cliente, ítem, proforma),
+  pero **no se importan ni en `apps/backend` ni en `apps/frontend`** (ambos lo
+  declaran como dependencia). La validación se duplica manualmente en los
+  servicios de Firestore y no existe en la API.
+- `@unyx/shared-types`: solo comentarios JSDoc, sin valor real.
+- `@unyx/eslint-config`: configuración ESLint 9 correcta, pero **ninguna app
+  la usa**: no hay `eslint.config.js` en `apps/*`, que es exactamente por lo
+  que `pnpm lint` falla.
+
+# Matriz de hallazgos
+
+```{r hallazgos}
+hallazgos <- data.frame(
+  ID = c(
+    "A-DEV-1","A-DEV-2","S-1","S-2","S-3","S-4",
+    "D-1","D-2",
+    "B-2","B-4","B-5","B-6","B-9","F-2","F-6","F-7","S-5","S-6",
+    "B-3","F-1","F-3",
+    "F-4","F-5","F-8","F-9","F-11","F-13","F-14","B-7","B-8","S-7","S-8",
+    "D-3","D-4","D-5","D-6","Q-1","Q-2",
+    "F-10","F-12","D-7","D-8","D-9","S-9","S-10","T-1"
+  ),
+  Area = c(
+    "Arquitectura","Arquitectura","Seguridad","Seguridad","Seguridad","Seguridad",
+    "DevOps","DevOps",
+    "Backend","Backend","Backend","Backend","Backend","Frontend","Frontend","Frontend","Seguridad","Seguridad",
+    "Backend","Frontend","Seguridad",
+    "Calidad","Calidad","Calidad","Calidad","UX","Accesibilidad","Rendimiento","Backend","Backend","Seguridad","Seguridad",
+    "DevOps","DevOps","DevOps","CI","Calidad","Calidad",
+    "Funcional","Calidad","CI","DevOps","DevOps","Seguridad","Seguridad","Pruebas"
+  ),
+  Severidad = c(
+    "Crítico","Crítico","Crítico","Crítico","Crítico","Crítico",
+    "Crítico","Crítico",
+    "Alto","Alto","Alto","Alto","Alto","Alto","Alto","Alto","Alto","Alto",
+    "Medio","Medio","Medio",
+    "Medio","Medio","Medio","Medio","Medio","Medio","Medio","Medio","Medio","Medio","Medio",
+    "Medio","Medio","Medio","Medio","Medio","Medio",
+    "Bajo","Bajo","Bajo","Bajo","Bajo","Bajo","Bajo","Bajo"
+  ),
+  Titulo = c(
+    "Doble fuente de verdad: Firestore directo vs PostgreSQL/Prisma",
+    "API embrionaria: rutas stub y única ruta real sin lógica",
+    "Login ficticio en API: JWT ADMIN para cualquier email",
+    "Autenticación simulada en el cliente (localStorage, rol ADMIN)",
+    "requireAuth definido pero no aplicado a ninguna ruta",
+    "Acceso directo a Firestore desde el navegador; reglas no auditables",
+    "Build Docker del web sin claves VITE_FIREBASE_* (app rota en deploy)",
+    "API Docker ejecuta migrate deploy sin migraciones (falla en base vacía)",
+    "Sin validación de entrada con Zod en la API",
+    "Error handler expone error.message al cliente",
+    "Listados sin paginación (findMany / getDocs completos)",
+    "Sin migraciones ni seed de Prisma",
+    "LoginPage no enrutada; /login no existe; ProtectedRoute muerto",
+    "Cálculo monetario con flotantes (IVA 15% con Number)",
+    "Número de proforma editable; doc-id = número; sobrescritura posible",
+    "Fuga de errores internos al cliente (ver B-5 en contexto)",
+    "Claves Firebase en bundle sin reglas de seguridad verificadas",
+    "Rutas clientes/productos/mantenimientos devuelven []",
+    "Proveedores (Auth/Theme/Toast) nunca montados en main.jsx",
+    "Login sin token; axios interceptor nunca usado por los servicios",
+    "Código muerto: addEventListener; en lib/firebase.js, stub diagnosticImport",
+    "Páginas monstruo (ProformaPage 735, MaintenancePage 1133 líneas)",
+    "Emitir/Generar PDF/Guardar ejecutan la misma función",
+    "Estados inconsistentes (emitida vs Emitida; aceptada/borrador)",
+    "alert()/confirm() en toda la app; ToastContext sin uso",
+    "Accesibilidad parcial (labels, type en botones)",
+    "Bundle 1.59 MB sin code splitting",
+    "morgan('dev') en producción; logs no estructurados",
+    "Rate limit global sin límite específico de login",
+    "JWT_SECRET de ejemplo en .env.example supera la validación mínima",
+    "Docker API y CI con --no-frozen-lockfile; versiones desalineadas",
+    "Nginx sin TLS",
+    "Sin healthchecks en web/api/nginx",
+    "CI no ejecuta lint ni análisis de seguridad",
+    "Duplicación (COMPANY, helpers de fecha, firebase.js, CSS)",
+    "Sin TypeScript; shared-types vacío; alias @ no configurado",
+    "Botones Filtrar/Exportar sin función; dashboard hardcodeado",
+    "key={index} en ítems de proforma",
+    "docker.yml solo manual; sin publicación de imágenes",
+    "deploy.sh sin backups ni verificación de salud",
+    "CODEOWNERS referencia equipos no verificables",
+    "CORS de un solo origen (revisar al crecer)",
+    "Datos corporativos hardcodeados en PDFs",
+    "Web sin pruebas; pnpm test falla; lint roto (ESLint sin config)"
+  )
+)
+hallazgos$Severidad <- factor(
+  hallazgos$Severidad,
+  levels = c("Crítico", "Alto", "Medio", "Bajo")
+)
+knitr::kable(hallazgos[order(hallazgos$Severidad, hallazgos$Area, hallazgos$ID), ],
+             row.names = FALSE,
+             caption = "Matriz completa de hallazgos ordenada por severidad")
+```
+
+```{r severidad-plot}
+conteo <- table(hallazgos$Severidad)
+colores <- c("Crítico" = "#c0392b", "Alto" = "#d35400",
+             "Medio" = "#f39c12", "Bajo" = "#27ae60")
+barplot(conteo[levels(hallazgos$Severidad)],
+        main = "Hallazgos por severidad",
+        ylab = "Cantidad",
+        col = colores[names(conteo)],
+        ylim = c(0, max(conteo) + 2))
+```
+
+# Deuda técnica
+
+1. **Capa de datos dual** (Firestore + PostgreSQL) que habrá que migrar o
+   reconciliar: es la deuda más costosa porque implica migración de datos y
+   reescritura de todos los servicios del frontend hacia HTTP.
+2. **Autenticación** por construir de verdad (contraseñas, roles, expiración,
+   refresh), en API y en frontend.
+3. **Validación y reglas de negocio** movidas al servidor (numeración
+   correlativa atómica, IVA/totales, estados).
+4. **Pipelines de calidad**: restaurar lint (adoptar `@unyx/eslint-config`),
+   hacer pasar `pnpm test` (o tolerar paquetes sin tests de forma explícita),
+   añadir pruebas de la lógica crítica.
+5. **Refactor de páginas grandes** en hooks y componentes pequeños para
+   poder probarlas.
+6. **Tipos**: adoptar TypeScript o, como mínimo, consumir los esquemas Zod
+   compartidos en ambos lados.
+
+# Plan de remediación
+
+## Fase 0 — Inmediato (semana 1): detener el sangrado
+
+1. Bloquear la API: aplicar `requireAuth` a todas las rutas salvo
+   `/api/health`; eliminar o aislar el login ficticio.
+2. Deshabilitar el acceso directo a Firestore hasta definir reglas de
+   seguridad estrictas y versionarlas (`firestore.rules`).
+3. Pasar las claves `VITE_FIREBASE_*` (o eliminarlas si se migra a la API)
+   como build args en `docker-compose.yml` y `apps/frontend/Dockerfile`.
+4. Crear la primera migración de Prisma (`prisma migrate dev`) y un seed con
+   usuario administrador; verificar que `docker compose up` levante.
+5. Crear `eslint.config.js` en `apps/backend` y `apps/frontend` usando
+   `@unyx/eslint-config`; hacer pasar `pnpm lint`.
+6. Hacer pasar `pnpm test` (aunque sea con un test smoke del web) e incluir
+   `lint` en CI.
+7. Filtrar `error.message` en producción en el error handler.
+
+## Fase 1 — Corto plazo (semanas 2–4): arquitectura objetivo
+
+1. Implementar CRUD completo en la API (clientes, productos, proformas,
+   mantenimientos) con Prisma, validación Zod (`@unyx/shared-schemas`),
+   paginación y numeración correlativa **atómica en servidor**.
+2. Reemplazar los servicios Firestore del frontend por llamadas HTTP con la
+   instancia `api` de axios existente; eliminar `lib/firebase.js`.
+3. Autenticación real: `POST /api/auth/login` con bcrypt + verificación
+   contra `User`, JWT corto, logout y protección de rutas en el router
+   (montar `AuthProvider` y enrutar `LoginPage`).
+4. Migrar datos de Firestore a PostgreSQL mediante script puntual.
+5. Cálculo monetario en centavos (enteros) o con biblioteca Decimal en el
+   cliente, validando en servidor con `Decimal` de Prisma.
+6. Normalizar estados a un enum compartido (emitida/aceptada/borrador/
+   expirada) y corregir `StatusBadge`/resúmenes.
+
+## Fase 2 — Medio plazo (mes 2): calidad y observabilidad
+
+1. Pruebas: unitarias para servicios, utilidades monetarias y el importador
+   de diagnósticos; de integración para rutas API; e2e (Playwright) para
+   proformas y mantenimientos.
+2. Refactor de `ProformaPage` y `MaintenancePage` en hooks
+   (`useProformaForm`, `useMaintenanceForm`, etc.).
+3. Code splitting por rutas (`React.lazy`) y `manualChunks` para Firebase
+   (mientras exista), jsPDF y html2canvas.
+4. CI estricto: `--frozen-lockfile`, lint + test + build + auditoría de
+   dependencias (`pnpm audit`), y healthchecks en compose.
+5. TLS en nginx (certbot/Let's Encrypt) y cabeceras de seguridad.
+6. Logs estructurados (pino) con niveles por entorno; eliminar
+   `morgan("dev")` en producción.
+
+## Fase 3 — Largo plazo (mes 3+)
+
+1. TypeScript incremental en `shared-*` y apps, aprovechando los esquemas Zod
+   para derivar tipos.
+2. Evaluar Firebase Auth como proveedor de identidad (con su SDK) si se desea
+   conservar Firebase, en lugar de Firestore como base de datos.
+3. Monitoreo/APM y métricas (Prometheus) para la API.
+4. Módulos pendientes (`usuarios`, `inventario`, `proyectos`) sobre la base
+   ya saneada.
+
+# Conclusiones
+
+El repositorio tiene **buenos cimientos**: monorepo organizado, convenciones
+claras, componentes reutilizables, esquema de datos razonable y una UI
+funcional con generación de PDF. Sin embargo, en su estado original **no
+estaba preparado para producción**: la autenticación era ficticia, no había
+control de acceso real, la aplicación dependía de una base de datos
+(Firestore) fuera de la arquitectura declarada y accesible desde el navegador
+sin reglas auditables, los comandos de calidad fallaban y el despliegue
+Docker no funcionaba de extremo a extremo.
+
+La prioridad era inequívoca: **unificar la capa de datos en la API +
+PostgreSQL, implementar autenticación real y restaurar los pipelines de
+calidad**. Ese trabajo se completó (ver la sección "Estado de remediación"
+al inicio de este documento): las fases 0, 1 y 2 del plan están implementadas
+y verificadas (type-check estricto, lint, 58 pruebas, build completo y
+despliegue Docker listo). Quedan únicamente las verificaciones operativas que
+requieren infraestructura real, listadas en esa misma sección.
+
+## Apéndice A — Archivos con problemas señalados
+
+> Nota: todos los problemas de esta tabla fueron resueltos durante la
+> remediación; la tabla se conserva como referencia histórica (ver la sección
+> "Estado de remediación" al inicio). Las rutas `.js/.jsx` listadas ahora
+> existen como `.ts/.tsx`.
+
+| Archivo | Problema principal |
+|---------|--------------------|
+| `apps/backend/src/modules/auth/auth.routes.js` | Login ficticio, rol ADMIN fijo |
+| `apps/backend/src/middleware/auth.js` | Definido pero sin uso |
+| `apps/backend/src/middleware/errorHandler.js` | Fuga de `error.message` |
+| `apps/backend/src/modules/{clientes,productos,mantenimientos}/*.routes.js` | Stubs |
+| `apps/backend/prisma/` | Sin migraciones ni seed |
+| `apps/backend/Dockerfile` | `migrate deploy` sin migraciones; `--no-frozen-lockfile` |
+| `apps/frontend/src/main.jsx` | Proveedores de contexto sin montar |
+| `apps/frontend/src/app/router.jsx` | Sin ruta `/login`; sin `ProtectedRoute` |
+| `apps/frontend/src/contexts/AuthContext.jsx` | Autenticación simulada |
+| `apps/frontend/src/lib/firebase.js` | `addEventListener;` muerto; duplicado |
+| `apps/frontend/src/modules/*/services/*` | Acceso directo a Firestore |
+| `apps/frontend/src/modules/mantenimientos/utils/diagnosticImport.js` | Stub roto |
+| `apps/frontend/src/modules/proformas/pages/ProformaPage.jsx` | Monolito; flotantes; número editable |
+| `apps/frontend/src/modules/mantenimientos/pages/MaintenancePage.jsx` | Monolito 1133 líneas |
+| `apps/frontend/src/modules/proformas/utils/generatePdf.js` | Datos corporativos hardcodeados |
+| `apps/frontend/src/modules/mantenimientos/utils/generateMaintenancePdf.js` | Duplicación de COMPANY |
+| `apps/frontend/Dockerfile` | Sin claves Firebase en build |
+| `packages/eslint-config/` | Nunca utilizado por las apps |
+| `.github/workflows/ci.yml` | Sin lint; `--no-frozen-lockfile` |
+| `turbo.json` | `test` depende de `^build`; API sin outputs |

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "1OGfa3I8EeDCTYaEEH8p",
+    "telefono": "0000000000",
+    "direccion": "Alborada",
+    "email": "test@test.com",
+    "nombre": "test",
+    "updatedAt": "2026-08-17T04:28:31.368000+00:00",
+    "createdAt": "2026-08-17T04:28:31.368000+00:00",
+    "ruc": "123456789",
+    "estado": "Activo",
+    "ciudad": "Guayaquil"
+  },
+  {
+    "id": "9nO2bGjlTBAznrMvlUt1",
+    "telefono": "+593993183173",
+    "direccion": "Urdesa",
+    "email": "xnaranjo@altosamobiliario.com",
+    "nombre": "ALTOSA",
+    "updatedAt": "2026-08-19T19:21:36.443000+00:00",
+    "createdAt": "2026-08-19T19:21:36.443000+00:00",
+    "ruc": "0992314842001",
+    "estado": "Activo",
+    "ciudad": "Guayaquil"
+  },
+  {
+    "id": "EBS3he8VuTs8j5CQl8JS",
+    "telefono": "+04 5030239",
+    "direccion": "Av Víctor Emilio Estrada 1214 y laureles",
+    "nombre": "RESTAURANT EDDYS-BBQ S.A.",
+    "email": "eddysbbq.ec@gmail.com",
+    "updatedAt": "2026-06-12T18:26:59.238000+00:00",
+    "createdAt": "2026-06-12T18:14:13.481000+00:00",
+    "ruc": "0992958219001",
+    "estado": "Activo",
+    "ciudad": "Guayaquil"
+  },
+  {
+    "id": "Os6m6sryYCDEVOhv28xH",
+    "direccion": "",
+    "telefono": "",
+    "email": "",
+    "nombre": "IRRIGARDEN",
+    "updatedAt": "2026-09-03T20:16:36.103000+00:00",
+    "createdAt": "2026-09-03T20:16:36.103000+00:00",
+    "ruc": "0999999999",
+    "estado": "Activo",
+    "ciudad": "Guayaquil"
+  },
+  {
+    "id": "RCSTRHVpkEffyxTWhFmE",
+    "telefono": "(04) 207-5050",
+    "direccion": "Ludeña & Asociados, S/N, 090602 Guayaquil",
+    "nombre": "LUDEÑA & ASOCIADOS LUDASOCI C. LTDA.",
+    "email": "",
+    "updatedAt": "2026-07-19T16:10:12.232000+00:00",
+    "createdAt": "2026-07-19T16:10:12.232000+00:00",
+    "ruc": "0992922214001",
+    "estado": "Activo",
+    "ciudad": "Guayaquil"
+  },
+  {
+    "id": "VIGLqWrgHDpHXShj9zIf",
+    "direccion": "Guayaquil",
+    "telefono": "042420096",
+    "email": "victor_jaen90@hotmail.com",
+    "nombre": "STAMPACORP ECUADOR S.A.S.",
+    "updatedAt": "2026-08-28T21:26:54.430000+00:00",
+    "createdAt": "2026-08-28T21:26:54.430000+00:00",
+    "ruc": "0993394146001",
+    "estado": "Activo",
+    "ciudad": "Guayaquil"
+  },
+  {
+    "id": "WTRHGTAVd7FjOrXulENR",
+    "direccion": "Ciudad Millenium, Edificio platinum, II y Av León Febres Cordero Ribadeneyra, Piso 8, Oficina 810",
+    "telefono": "+593 96 090 6093",
+    "nombre": "LUXVIAJES AGENCIA DE VIAJES S.A.S.",
+    "email": "gfarinango@agencialuxviajes.com",
+    "updatedAt": "2026-06-11T00:47:40.571000+00:00",
+    "createdAt": "2026-06-10T23:32:24.972000+00:00",
+    "ruc": "0993380696001",
+    "estado": "Activo",
+    "ciudad": "Guayaquil"
+  },
+  {
+    "id": "hBnzxsskUQ7AKtjzDMuI",
+    "telefono": "0997449646",
+    "direccion": "Edificio Esquinero Farmacia Difarmes Piso 2",
+    "email": "",
+    "nombre": "SERVINCREIBLE S.A.",
+    "updatedAt": "2026-07-13T17:08:26.368000+00:00",
+    "createdAt": "2026-07-13T17:08:26.368000+00:00",
+    "ruc": "0992538902001",
+    "estado": "Activo",
+    "ciudad": "Guayaquil"
+  },
+  {
+    "id": "vRs7K0douolHzcijA4NP",
+    "telefono": "0999289471",
+    "direccion": "QUITO DISTRITO METROPOLITANO / HUGO MONCAYO E11-46 Y GREGORIO MUNGA",
+    "email": "contabilida@hseservices.ec",
+    "nombre": "HSESERVICES SEGURIDAD SALUD Y AMBIENTE CIA LTDA",
+    "updatedAt": "2026-07-01T05:15:20.289000+00:00",
+    "createdAt": "2026-07-01T05:15:20.289000+00:00",
+    "ruc": "1792581931001",
+    "estado": "Activo",
+    "ciudad": "Guayaquil"
+  }
+]

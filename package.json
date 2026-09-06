@@ -4,15 +4,28 @@
   "packageManager": "pnpm@10.13.1",
   "scripts": {
     "dev": "turbo dev",
+    "dev:backend": "pnpm --filter @unyx/backend dev",
+    "dev:frontend": "pnpm --filter @unyx/frontend dev",
     "build": "turbo build",
+    "build:backend": "pnpm --filter @unyx/backend build",
+    "build:frontend": "pnpm --filter @unyx/frontend build",
+    "type-check": "turbo type-check",
     "lint": "turbo lint",
     "test": "turbo test",
     "format": "prettier --write .",
-    "docker:up": "docker compose up -d --build",
-    "docker:down": "docker compose down"
+    "deploy:prod": "docker compose --env-file .env.production up -d --build",
+    "migrate:prod": "docker compose --env-file .env.production run --rm backend pnpm --filter @unyx/backend prisma:deploy",
+    "seed:prod": "docker compose --env-file .env.production run --rm backend pnpm --filter @unyx/backend prisma:seed",
+    "docker:up": "docker compose --env-file .env.production up -d --build",
+    "docker:down": "docker compose --env-file .env.production down",
+    "docker:logs": "docker compose --env-file .env.production logs -f"
   },
   "devDependencies": {
+    "@types/node": "^24.0.0",
+    "globals": "^16.3.0",
     "prettier": "^3.6.2",
-    "turbo": "^2.5.5"
+    "turbo": "^2.5.5",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.69.0"
   }
 }

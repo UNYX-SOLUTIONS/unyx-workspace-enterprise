@@ -1,55 +1,9 @@
-# ============================================
-# UNYX Workspace (Proyecto B) - VPS Global
-# ============================================
-# PostgreSQL es EXTERNO: contenedor 'postgres-unyx' administrado por el VPS.
-# Todos los servicios usan la red externa 'empresa-network'.
-#
-# Despliegue:
-#   docker compose --env-file .env.production up -d --build
-#   pnpm migrate:prod   (aplicar migraciones, una sola vez o en CI/CD)
-#   pnpm seed:prod      (usuarios iniciales, una sola vez)
-
 services:
-  backend:
-    build:
-      context: .
-      dockerfile: apps/backend/Dockerfile
-    container_name: unyx-backend
-    restart: unless-stopped
 
-    ports:
-      - "3000:3000"
-
-    environment:
-      PORT: 3000
-      NODE_ENV: production
-
-      # PostgreSQL del VPS global (contenedor postgres-unyx en empresa-network)
-      DATABASE_URL: postgresql://unyx_user:${UNYX_DB_PASSWORD}@postgres-unyx:5432/unyx_workspace
-
-      JWT_SECRET: ${JWT_SECRET}
-
-      CORS_ORIGIN: ${CORS_ORIGIN:-https://workspace.unyxsolutions.com}
-
-      REDIS_URL: redis://redis:6379
-
-      LOG_LEVEL: ${LOG_LEVEL:-info}
-
-      LOGIN_RATE_LIMIT_MAX: ${LOGIN_RATE_LIMIT_MAX:-10}
-
-    depends_on:
-      redis:
-        condition: service_started
-
-    networks:
-      - empresa-network
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/api/health || exit 1"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-
+  # =========================================================
+  # FRONTEND
+  # React / Vite servido por Nginx
+  # =========================================================
   frontend:
     build:
       context: .
@@ -57,43 +11,182 @@ services:
       args:
         VITE_API_URL: ${VITE_API_URL:-/api}
         VITE_APP_NAME: ${VITE_APP_NAME:-UNYX Workspace}
+
     container_name: unyx-frontend
     restart: unless-stopped
+
     depends_on:
       backend:
         condition: service_healthy
+
     networks:
-      - empresa-network
+      - workspace-front
+
+    # Solo accesible desde el propio VPS.
+    # El reverse proxy público deberá apuntar a 127.0.0.1:8080.
     ports:
-      - "80:80"
+      - "127.0.0.1:${WORKSPACE_HTTP_PORT:-8080}:80"
+
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://127.0.0.1/ || exit 1"
+        ]
       interval: 15s
       timeout: 5s
       retries: 5
       start_period: 15s
 
+
+  # =========================================================
+  # BACKEND
+  # Node.js / Prisma
+  # NO se publica al host
+  # =========================================================
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+
+    container_name: unyx-backend
+    restart: unless-stopped
+
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+
+      JWT_SECRET: ${JWT_SECRET}
+
+      CORS_ORIGIN: ${CORS_ORIGIN}
+
+      REDIS_URL: redis://redis:6379
+
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+
+      LOGIN_RATE_LIMIT_MAX: ${LOGIN_RATE_LIMIT_MAX:-10}
+
+      TZ: ${TZ:-America/Guayaquil}
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_healthy
+
+    networks:
+      - workspace-front
+      - workspace-back
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://127.0.0.1:3000/api/health || exit 1"
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+
+  # =========================================================
+  # POSTGRESQL
+  # Base exclusiva de UNYX Workspace
+  # NO se publica al VPS
+  # =========================================================
+  postgres:
+    image: postgres:16-alpine
+
+    container_name: unyx-workspace-db
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      TZ: ${TZ:-America/Guayaquil}
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    networks:
+      - workspace-back
+      - db-admin
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+
+  # =========================================================
+  # REDIS
+  # Solo red interna del backend
+  # =========================================================
   redis:
     image: redis:7-alpine
+
     container_name: unyx-redis
     restart: unless-stopped
 
-    command: redis-server --appendonly yes
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
 
     volumes:
       - redis_data:/data
 
     networks:
-      - empresa-network
+      - workspace-back
+
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "redis-cli ping | grep PONG || exit 1"
+        ]
       interval: 15s
       timeout: 5s
       retries: 5
 
+
+# =========================================================
+# NETWORKS
+# =========================================================
 networks:
-  empresa-network:
+
+  workspace-front:
+    name: unyx-workspace-front
     external: true
 
+  workspace-back:
+    name: unyx-workspace-back
+    external: true
+
+  db-admin:
+    name: unyx-db-admin
+    external: true
+
+
+# =========================================================
+# PERSISTENT VOLUMES
+# =========================================================
 volumes:
+
+  postgres_data:
+    name: unyx_workspace_postgres_data
+
   redis_data:
+    name: unyx_workspace_redis_data

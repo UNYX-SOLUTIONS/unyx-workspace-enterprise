@@ -1,57 +1,114 @@
-#!/bin/bash
-# deploy.sh - Despliegue de UNYX Workspace (Proyecto B) en el VPS global
-set -e
+#!/usr/bin/env bash
 
-echo "Desplegando UNYX Workspace en el VPS global..."
+set -euo pipefail
 
-# 1. Validar que la red externa existe
-if ! docker network inspect empresa-network &>/dev/null; then
-  echo "ERROR: la red 'empresa-network' no existe en el VPS."
-  echo "El administrador del VPS debe crearla primero:"
-  echo "  docker network create empresa-network"
-  exit 1
+PROJECT_DIR="/docker/unyx-workspace-enterprise"
+ENV_FILE="$PROJECT_DIR/.env.production"
+
+cd "$PROJECT_DIR"
+
+if [ ! -f "$ENV_FILE" ]; then
+    echo "ERROR: $ENV_FILE not found."
+    exit 1
 fi
 
-# 2. Validar variables de entorno de producción
-if [ ! -f .env.production ]; then
-  echo "ERROR: archivo .env.production no encontrado."
-  echo "Copia .env.example a .env.production y completa los valores reales."
-  exit 1
-fi
+set -a
+source "$ENV_FILE"
+set +a
 
-# 3. Validar que postgres-unyx existe y es alcanzable en la red
-if ! docker ps --format '{{.Names}}' | grep -q '^postgres-unyx$'; then
-  echo "ERROR: el contenedor 'postgres-unyx' no está corriendo."
-  echo "El administrador del VPS debe crearlo (ver README, sección VPS)."
-  exit 1
-fi
+echo "========================================"
+echo "UNYX Workspace Deployment"
+echo "========================================"
 
-# 4. Construir y levantar los servicios del proyecto
-echo "Construyendo imagenes y levantando contenedores..."
-docker compose --env-file .env.production up -d --build
+echo ""
+echo "[1/8] Creating database backup..."
 
-# 5. Aplicar migraciones y seed (idempotentes) desde dentro de la red
-echo "Aplicando migraciones de Prisma..."
-docker compose --env-file .env.production run --rm backend pnpm --filter @unyx/backend prisma:deploy
+./infrastructure/scripts/backup-db.sh
 
-echo "Aplicando seed (usuarios y secuencias)..."
-docker compose --env-file .env.production run --rm backend pnpm --filter @unyx/backend prisma:seed
+echo ""
+echo "[2/8] Pulling latest code..."
 
-# 6. Verificar estado de los servicios
-echo "Estado de los servicios:"
-docker compose ps
+git pull --ff-only origin main
 
-# 7. Verificar healthchecks del backend
-echo "Esperando healthcheck del backend..."
-for i in $(seq 1 12); do
-  if [ "$(docker inspect -f '{{.State.Health.Status}}' unyx-backend 2>/dev/null)" = "healthy" ]; then
-    break
-  fi
-  sleep 5
+echo ""
+echo "[3/8] Validating Docker Compose..."
+
+docker compose \
+    --env-file "$ENV_FILE" \
+    config > /dev/null
+
+echo "Docker Compose configuration is valid."
+
+echo ""
+echo "[4/8] Building application images..."
+
+docker compose \
+    --env-file "$ENV_FILE" \
+    build
+
+echo ""
+echo "[5/8] Starting database services..."
+
+docker compose \
+    --env-file "$ENV_FILE" \
+    up -d postgres redis
+
+echo ""
+echo "Waiting for PostgreSQL..."
+
+until docker exec unyx-workspace-db \
+    pg_isready \
+    -U "$POSTGRES_USER" \
+    -d "$POSTGRES_DB" \
+    > /dev/null 2>&1
+do
+    echo "PostgreSQL is not ready yet..."
+    sleep 2
 done
 
-docker compose ps
+echo "PostgreSQL is ready."
 
-echo "Despliegue completado."
-echo "Aplicacion: https://workspace.unyxsolutions.com"
-echo "Logs: docker compose logs -f backend"
+echo ""
+echo "[6/8] Applying Prisma migrations..."
+
+docker compose \
+    --env-file "$ENV_FILE" \
+    run --rm backend \
+    pnpm --filter @unyx/backend exec prisma migrate deploy \
+    --schema prisma/schema.prisma
+
+echo ""
+echo "[7/8] Starting application..."
+
+docker compose \
+    --env-file "$ENV_FILE" \
+    up -d backend frontend
+
+echo ""
+echo "[8/8] Checking service status..."
+
+sleep 5
+
+docker compose \
+    --env-file "$ENV_FILE" \
+    ps
+
+echo ""
+echo "Checking API..."
+
+if curl -fsS \
+    "http://127.0.0.1:${WORKSPACE_HTTP_PORT:-8080}/api/health" \
+    > /dev/null
+then
+    echo "API: OK"
+else
+    echo "WARNING: API health check failed."
+    echo ""
+    echo "Check logs with:"
+    echo "docker logs unyx-backend"
+fi
+
+echo ""
+echo "========================================"
+echo "Deployment completed"
+echo "========================================"

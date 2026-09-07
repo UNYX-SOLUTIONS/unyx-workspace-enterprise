@@ -1,24 +1,75 @@
-#!/bin/bash
-# backup-db.sh - Respaldo de PostgreSQL de UNYX Workspace (postgres-unyx)
-set -e
+#!/usr/bin/env bash
 
-BACKUP_DIR="./backups"
+set -euo pipefail
+
+PROJECT_DIR="/docker/unyx-workspace-enterprise"
+ENV_FILE="$PROJECT_DIR/.env.production"
+BACKUP_DIR="$PROJECT_DIR/backups/postgres"
+
+if [ ! -f "$ENV_FILE" ]; then
+    echo "ERROR: $ENV_FILE not found."
+    exit 1
+fi
+
+set -a
+source "$ENV_FILE"
+set +a
+
+mkdir -p "$BACKUP_DIR"
+
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-BACKUP_FILE="${BACKUP_DIR}/unyx_workspace_${TIMESTAMP}.sql"
+BACKUP_FILE="$BACKUP_DIR/unyx_workspace_$TIMESTAMP.dump"
 
-mkdir -p "${BACKUP_DIR}"
+echo "========================================"
+echo "UNYX Workspace Database Backup"
+echo "========================================"
 
-echo "Creando backup de unyx_workspace (postgres-unyx)..."
+if ! docker ps --format '{{.Names}}' | grep -q '^unyx-workspace-db$'; then
+    echo "ERROR: unyx-workspace-db is not running."
+    exit 1
+fi
 
-docker exec postgres-unyx pg_dump -U unyx_user -d unyx_workspace > "${BACKUP_FILE}"
+echo "Checking PostgreSQL..."
 
-gzip "${BACKUP_FILE}"
-echo "Backup guardado: ${BACKUP_FILE}.gz"
+if ! docker exec unyx-workspace-db \
+    pg_isready \
+    -U "$POSTGRES_USER" \
+    -d "$POSTGRES_DB" > /dev/null 2>&1; then
 
-# Mantener solo los últimos 7 días
-find "${BACKUP_DIR}" -name "*.sql.gz" -mtime +7 -delete
+    echo "ERROR: PostgreSQL is not ready."
+    exit 1
+fi
 
-# Opcional: copiar a almacenamiento externo (S3, etc.)
-# aws s3 cp "${BACKUP_FILE}.gz" "s3://backups-empresa/unyx/"
+echo "Creating backup..."
 
-echo "Respaldo completado."
+docker exec unyx-workspace-db \
+    pg_dump \
+    -U "$POSTGRES_USER" \
+    -d "$POSTGRES_DB" \
+    -Fc \
+    > "$BACKUP_FILE"
+
+if [ ! -s "$BACKUP_FILE" ]; then
+    echo "ERROR: Backup file is empty."
+    rm -f "$BACKUP_FILE"
+    exit 1
+fi
+
+chmod 600 "$BACKUP_FILE"
+
+echo ""
+echo "Backup created successfully:"
+echo "$BACKUP_FILE"
+
+du -h "$BACKUP_FILE"
+
+echo ""
+echo "Removing backups older than 30 days..."
+
+find "$BACKUP_DIR" \
+    -type f \
+    -name "unyx_workspace_*.dump" \
+    -mtime +30 \
+    -delete
+
+echo "Backup process completed."

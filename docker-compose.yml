@@ -1,5 +1,4 @@
 services:
-
   # =========================================================
   # FRONTEND
   # React / Vite servido por Nginx
@@ -22,22 +21,25 @@ services:
     networks:
       - workspace-front
 
-    # Solo accesible desde el propio VPS.
-    # El reverse proxy público deberá apuntar a 127.0.0.1:8080.
     ports:
       - "127.0.0.1:${WORKSPACE_HTTP_PORT:-8080}:80"
 
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.routers.unyx-workspace.rule=Host(`workspace.unyxsolutions.com`)"
+      - "traefik.http.routers.unyx-workspace.entrypoints=websecure"
+      - "traefik.http.routers.unyx-workspace.tls=true"
+      - "traefik.http.routers.unyx-workspace.tls.certresolver=letsencrypt"
+
+      - "traefik.http.services.unyx-workspace.loadbalancer.server.port=80"
+
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "wget -qO- http://127.0.0.1/ || exit 1"
-        ]
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 5
       start_period: 15s
-
 
   # =========================================================
   # BACKEND
@@ -83,15 +85,11 @@ services:
 
     healthcheck:
       test:
-        [
-          "CMD-SHELL",
-          "wget -qO- http://127.0.0.1:3000/api/health || exit 1"
-        ]
+        ["CMD-SHELL", "wget -qO- http://127.0.0.1:3000/api/health || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 5
       start_period: 30s
-
 
   # =========================================================
   # POSTGRESQL
@@ -119,16 +117,11 @@ services:
       - db-admin
 
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
-        ]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 10s
-
 
   # =========================================================
   # REDIS
@@ -152,21 +145,15 @@ services:
       - workspace-back
 
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "redis-cli ping | grep PONG || exit 1"
-        ]
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 5
-
 
 # =========================================================
 # NETWORKS
 # =========================================================
 networks:
-
   workspace-front:
     name: unyx-workspace-front
     external: true
@@ -179,12 +166,10 @@ networks:
     name: unyx-db-admin
     external: true
 
-
 # =========================================================
 # PERSISTENT VOLUMES
 # =========================================================
 volumes:
-
   postgres_data:
     name: unyx_workspace_postgres_data
 

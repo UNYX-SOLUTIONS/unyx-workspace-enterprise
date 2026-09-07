@@ -92,6 +92,10 @@ Aplicación: `http://localhost` · API: `http://localhost/api/health`.
 
 ## Despliegue en el VPS global (Proyecto B)
 
+> Guía completa paso a paso para quien despliega: **`DEPLOYMENT-VPS.md`**
+> (requisitos, secretos, red, base de datos, despliegue, carga de datos,
+> verificación y problemas comunes). En resumen: `bash infrastructure/scripts/deploy.sh`.
+
 El proyecto convive en el VPS central de la empresa junto a otros proyectos:
 
 ```text
@@ -158,9 +162,9 @@ Secretos requeridos en `.env.production`: `UNYX_DB_PASSWORD`, `JWT_SECRET`
 ### Despliegue
 
 ```bash
-pnpm deploy:prod    # build + up con .env.production
-pnpm migrate:prod   # prisma migrate deploy (dentro de la red, idempotente)
-pnpm seed:prod      # usuarios admin/demo + secuencias (idempotente)
+pnpm deploy:prod    # build + up + migraciones + seed (todo en uno)
+pnpm migrate:prod   # solo migraciones (idempotente)
+pnpm seed:prod      # solo seed: usuarios admin/demo + secuencias (idempotente)
 
 # o todo junto:
 bash infrastructure/scripts/deploy.sh
@@ -168,6 +172,9 @@ bash infrastructure/scripts/deploy.sh
 # Respaldo de la base:
 bash infrastructure/scripts/backup-db.sh   # guarda en ./backups/*.sql.gz
 ```
+
+**Importante:** la base nace vacía; sin `migrate:prod` + `seed:prod` el login
+falla con 500 (la tabla `User` no existe). `deploy:prod` ya incluye ambos.
 
 ### HTTPS en producción
 

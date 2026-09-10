@@ -56,3 +56,9 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+
+backups/
+*.dump
+
+apps/backend/prisma/import/data/*.json

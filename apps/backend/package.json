@@ -12,10 +12,13 @@
     "lint": "eslint src",
     "test": "vitest run",
     "env:copy": "node -e \"import('node:fs').then(fs => { if (!fs.existsSync('.env')) fs.copyFileSync('.env.example', '.env'); })\"",
+
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
-    "prisma:seed": "prisma db seed"
+    "prisma:seed": "prisma db seed",
+
+    "import:initial-data": "tsx prisma/import/import-initial-data.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

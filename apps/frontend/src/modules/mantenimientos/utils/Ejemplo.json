@@ -1,0 +1,290 @@
+{
+  "equipo": {
+    "tipo": "Laptop",
+    "marca": "Lenovo",
+    "modelo": "IdeaPad 3 14IL05 (81WD)",
+    "numeroSerie": "PF2ST0KN",
+    "sistemaOperativo": "Microsoft Windows 11 Pro · 10.0.26200",
+    "procesador": "Intel Core i5-1035G1 @ 1.00 GHz",
+    "ram": "20 GB (16 GB + 4 GB) DDR4 · Dual Channel · 2667 MT/s",
+    "almacenamiento": "SSD · NVMe · 476,94 GB",
+    "accesorios": "Mouse Bluetooth",
+    "cargadorEntregado": true
+  },
+  "diagnosticoInicial": {
+    "tiempoEncendido": "36,61 segundos",
+    "usoCpu": "12,8 %",
+    "usoRam": "7,68 GB de 19,75 GB (38,9 %)",
+    "usoDisco": "0 %",
+    "espacioDisponible": "305,51 GB de 475,24 GB",
+    "temperaturaReposo": "55 °C",
+    "temperaturaMaxima": "97 °C",
+    "estadoDisco": "SKHynix HFM512GDHTNI-87A0B, Healthy, 39 °C, 0 % utilizado",
+    "estadoBateria": "OK, sin desgaste aparente ni anomalías físicas",
+    "condicionFisica": "Equipo operativo con raspones mínimos por uso continuo. Teclado con desgaste, pero funcional. Tornillos completos. Faltan dos gomas de soporte inferior, sin representar un daño mayor. Touchpad y mouse Bluetooth en buenas condiciones."
+  },
+  "diagnosticoFinal": {
+    "tiempoEncendido": "29,01 segundos",
+    "usoCpu": "No medido",
+    "usoRam": "No medido",
+    "usoDisco": "No medido",
+    "espacioDisponible": "317,97 GB de 475,24 GB (estimado)",
+    "temperaturaReposo": "48 °C",
+    "temperaturaMaxima": "93 °C"
+  },
+  "checklist": [
+    {
+      "actividad": "Consultar los problemas reportados por el usuario",
+      "estado": "Conforme",
+      "observacion": "El cliente solicitó mantenimiento preventivo; no reportó una falla específica."
+    },
+    {
+      "actividad": "Registrar el tiempo de encendido antes del mantenimiento",
+      "estado": "Conforme",
+      "observacion": "36,61 segundos."
+    },
+    {
+      "actividad": "Revisar el uso de CPU, memoria RAM y disco en reposo",
+      "estado": "Conforme",
+      "observacion": "CPU 12,8 %; RAM 7,68 GB de 19,75 GB (38,9 %); disco 0 %."
+    },
+    {
+      "actividad": "Confirmar la existencia de un respaldo de la información",
+      "estado": "No aplica",
+      "observacion": "No se realizó una intervención sobre archivos personales que requiriera respaldo."
+    },
+    {
+      "actividad": "Identificar si la unidad es HDD, SSD SATA o SSD NVMe",
+      "estado": "Conforme",
+      "observacion": "SSD NVMe SKHynix HFM512GDHTNI-87A0B de 476,94 GB."
+    },
+    {
+      "actividad": "Revisar el estado SMART y la vida útil estimada",
+      "estado": "Conforme",
+      "observacion": "Windows reportó estado Healthy y 0 % de desgaste utilizado; SMART detallado no fue expuesto por WMI."
+    },
+    {
+      "actividad": "Comprobar errores o sectores defectuosos",
+      "estado": "No aplica",
+      "observacion": "No se ejecutó una prueba extensa de superficie; no se detectaron alertas operativas."
+    },
+    {
+      "actividad": "Verificar temperatura y espacio disponible",
+      "estado": "Conforme",
+      "observacion": "Temperatura inicial del SSD: 39 °C. Espacio inicial disponible: 305,51 GB de 475,24 GB."
+    },
+    {
+      "actividad": "Comprobar que TRIM esté activo en unidades SSD",
+      "estado": "Conforme",
+      "observacion": "TRIM activo: NTFS DisableDeleteNotify = 0."
+    },
+    {
+      "actividad": "Verificar capacidad, velocidad y reconocimiento total",
+      "estado": "Conforme",
+      "observacion": "20 GB DDR4 instalados; Windows reconoce 19,75 GB. Velocidad operativa aproximada: 2667 MT/s."
+    },
+    {
+      "actividad": "Revisar el consumo de memoria en reposo",
+      "estado": "Conforme",
+      "observacion": "7,68 GB utilizados de 19,75 GB (38,9 %)."
+    },
+    {
+      "actividad": "Ejecutar una prueba de errores de memoria",
+      "estado": "No aplica",
+      "observacion": "No se consideró necesaria debido al funcionamiento estable y ausencia de síntomas de memoria."
+    },
+    {
+      "actividad": "Verificar configuración Single Channel o Dual Channel",
+      "estado": "Conforme",
+      "observacion": "Dual Channel confirmado mediante HWiNFO."
+    },
+    {
+      "actividad": "Revisar el funcionamiento y ruido del ventilador",
+      "estado": "Conforme",
+      "observacion": "Ventilador funcional y sin ruido anormal."
+    },
+    {
+      "actividad": "Medir la temperatura del procesador en reposo",
+      "estado": "Conforme",
+      "observacion": "Temperatura inicial: 55 °C."
+    },
+    {
+      "actividad": "Medir la temperatura durante una prueba de carga",
+      "estado": "Conforme",
+      "observacion": "Temperatura máxima inicial: 97 °C."
+    },
+    {
+      "actividad": "Verificar si existe reducción térmica de rendimiento",
+      "estado": "Conforme",
+      "observacion": "No se reportó reducción térmica de rendimiento durante la verificación."
+    },
+    {
+      "actividad": "Revisar el estado físico de la batería",
+      "estado": "Conforme",
+      "observacion": "No presenta desgaste aparente, inflamación ni anomalías físicas."
+    },
+    {
+      "actividad": "Comparar capacidad actual y capacidad de diseño",
+      "estado": "No aplica",
+      "observacion": "Capacidad de carga completa reportada: 25.810 mWh. La capacidad de diseño no estuvo disponible para calcular el porcentaje."
+    },
+    {
+      "actividad": "Revisar ciclos de carga y porcentaje de desgaste",
+      "estado": "No aplica",
+      "observacion": "Windows no proporcionó ciclos ni porcentaje de desgaste; el estado operativo fue OK."
+    },
+    {
+      "actividad": "Probar cargador, conector y estabilidad de carga",
+      "estado": "Conforme",
+      "observacion": "Cargador recibido; conector y carga estables."
+    },
+    {
+      "actividad": "Probar pantalla, brillo y estado de las bisagras",
+      "estado": "Conforme",
+      "observacion": "Pantalla, brillo y bisagras funcionales."
+    },
+    {
+      "actividad": "Probar teclado y touchpad",
+      "estado": "Observación",
+      "observacion": "Teclado con desgaste por uso, pero funcional. Touchpad en buenas condiciones."
+    },
+    {
+      "actividad": "Probar cámara, micrófono, parlantes y audífonos",
+      "estado": "Conforme",
+      "observacion": "Todos los elementos funcionan correctamente."
+    },
+    {
+      "actividad": "Probar puertos USB, HDMI, Ethernet y lector de tarjetas",
+      "estado": "Conforme",
+      "observacion": "Periféricos y puertos probados sin novedades."
+    },
+    {
+      "actividad": "Probar conexiones WiFi y Bluetooth",
+      "estado": "Conforme",
+      "observacion": "WiFi y Bluetooth funcionan correctamente; mouse Bluetooth en buen estado."
+    },
+    {
+      "actividad": "Revisar carcasa, tornillos y patas de goma",
+      "estado": "Observación",
+      "observacion": "Raspones mínimos por uso. Tornillos completos. Faltan dos gomas inferiores, sin afectar el funcionamiento."
+    },
+    {
+      "actividad": "Limpiar carcasa, pantalla, teclado y touchpad",
+      "estado": "Conforme",
+      "observacion": "Limpieza física externa completada."
+    },
+    {
+      "actividad": "Retirar polvo de ventiladores, rejillas y disipadores",
+      "estado": "Conforme",
+      "observacion": "Limpieza interna completa realizada."
+    },
+    {
+      "actividad": "Revisar conexiones, cables y tornillos internos",
+      "estado": "Conforme",
+      "observacion": "Conexiones y tornillos internos revisados durante la limpieza."
+    },
+    {
+      "actividad": "Revisar la condición de la pasta térmica",
+      "estado": "Conforme",
+      "observacion": "Se realizó cambio de pasta térmica."
+    },
+    {
+      "actividad": "Instalar actualizaciones pendientes del sistema operativo",
+      "estado": "Conforme",
+      "observacion": "Actualizaciones obligatorias de Windows instaladas; quedó disponible una actualización preliminar opcional."
+    },
+    {
+      "actividad": "Actualizar controladores desde fuentes oficiales",
+      "estado": "Conforme",
+      "observacion": "Controladores actualizados."
+    },
+    {
+      "actividad": "Revisar actualizaciones de BIOS o firmware",
+      "estado": "No aplica",
+      "observacion": "No se realizó actualización de BIOS. Versión instalada: EMCN44WW."
+    },
+    {
+      "actividad": "Desinstalar programas innecesarios o duplicados",
+      "estado": "No aplica",
+      "observacion": "No se reportó desinstalación de programas."
+    },
+    {
+      "actividad": "Desactivar aplicaciones innecesarias del inicio",
+      "estado": "Conforme",
+      "observacion": "Se deshabilitaron aplicaciones de inicio innecesarias para mejorar el arranque."
+    },
+    {
+      "actividad": "Limpiar archivos temporales y liberar espacio",
+      "estado": "Conforme",
+      "observacion": "Se liberaron 12,46 GB; 13.803 archivos y 2.251 carpetas eliminados. 22 elementos en uso fueron omitidos."
+    },
+    {
+      "actividad": "Comprobar y reparar archivos del sistema",
+      "estado": "No aplica",
+      "observacion": "No se reportó ejecución de SFC o DISM."
+    },
+    {
+      "actividad": "Revisar configuración de energía y memoria virtual",
+      "estado": "No aplica",
+      "observacion": "No se reportaron cambios en energía o memoria virtual."
+    },
+    {
+      "actividad": "Confirmar que el antivirus y el firewall estén activos",
+      "estado": "Conforme",
+      "observacion": "McAfee quedó configurado como antivirus. No se reportaron alertas de seguridad."
+    },
+    {
+      "actividad": "Ejecutar un análisis completo de amenazas",
+      "estado": "No aplica",
+      "observacion": "No se reportó la ejecución de un análisis completo de amenazas."
+    },
+    {
+      "actividad": "Revisar extensiones y aplicaciones sospechosas",
+      "estado": "No aplica",
+      "observacion": "No se reportó una revisión específica de extensiones."
+    },
+    {
+      "actividad": "Medir nuevamente el tiempo de encendido",
+      "estado": "Conforme",
+      "observacion": "29,01 segundos; mejora de 7,60 segundos (20,76 %)."
+    },
+    {
+      "actividad": "Comparar uso de CPU, RAM y disco en reposo",
+      "estado": "No aplica",
+      "observacion": "No se registraron mediciones finales de CPU, RAM ni disco."
+    },
+    {
+      "actividad": "Revisar nuevamente las temperaturas",
+      "estado": "Conforme",
+      "observacion": "Temperatura final en reposo: 48 °C. Temperatura máxima final: 93 °C."
+    },
+    {
+      "actividad": "Ejecutar una prueba corta de estabilidad",
+      "estado": "Conforme",
+      "observacion": "La medición térmica finalizó sin fallos reportados."
+    },
+    {
+      "actividad": "Confirmar el funcionamiento de periféricos y conexiones",
+      "estado": "Conforme",
+      "observacion": "Periféricos, puertos, cargador y conexiones funcionan correctamente."
+    },
+    {
+      "actividad": "Verificar la apertura de los programas principales",
+      "estado": "No aplica",
+      "observacion": "No se registró una prueba específica de apertura de programas."
+    }
+  ],
+  "accionesRealizadas": "Limpieza física externa completa\nLimpieza física interna de ventilador, rejillas, disipador y componentes\nCambio de pasta térmica\nLimpieza de archivos temporales y liberación de espacio\nInstalación de actualizaciones de Windows\nActualización de controladores\nDesactivación de aplicaciones innecesarias del inicio\nConfiguración de McAfee como antivirus\nPruebas de cargador, periféricos, puertos y conexiones",
+  "hallazgos": "Raspones mínimos en la carcasa por el uso continuo\nTeclado con desgaste, pero completamente funcional\nFaltan dos gomas de soporte inferior, sin afectar el funcionamiento",
+  "recomendaciones": "Mantener actualizados Windows, los controladores y el antivirus\nEvitar bloquear las rejillas de ventilación durante el uso\nRealizar mantenimiento preventivo periódico",
+  "conclusion": "El equipo quedó operativo y fue entregado después del mantenimiento preventivo. Se redujo el tiempo de encendido, se liberó espacio, se actualizaron Windows y los controladores, y se comprobó el funcionamiento de los componentes y conexiones evaluados.",
+  "observaciones": "Los datos finales de CPU, RAM y actividad del disco no fueron medidos. El espacio final disponible se presenta como una estimación matemática.",
+  "metadata": {
+    "numero": "MANT-00000007",
+    "fecha": "2026-09-08",
+    "estado": "Entregado",
+    "tecnicoResponsable": "Jhonston Benjumea",
+    "lugarServicio": "Oficina del cliente",
+    "solicitudCliente": "Mantenimiento preventivo"
+  }
+}

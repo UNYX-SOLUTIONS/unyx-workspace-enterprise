@@ -82,10 +82,10 @@ export default function MaintenancePage() {
               onClick={searchMaintenance}
               disabled={loading}
               className="
-                rounded-lg border border-[#c7c6cb]
+                rounded-lg border border-slate-200
                 bg-white px-4 py-2 font-semibold
-                !text-[#26364d] transition-colors
-                hover:bg-[#eff4ff]
+                !text-slate-700 transition-colors
+                hover:bg-slate-100
                 disabled:cursor-not-allowed
                 disabled:opacity-50
               "
@@ -98,10 +98,9 @@ export default function MaintenancePage() {
               onClick={() => save(false)}
               disabled={loading}
               className="
-                rounded-lg bg-gradient-to-r
-                from-[#2170e4] to-[#0058be]
+                rounded-lg bg-blue-500
                 px-5 py-2 font-semibold text-white
-                transition-opacity
+                transition-colors hover:bg-blue-600
                 disabled:cursor-not-allowed
                 disabled:opacity-50
               "
@@ -139,12 +138,12 @@ export default function MaintenancePage() {
         className="hidden"
       />
 
-      <Card className="border-l-4 border-[#2170e4] p-5">
+      <Card className="border-l-4 border-blue-500 p-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="font-bold !text-[#111827]">Importar diagnóstico automático</p>
+            <p className="font-bold !text-slate-900">Importar diagnóstico automático</p>
 
-            <p className="mt-1 text-sm !text-[#4b5563]">
+            <p className="mt-1 text-sm !text-slate-600">
               Selecciona el archivo JSON generado por el script de diagnóstico UNYX.
             </p>
           </div>
@@ -153,9 +152,9 @@ export default function MaintenancePage() {
             type="button"
             onClick={() => diagnosticFileInput.current?.click()}
             className="
-              rounded-lg bg-[#111827]
+              rounded-lg bg-slate-900
               px-5 py-2.5 font-semibold text-white
-              transition-colors hover:bg-[#1f2937]
+              transition-colors hover:bg-slate-800
             "
           >
             Importar JSON
@@ -164,7 +163,7 @@ export default function MaintenancePage() {
       </Card>
 
       <Card className="p-6">
-        <p className="mb-6 text-xl font-bold !text-[#111827]">Datos del mantenimiento</p>
+        <p className="mb-6 text-xl font-bold !text-slate-900">Datos del mantenimiento</p>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <InputField
@@ -181,17 +180,17 @@ export default function MaintenancePage() {
           />
 
           <label className="block">
-            <span className="mb-2 block text-sm font-semibold !text-[#111827]">Estado</span>
+            <span className="mb-2 block text-sm font-semibold !text-slate-900">Estado</span>
 
             <select
               value={form.estado}
               onChange={(event) => form.setEstado(event.target.value)}
               className="
                 w-full rounded-lg border
-                border-[#c7c6cb] bg-white
-                px-4 py-3 !text-[#111827]
+                border-slate-200 bg-white
+                px-4 py-3 !text-slate-900
                 outline-none focus:ring-2
-                focus:ring-[#2170e4]
+                focus:ring-blue-500
               "
             >
               <option>En revisión</option>
@@ -210,7 +209,7 @@ export default function MaintenancePage() {
       </Card>
 
       <Card className="overflow-visible p-6">
-        <p className="mb-6 text-xl font-bold !text-[#111827]">Datos del cliente</p>
+        <p className="mb-6 text-xl font-bold !text-slate-900">Datos del cliente</p>
 
         <div className="relative mb-4">
           <input
@@ -223,11 +222,11 @@ export default function MaintenancePage() {
             placeholder="Buscar por nombre, RUC o correo"
             className="
               w-full rounded-lg border
-              border-[#c7c6cb] bg-white
-              px-4 py-3 !text-[#111827]
-              placeholder:!text-[#6b7280]
+              border-slate-200 bg-white
+              px-4 py-3 !text-slate-900
+              placeholder:!text-slate-500
               outline-none focus:ring-2
-              focus:ring-[#2170e4]
+              focus:ring-blue-500
             "
           />
 
@@ -236,7 +235,7 @@ export default function MaintenancePage() {
               className="
                 absolute z-40 mt-2 max-h-72
                 w-full overflow-y-auto
-                rounded-xl border border-[#c7c6cb]
+                rounded-xl border border-slate-200
                 bg-white shadow-xl
               "
             >
@@ -247,21 +246,21 @@ export default function MaintenancePage() {
                   onClick={() => form.selectClient(client)}
                   className="
                     w-full border-b
-                    border-[#e5e7eb]
+                    border-slate-100
                     px-4 py-3 text-left
-                    hover:bg-[#eff4ff]
+                    hover:bg-slate-100
                   "
                 >
-                  <p className="font-bold !text-[#111827]">{client.nombre}</p>
+                  <p className="font-bold !text-slate-900">{client.nombre}</p>
 
-                  <p className="text-xs !text-[#4b5563]">
+                  <p className="text-xs !text-slate-600">
                     {client.ruc || "Sin identificación"}
                   </p>
                 </button>
               ))}
 
               {form.filteredClients.length === 0 && (
-                <p className="px-4 py-4 text-sm !text-[#4b5563]">
+                <p className="px-4 py-4 text-sm !text-slate-600">
                   No se encontraron clientes.
                 </p>
               )}
@@ -295,13 +294,13 @@ export default function MaintenancePage() {
       </Card>
 
       <Card className="p-6">
-        <p className="mb-6 text-xl font-bold !text-[#111827]">Identificación del equipo</p>
+        <p className="mb-6 text-xl font-bold !text-slate-900">Identificación del equipo</p>
 
         <EquipmentForm equipo={form.equipo} onChange={form.setEquipo} />
       </Card>
 
       <Card className="p-6">
-        <p className="mb-6 text-xl font-bold !text-[#111827]">Problemas reportados</p>
+        <p className="mb-6 text-xl font-bold !text-slate-900">Problemas reportados</p>
 
         <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {form.REPORTED_PROBLEMS.map((problem) => (
@@ -309,15 +308,15 @@ export default function MaintenancePage() {
               key={problem}
               className="
                 flex items-center gap-3 rounded-lg
-                border border-[#e1e1e5] p-3
-                !text-[#111827]
+                border border-slate-200 p-3
+                !text-slate-900
               "
             >
               <input
                 type="checkbox"
                 checked={form.problemasReportados.includes(problem)}
                 onChange={() => form.toggleProblem(problem)}
-                className="accent-[#2170e4]"
+                className="accent-blue-500"
               />
 
               {problem}
@@ -333,7 +332,7 @@ export default function MaintenancePage() {
       </Card>
 
       <Card className="p-6">
-        <p className="mb-6 text-xl font-bold !text-[#111827]">Diagnóstico inicial</p>
+        <p className="mb-6 text-xl font-bold !text-slate-900">Diagnóstico inicial</p>
 
         <DiagnosticFields
           value={form.diagnosticoInicial}
@@ -344,9 +343,9 @@ export default function MaintenancePage() {
 
       <Card className="p-6">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xl font-bold !text-[#111827]">Checklist técnico</p>
+          <p className="text-xl font-bold !text-slate-900">Checklist técnico</p>
 
-          <p className="text-sm font-medium !text-[#4b5563]">
+          <p className="text-sm font-medium !text-slate-600">
             Conformes: {form.summary.Conforme || 0}
             {" · "}
             Observaciones: {form.summary["Observación"] || 0}
@@ -361,13 +360,13 @@ export default function MaintenancePage() {
       </Card>
 
       <Card className="p-6">
-        <p className="mb-6 text-xl font-bold !text-[#111827]">Diagnóstico final</p>
+        <p className="mb-6 text-xl font-bold !text-slate-900">Diagnóstico final</p>
 
         <DiagnosticFields value={form.diagnosticoFinal} onChange={form.setDiagnosticoFinal} />
       </Card>
 
       <Card className="space-y-5 p-6">
-        <p className="text-xl font-bold !text-[#111827]">Resultados del mantenimiento</p>
+        <p className="text-xl font-bold !text-slate-900">Resultados del mantenimiento</p>
 
         <TextArea
           label="Acciones realizadas"
@@ -412,9 +411,9 @@ export default function MaintenancePage() {
           onClick={() => save(false)}
           disabled={loading}
           className="
-            rounded-lg border-2 border-[#2170e4]
+            rounded-lg border border-blue-500
             bg-white px-6 py-3 font-bold
-            !text-[#2170e4]
+            !text-blue-600
             disabled:cursor-not-allowed
             disabled:opacity-50
           "
@@ -427,9 +426,9 @@ export default function MaintenancePage() {
           onClick={() => save(true)}
           disabled={loading}
           className="
-            rounded-lg bg-gradient-to-r
-            from-[#2170e4] to-[#0058be]
+            rounded-lg bg-blue-500
             px-6 py-3 font-bold text-white
+            transition-colors hover:bg-blue-600
             disabled:cursor-not-allowed
             disabled:opacity-50
           "

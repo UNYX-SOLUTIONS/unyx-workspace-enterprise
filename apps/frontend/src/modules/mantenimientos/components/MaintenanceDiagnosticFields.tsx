@@ -17,7 +17,7 @@ export const TextArea = ({
   rows = 4,
 }: TextAreaProps) => (
   <label className="block">
-    <span className="mb-2 block text-sm font-semibold !text-[#111827]">{label}</span>
+    <span className="mb-2 block text-sm font-semibold !text-slate-900">{label}</span>
 
     <textarea
       value={value}
@@ -26,12 +26,12 @@ export const TextArea = ({
       placeholder={placeholder}
       className="
         w-full resize-y rounded-lg
-        border border-[#c7c6cb] bg-white
-        p-3 !text-[#111827]
-        placeholder:!text-[#6b7280]
+        border border-slate-200 bg-white
+        p-3 !text-slate-900
+        placeholder:!text-slate-500
         outline-none transition-all
-        focus:border-[#2170e4]
-        focus:ring-2 focus:ring-[#2170e4]
+        focus:border-blue-500
+        focus:ring-2 focus:ring-blue-500
       "
     />
   </label>

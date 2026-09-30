@@ -8,13 +8,8 @@ import type { createProformaSchema, updateProformaSchema } from "./proformas.val
 
 const IVA_RATE = "0.15";
 
-const STATUS_TRANSITIONS: Record<ProformaEstado, ProformaEstado[]> = {
-  BORRADOR: ["BORRADOR", "EMITIDA", "CANCELADA"],
-  EMITIDA: ["EMITIDA", "ENVIADA", "CANCELADA"],
-  ENVIADA: ["ENVIADA", "APROBADA", "CANCELADA"],
-  APROBADA: ["APROBADA", "CANCELADA"],
-  CANCELADA: ["CANCELADA"],
-};
+// Todos los estados son reversibles entre sí: no hay flujo secuencial y
+// CANCELADA no bloquea ninguna acción del ciclo de vida.
 
 const PROFORMA_INCLUDE = { cliente: true, items: true } as const;
 
@@ -192,15 +187,6 @@ export async function updateProforma(
   input: UpdateProformaInput
 ): Promise<ProformaWithRelations> {
   const existing = await findProforma(identifier);
-
-  const nextEstado = input.estado ?? existing.estado;
-  if (!STATUS_TRANSITIONS[existing.estado].includes(nextEstado)) {
-    throw new AppError(
-      409,
-      "INVALID_STATUS_TRANSITION",
-      `No se puede cambiar la proforma de ${existing.estado} a ${nextEstado}`
-    );
-  }
 
   const data: {
     validezDias?: number;

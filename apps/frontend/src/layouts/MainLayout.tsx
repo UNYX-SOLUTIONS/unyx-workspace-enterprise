@@ -14,7 +14,7 @@ export default function MainLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f8fa]">
+    <div className="min-h-screen bg-slate-50">
       <div className="flex min-h-screen">
         <Sidebar open={sidebarOpen} onClose={closeSidebar} />
 
@@ -27,8 +27,8 @@ export default function MainLayout() {
             </div>
           </main>
 
-          <footer className="border-t border-[#e2e3e7] bg-white px-6 py-4">
-            <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-1 text-sm text-[#83848e] sm:flex-row sm:items-center sm:justify-between">
+          <footer className="border-t border-slate-200 bg-white px-6 py-4">
+            <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-1 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between">
               <p>© {new Date().getFullYear()} UNYX Solutions S.A.S.</p>
 
               <p>UNYX Workspace</p>

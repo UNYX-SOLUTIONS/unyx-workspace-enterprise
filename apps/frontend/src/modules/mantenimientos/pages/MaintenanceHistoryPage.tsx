@@ -174,14 +174,14 @@ export default function MaintenanceHistoryPage() {
   function sortIndicator(key: SortKey) {
     if (sortConfig.key !== key) {
       return (
-        <span className="!text-[#7b8494]" aria-hidden="true">
+        <span className="!text-slate-400" aria-hidden="true">
           ↕
         </span>
       );
     }
 
     return (
-      <span className="!text-[#174a8b]" aria-hidden="true">
+      <span className="!text-blue-700" aria-hidden="true">
         {sortConfig.direction === "asc" ? "↑" : "↓"}
       </span>
     );
@@ -215,8 +215,8 @@ export default function MaintenanceHistoryPage() {
   const headerButtonClass = `
     flex w-full items-center gap-2 text-left
     text-xs font-extrabold uppercase tracking-wide
-    !text-[#26364d] transition-colors
-    hover:!text-[#174a8b]
+    !text-slate-700 transition-colors
+    hover:!text-blue-700
   `;
 
   return (
@@ -231,7 +231,7 @@ export default function MaintenanceHistoryPage() {
         }
       />
 
-      <div className="rounded-xl border border-[#c7c6cb] bg-white p-5 shadow-sm">
+      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
         <label className="block">
           <span className="sr-only">Buscar mantenimiento</span>
 
@@ -241,20 +241,20 @@ export default function MaintenanceHistoryPage() {
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Buscar por número, cliente, RUC, marca, modelo o serie"
             className="
-              w-full rounded-lg border border-[#aebbd0]
-              bg-white px-4 py-3 !text-[#111827]
-              placeholder:!text-[#6b7280] outline-none
-              transition-all focus:border-[#2170e4]
-              focus:ring-2 focus:ring-[#2170e4]
+              w-full rounded-lg border border-slate-200
+              bg-white px-4 py-3 !text-slate-900
+              placeholder:!text-slate-500 outline-none
+              transition-all focus:border-blue-500
+              focus:ring-2 focus:ring-blue-500
             "
           />
         </label>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-[#c7c6cb] bg-white shadow-sm">
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
         {loading && (
           <div className="p-10 text-center">
-            <p className="font-semibold !text-[#4b5563]">
+            <p className="font-semibold !text-slate-600">
               Cargando mantenimientos...
             </p>
           </div>
@@ -262,7 +262,7 @@ export default function MaintenanceHistoryPage() {
 
         {!loading && error && (
           <div className="p-10 text-center">
-            <p className="font-semibold !text-[#b42318]">{error}</p>
+            <p className="font-semibold !text-red-700">{error}</p>
           </div>
         )}
 
@@ -271,7 +271,7 @@ export default function MaintenanceHistoryPage() {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[950px] border-collapse text-sm">
                 <thead>
-                  <tr className="border-b border-[#b7c3d7] bg-[#e7effd]">
+                  <tr className="border-b border-slate-200 bg-slate-50">
                     <th className="px-4 py-4">
                       <button
                         type="button"
@@ -338,41 +338,41 @@ export default function MaintenanceHistoryPage() {
                       </button>
                     </th>
 
-                    <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wide !text-[#26364d]">
+                    <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wide !text-slate-700">
                       Acciones
                     </th>
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-[#d1d8e3]">
+                <tbody className="divide-y divide-slate-100">
                   {sortedMaintenances.map((maintenance) => (
                     <tr
                       key={maintenance.id || maintenance.numero}
-                      className="transition-colors hover:bg-[#f3f7ff]"
+                      className="transition-colors hover:bg-slate-50"
                     >
                       <td className="px-4 py-4">
                         <button
                           type="button"
                           onClick={() => handleEdit(maintenance)}
-                          className="font-mono font-extrabold !text-[#145dbf] hover:underline"
+                          className="font-mono font-extrabold !text-blue-600 hover:underline"
                         >
                           {maintenance.numero || "Sin número"}
                         </button>
                       </td>
 
-                      <td className="px-4 py-4 font-medium !text-[#374151]">
+                      <td className="px-4 py-4 font-medium !text-slate-700">
                         {formatDate(maintenance.fecha, "Sin fecha")}
                       </td>
 
                       <td className="px-4 py-4">
-                        <p className="font-bold !text-[#111827]">
+                        <p className="font-bold !text-slate-900">
                           {String(
                             (maintenance?.cliente as { nombre?: unknown } | undefined)
                               ?.nombre || "Sin cliente"
                           )}
                         </p>
 
-                        <p className="mt-1 text-xs !text-[#4b5563]">
+                        <p className="mt-1 text-xs !text-slate-600">
                           {String(
                             (maintenance?.cliente as { ruc?: unknown } | undefined)?.ruc ||
                               "Sin identificación"
@@ -381,7 +381,7 @@ export default function MaintenanceHistoryPage() {
                       </td>
 
                       <td className="px-4 py-4">
-                        <p className="font-bold !text-[#111827]">
+                        <p className="font-bold !text-slate-900">
                           {[
                             (maintenance?.equipo as { marca?: unknown } | undefined)?.marca,
                             (maintenance?.equipo as { modelo?: unknown } | undefined)?.modelo,
@@ -390,7 +390,7 @@ export default function MaintenanceHistoryPage() {
                             .join(" ") || "Sin información"}
                         </p>
 
-                        <p className="mt-1 text-xs !text-[#4b5563]">
+                        <p className="mt-1 text-xs !text-slate-600">
                           {String(
                             (maintenance?.equipo as { tipo?: unknown } | undefined)?.tipo ||
                               "Equipo"
@@ -398,7 +398,7 @@ export default function MaintenanceHistoryPage() {
                         </p>
                       </td>
 
-                      <td className="px-4 py-4 font-medium !text-[#374151]">
+                      <td className="px-4 py-4 font-medium !text-slate-700">
                         {String(
                           (maintenance?.equipo as { numeroSerie?: unknown } | undefined)
                             ?.numeroSerie || "Sin serie"
@@ -421,10 +421,10 @@ export default function MaintenanceHistoryPage() {
                             type="button"
                             onClick={() => handleEdit(maintenance)}
                             className="
-                              rounded-lg border border-[#aebbd0]
+                              rounded-lg border border-slate-200
                               bg-white px-3 py-2 font-semibold
-                              !text-[#26364d] transition-colors
-                              hover:bg-[#eff4ff]
+                              !text-slate-700 transition-colors
+                              hover:bg-slate-100
                             "
                           >
                             Editar
@@ -435,9 +435,9 @@ export default function MaintenanceHistoryPage() {
                             disabled={generatingPdfNumber === maintenance.numero}
                             onClick={() => handleGeneratePdf(maintenance)}
                             className="
-                              rounded-lg bg-[#2170e4]
+                              rounded-lg bg-blue-500
                               px-3 py-2 font-semibold text-white
-                              transition-colors hover:bg-[#0058be]
+                              transition-colors hover:bg-blue-600
                               disabled:cursor-not-allowed
                               disabled:opacity-50
                             "
@@ -456,7 +456,7 @@ export default function MaintenanceHistoryPage() {
 
             {sortedMaintenances.length === 0 && (
               <div className="p-10 text-center">
-                <p className="font-semibold !text-[#374151]">
+                <p className="font-semibold !text-slate-700">
                   {normalizedSearch
                     ? "No se encontraron mantenimientos con esa búsqueda."
                     : "Todavía no existen mantenimientos registrados."}
@@ -464,14 +464,14 @@ export default function MaintenanceHistoryPage() {
               </div>
             )}
 
-            <div className="border-t border-[#d1d8e3] bg-white px-5 py-4">
-              <p className="text-sm font-medium !text-[#4b5563]">
+            <div className="border-t border-slate-100 bg-white px-5 py-4">
+              <p className="text-sm font-medium !text-slate-600">
                 Mostrando{" "}
-                <span className="font-extrabold !text-[#111827]">
+                <span className="font-extrabold !text-slate-900">
                   {sortedMaintenances.length}
                 </span>{" "}
                 de{" "}
-                <span className="font-extrabold !text-[#111827]">
+                <span className="font-extrabold !text-slate-900">
                   {maintenances.length}
                 </span>{" "}
                 mantenimientos

@@ -26,7 +26,7 @@ function withSuspense(Component: LazyExoticComponent<ComponentType>) {
   return (
     <Suspense
       fallback={
-        <div className="p-10 text-center font-medium text-[#46464b]">Cargando...</div>
+        <div className="p-10 text-center font-medium text-slate-600">Cargando...</div>
       }
     >
       <Component />

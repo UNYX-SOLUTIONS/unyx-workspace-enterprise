@@ -54,7 +54,7 @@ export default function ProformaPage() {
   }, [routeNumero]);
 
   if (loading) {
-    return <div className="py-12 text-center font-medium text-[#46464b]">Cargando proforma...</div>;
+    return <div className="py-12 text-center font-medium text-slate-600">Cargando proforma...</div>;
   }
 
   return (
@@ -67,7 +67,7 @@ export default function ProformaPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <Card className="p-6">
-            <h3 className="mb-6 text-xl font-bold text-[#010105]">Datos del Emisor</h3>
+            <h3 className="mb-6 text-xl font-bold text-slate-900">Datos del Emisor</h3>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <InputField label="Razón Social" value="UNYX SOLUTIONS S.A.S." readOnly />
               <InputField label="RUC" value="0993406012001" readOnly />

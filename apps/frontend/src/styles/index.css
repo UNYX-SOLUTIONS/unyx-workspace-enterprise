@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Inter", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Hanken Grotesk", "Inter", system-ui, sans-serif;
+}
+
 :root {
   color-scheme: light;
 }
@@ -12,15 +17,9 @@ body,
 
 body {
   margin: 0;
-  font-family:
-    system-ui,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
-  color: #111827;
-  background-color: #f7f8fa;
+  font-family: var(--font-sans);
+  color: #0f172a;
+  background-color: #f8fafc;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -53,10 +52,10 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #c7c6cb;
+  background-color: #cbd5e1;
   border-radius: 999px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background-color: #a8a7ad;
+  background-color: #94a3b8;
 }

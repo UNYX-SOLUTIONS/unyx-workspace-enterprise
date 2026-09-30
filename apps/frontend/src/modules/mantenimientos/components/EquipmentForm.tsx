@@ -85,14 +85,14 @@ export function EquipmentForm({ equipo, onChange }: EquipmentFormProps) {
       <label
         className="
           mt-7 flex items-center gap-3
-          text-sm font-semibold !text-[#111827]
+          text-sm font-semibold !text-slate-900
         "
       >
         <input
           type="checkbox"
           checked={Boolean(equipo.cargadorEntregado)}
           onChange={(event) => update("cargadorEntregado", event.target.checked)}
-          className="h-5 w-5 accent-[#2170e4]"
+          className="h-5 w-5 accent-blue-500"
         />
 
         Cargador entregado

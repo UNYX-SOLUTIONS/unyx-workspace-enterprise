@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { useEffect, type ReactNode } from "react";
 
 const sizes: Record<string, string> = {
@@ -60,7 +61,7 @@ export default function Modal({
     >
       <button
         type="button"
-        className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-900/40"
         onClick={onClose}
         aria-label="Cerrar modal"
       />
@@ -68,38 +69,27 @@ export default function Modal({
       <div
         className={`
           relative z-10 max-h-[90vh] w-full overflow-y-auto
-          rounded-2xl border border-[#d1d5db]
-          bg-white shadow-2xl
+          rounded-xl border border-slate-200
+          bg-white shadow-lg
           ${sizes[size] || sizes.md}
         `}
       >
-        <div
-          className="
-            sticky top-0 z-20 flex items-center justify-between
-            rounded-t-2xl border-b border-[#d1d5db]
-            bg-white px-6 py-5
-          "
-        >
-          <p id="modal-title" className="text-xl font-extrabold !text-[#111827]">
+        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
+          <p id="modal-title" className="font-display text-lg font-bold text-slate-900">
             {title}
           </p>
 
           <button
             type="button"
             onClick={onClose}
-            className="
-              flex h-9 w-9 items-center justify-center
-              rounded-lg text-lg font-bold !text-[#4b5563]
-              transition-colors hover:bg-[#eff4ff]
-              hover:!text-[#111827]
-            "
             aria-label="Cerrar"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
           >
-            ✕
+            <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
-        <div className="bg-white p-6 !text-[#111827]">{children}</div>
+        <div className="bg-white p-6">{children}</div>
       </div>
     </div>
   );

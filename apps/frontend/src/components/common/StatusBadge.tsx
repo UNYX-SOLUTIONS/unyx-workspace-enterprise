@@ -1,14 +1,19 @@
 const styles: Record<string, string> = {
-  Emitida: "border-amber-300 bg-amber-100 text-amber-700",
-  Borrador: "border-gray-300 bg-gray-100 text-gray-700",
-  Aceptada: "border-green-300 bg-green-100 text-green-700",
-  Expirada: "border-red-300 bg-red-50 text-red-700",
-  Activo: "border-green-300 bg-green-100 text-green-700",
-  Pendiente: "border-amber-300 bg-amber-100 text-amber-700",
-  Inactivo: "border-gray-300 bg-gray-100 text-gray-700",
-  Conforme: "border-green-300 bg-green-100 text-green-700",
-  Observación: "border-amber-300 bg-amber-100 text-amber-700",
-  "No aplica": "border-gray-300 bg-gray-100 text-gray-700",
+  Activo: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  Pendiente: "border-amber-200 bg-amber-50 text-amber-700",
+  Inactivo: "border-slate-200 bg-slate-100 text-slate-600",
+  Conforme: "border-emerald-200 bg-emerald-50 text-emerald-700",
+  Observación: "border-amber-200 bg-amber-50 text-amber-700",
+  "No aplica": "border-slate-200 bg-slate-100 text-slate-600",
+};
+
+const dots: Record<string, string> = {
+  Activo: "bg-emerald-500",
+  Pendiente: "bg-amber-500",
+  Inactivo: "bg-slate-400",
+  Conforme: "bg-emerald-500",
+  Observación: "bg-amber-500",
+  "No aplica": "bg-slate-400",
 };
 
 export interface StatusBadgeProps {
@@ -18,14 +23,15 @@ export interface StatusBadgeProps {
 
 export default function StatusBadge({ status, className = "" }: StatusBadgeProps) {
   const resolved = status ?? "";
+  const style = styles[resolved] || "border-slate-200 bg-slate-100 text-slate-600";
+  const dot = dots[resolved] || "bg-slate-400";
+
   return (
     <span
-      className={`
-        inline-flex rounded-full border px-3 py-1 text-xs font-bold uppercase
-        ${styles[resolved] || "border-gray-300 bg-gray-100 text-gray-700"}
-        ${className}
-      `}
+      role="status"
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${style} ${className}`}
     >
+      <span className={`h-1.5 w-1.5 rounded-full ${dot}`} aria-hidden="true" />
       {resolved || "Sin estado"}
     </span>
   );

@@ -21,7 +21,7 @@ export default function ProformaActions({
         type="button"
         onClick={onDownloadPdf}
         disabled={pending}
-        className="w-full rounded-lg border-2 border-[#2170e4] bg-white px-6 py-3 font-bold text-[#2170e4] transition-all hover:bg-[#eff4ff] disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full rounded-lg border border-blue-500 bg-white px-6 py-3 font-bold text-blue-600 transition-all hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Generar PDF
       </button>
@@ -31,7 +31,7 @@ export default function ProformaActions({
           type="button"
           onClick={onSaveDraft}
           disabled={pending}
-          className="w-full rounded-lg border-2 border-[#2170e4] bg-white px-6 py-3 font-bold text-[#2170e4] transition-all hover:bg-[#eff4ff] disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-lg border border-blue-500 bg-white px-6 py-3 font-bold text-blue-600 transition-all hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {pending ? "Procesando..." : "Guardar borrador"}
         </button>
@@ -41,7 +41,7 @@ export default function ProformaActions({
         type="button"
         onClick={onEmit}
         disabled={pending}
-        className="w-full rounded-lg bg-gradient-to-r from-[#2170e4] to-[#0058be] px-6 py-3 font-bold text-white transition-all hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full rounded-lg bg-blue-500 hover:bg-blue-600 px-6 py-3 font-bold text-white transition-all hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
       >
         {pending ? "Procesando..." : emitLabel}
       </button>

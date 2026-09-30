@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
+import { Save } from "lucide-react";
 import { InputField, LoadingSpinner } from "@/components/common";
 
 export interface ProductFormValues {
@@ -115,7 +116,7 @@ export function ProductForm({ initialData = null, onSubmit, isLoading = false }:
         <button
           type="submit"
           disabled={isLoading}
-          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#2170e4] to-[#0058be] px-4 py-2 font-bold text-white transition-all hover:shadow-lg disabled:opacity-50"
+          className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-500 hover:bg-blue-600 px-4 py-2 font-bold text-white transition-all hover:shadow-lg disabled:opacity-50"
         >
           {isLoading ? (
             <>
@@ -123,7 +124,10 @@ export function ProductForm({ initialData = null, onSubmit, isLoading = false }:
               Guardando...
             </>
           ) : (
-            <>💾 Guardar Producto</>
+            <>
+              <Save className="h-4 w-4" aria-hidden="true" />
+              Guardar Producto
+            </>
           )}
         </button>
       </div>

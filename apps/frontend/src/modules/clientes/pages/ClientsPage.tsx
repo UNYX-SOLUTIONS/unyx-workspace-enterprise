@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Clock, SearchX, UserCheck, UserX, Users } from "lucide-react";
 import {
   SummaryCard,
   StatusBadge,
@@ -153,7 +154,7 @@ export default function ClientsPage() {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <LoadingSpinner size="lg" />
-        <p className="mt-4 text-[#46464b]">Cargando clientes...</p>
+        <p className="mt-4 text-slate-600">Cargando clientes...</p>
       </div>
     );
   }
@@ -166,7 +167,7 @@ export default function ClientsPage() {
         action={
           <button
             onClick={() => handleOpenModal()}
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-[#2170e4] to-[#0058be] px-6 py-3 font-bold text-white transition-all hover:scale-105 hover:shadow-lg"
+            className="flex items-center gap-2 rounded-lg bg-blue-500 hover:bg-blue-600 px-6 py-3 font-bold text-white transition-all hover:scale-105 hover:shadow-lg"
           >
             + Nuevo Cliente
           </button>
@@ -174,30 +175,41 @@ export default function ClientsPage() {
       />
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <SummaryCard title="Total Clientes" value={totalClientes} icon="👥" color="blue" />
-        <SummaryCard title="Activos" value={activos} icon="✅" color="green" />
-        <SummaryCard title="Pendientes" value={pendientes} icon="⏳" color="orange" />
-        <SummaryCard title="Inactivos" value={inactivos} icon="❌" color="red" />
+        <SummaryCard
+          title="Total Clientes"
+          value={totalClientes}
+          icon={<Users className="h-4 w-4" aria-hidden="true" />}
+          color="blue"
+        />
+        <SummaryCard
+          title="Activos"
+          value={activos}
+          icon={<UserCheck className="h-4 w-4" aria-hidden="true" />}
+          color="green"
+        />
+        <SummaryCard
+          title="Pendientes"
+          value={pendientes}
+          icon={<Clock className="h-4 w-4" aria-hidden="true" />}
+          color="orange"
+        />
+        <SummaryCard
+          title="Inactivos"
+          value={inactivos}
+          icon={<UserX className="h-4 w-4" aria-hidden="true" />}
+          color="red"
+        />
       </section>
 
       <Card className="overflow-hidden">
-        <div className="space-y-4 border-b border-[#c7c6cb] bg-gradient-to-r from-[#eff4ff] to-[#dce9ff] p-4 sm:p-6">
+        <div className="space-y-4 border-b border-slate-200 bg-slate-50 p-4 sm:p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex flex-wrap gap-2">
-              <button className="rounded-lg border border-[#c7c6cb] bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-[#e5eeff]">
-                📊 Filtrar
-              </button>
-              <button className="rounded-lg border border-[#c7c6cb] bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-[#e5eeff]">
-                🔤 Ordenar
-              </button>
-            </div>
-
             <input
               type="text"
               placeholder="Buscar cliente..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg border border-[#c7c6cb] bg-white px-4 py-2 outline-none transition-all focus:ring-2 focus:ring-[#2170e4] sm:max-w-xs"
+              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 sm:max-w-xs"
             />
           </div>
         </div>
@@ -205,48 +217,48 @@ export default function ClientsPage() {
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-[#c7c6cb] bg-[#eff4ff]">
-                <th className="px-4 py-4 text-xs font-bold uppercase text-[#46464b] sm:px-6">
+              <tr className="border-b border-slate-200 bg-slate-50">
+                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6">
                   Cliente
                 </th>
-                <th className="hidden px-4 py-4 text-xs font-bold uppercase text-[#46464b] sm:px-6 md:table-cell">
+                <th className="hidden px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6 md:table-cell">
                   RUC
                 </th>
-                <th className="hidden px-4 py-4 text-xs font-bold uppercase text-[#46464b] sm:px-6 lg:table-cell">
+                <th className="hidden px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6 lg:table-cell">
                   Teléfono
                 </th>
-                <th className="px-4 py-4 text-xs font-bold uppercase text-[#46464b] sm:px-6">
+                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6">
                   Estado
                 </th>
-                <th className="px-4 py-4 text-right text-xs font-bold uppercase text-[#46464b] sm:px-6">
+                <th className="px-4 py-4 text-right text-xs font-bold uppercase text-slate-600 sm:px-6">
                   Acciones
                 </th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-[#c7c6cb]">
+            <tbody className="divide-y divide-slate-200">
               {filteredClients.map((client) => (
-                <tr key={client.id} className="animate-fade-in transition-colors group hover:bg-[#eff4ff]">
+                <tr key={client.id} className="animate-fade-in transition-colors group hover:bg-slate-100">
                   <td className="px-4 py-4 sm:px-6">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#2170e4] to-[#0058be] text-sm font-bold text-white">
+                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-blue-500 text-sm font-bold text-white">
                         {getInitials(client.nombre)}
                       </div>
 
                       <div className="min-w-0">
-                        <p className="truncate font-bold text-[#010105]">{client.nombre}</p>
-                        <p className="truncate text-xs text-[#46464b]">
+                        <p className="truncate font-bold text-slate-900">{client.nombre}</p>
+                        <p className="truncate text-xs text-slate-600">
                           {client.email || "Sin correo"}
                         </p>
                       </div>
                     </div>
                   </td>
 
-                  <td className="hidden px-4 py-4 font-mono text-sm text-[#0b1c30] sm:px-6 md:table-cell">
+                  <td className="hidden px-4 py-4 font-mono text-sm text-slate-900 sm:px-6 md:table-cell">
                     {client.ruc}
                   </td>
 
-                  <td className="hidden px-4 py-4 text-sm text-[#0b1c30] sm:px-6 lg:table-cell">
+                  <td className="hidden px-4 py-4 text-sm text-slate-900 sm:px-6 lg:table-cell">
                     {client.telefono || "Sin teléfono"}
                   </td>
 
@@ -275,7 +287,7 @@ export default function ClientsPage() {
                 <tr>
                   <td colSpan={5} className="p-8 text-center">
                     <EmptyState
-                      icon="🔍"
+                      icon={<SearchX className="h-10 w-10 text-slate-300" aria-hidden="true" />}
                       title="No se encontraron clientes"
                       description={
                         search ? "Intenta con otra búsqueda" : "Agrega tu primer cliente para comenzar"
@@ -288,8 +300,8 @@ export default function ClientsPage() {
           </table>
         </div>
 
-        <div className="flex flex-col gap-4 border-t border-[#c7c6cb] bg-white p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-          <p className="text-sm text-[#46464b]">
+        <div className="flex flex-col gap-4 border-t border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <p className="text-sm text-slate-600">
             Mostrando <span className="font-bold">{filteredClients.length}</span> de{" "}
             <span className="font-bold">{clients.length}</span> clientes
           </p>

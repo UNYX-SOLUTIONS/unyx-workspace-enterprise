@@ -100,6 +100,25 @@ export async function updateProformaStatus(
   return updateProforma(numeroOrId, { estado });
 }
 
+export async function duplicateProforma(numeroOrId: string): Promise<ProformaDto> {
+  const source = await getProforma(numeroOrId);
+
+  return createProforma({
+    clienteId: source.cliente.id,
+    fecha: new Date().toISOString().split("T")[0],
+    validezDias: source.validezDias,
+    notas: source.notas ?? undefined,
+    items: source.items.map((item) => ({
+      codigo: item.codigo ?? undefined,
+      descripcion: item.descripcion,
+      marca: item.marca ?? undefined,
+      cantidad: Number(item.cantidad),
+      precio: Number(item.precio),
+    })),
+    estado: "BORRADOR",
+  });
+}
+
 export async function deleteProforma(
   numeroOrId: string
 ): Promise<{ id: string; numero: string }> {

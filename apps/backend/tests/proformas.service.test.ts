@@ -37,7 +37,6 @@ import {
   previewNextProformaNumber,
   updateProforma,
 } from "../src/modules/proformas/proformas.service.js";
-import { AppError } from "../src/middleware/errorHandler.js";
 
 const baseInput = {
   cliente: { nombre: "Cliente de prueba", ruc: "0993406012001" },
@@ -166,32 +165,7 @@ describe("updateProforma", () => {
     });
   });
 
-  it("rechaza transiciones de estado inválidas", async () => {
-    prismaMock.proforma.findFirst.mockResolvedValue({
-      id: "p1",
-      numero: "00000001",
-      estado: "EMITIDA",
-      cliente: { id: "client-1" },
-      items: [],
-    });
-
-    await expect(
-      updateProforma("00000001", { estado: "BORRADOR" })
-    ).rejects.toThrow(AppError);
-
-    await expect(
-      updateProforma("00000001", { estado: "BORRADOR" })
-    ).rejects.toMatchObject({ code: "INVALID_STATUS_TRANSITION" });
-  });
-
-  it("permite avanzar el flujo ENVIADA -> APROBADA y cancelar desde cualquier estado", async () => {
-    prismaMock.proforma.findFirst.mockResolvedValue({
-      id: "p1",
-      numero: "00000001",
-      estado: "ENVIADA",
-      cliente: { id: "client-1" },
-      items: [],
-    });
+  it("permite cualquier transición de estado, sin flujo secuencial", async () => {
     prismaMock.proforma.update.mockImplementation(async ({ data }: { data: Record<string, unknown> }) => ({
       id: "p1",
       numero: "00000001",
@@ -199,16 +173,30 @@ describe("updateProforma", () => {
       items: [],
     }));
 
-    await expect(updateProforma("00000001", { estado: "APROBADA" })).resolves.toMatchObject({
-      estado: "APROBADA",
-    });
+    const cases: Array<[string, string]> = [
+      ["BORRADOR", "ACEPTADA"],
+      ["ENVIADA", "BORRADOR"],
+      ["ACEPTADA", "EXPIRADA"],
+      ["CANCELADA", "ACEPTADA"],
+      ["EXPIRADA", "ENVIADA"],
+    ];
 
-    await expect(updateProforma("00000001", { estado: "CANCELADA" })).resolves.toMatchObject({
-      estado: "CANCELADA",
-    });
+    for (const [from, to] of cases) {
+      prismaMock.proforma.findFirst.mockResolvedValue({
+        id: "p1",
+        numero: "00000001",
+        estado: from,
+        cliente: { id: "client-1" },
+        items: [],
+      });
+
+      await expect(updateProforma("00000001", { estado: to as never })).resolves.toMatchObject({
+        estado: to,
+      });
+    }
   });
 
-  it("no permite cambiar una proforma CANCELADA", async () => {
+  it("una proforma CANCELADA sigue siendo editable (notas y estado)", async () => {
     prismaMock.proforma.findFirst.mockResolvedValue({
       id: "p1",
       numero: "00000001",
@@ -216,10 +204,17 @@ describe("updateProforma", () => {
       cliente: { id: "client-1" },
       items: [],
     });
+    prismaMock.proforma.update.mockImplementation(async ({ data }: { data: Record<string, unknown> }) => ({
+      id: "p1",
+      numero: "00000001",
+      estado: data.estado ?? "CANCELADA",
+      notas: data.notas,
+      items: [],
+    }));
 
     await expect(
-      updateProforma("00000001", { estado: "EMITIDA" })
-    ).rejects.toMatchObject({ code: "INVALID_STATUS_TRANSITION" });
+      updateProforma("00000001", { notas: "Reactivada por el cliente", estado: "ACEPTADA" })
+    ).resolves.toMatchObject({ estado: "ACEPTADA" });
   });
 
   it("lanza 404 cuando la proforma no existe", async () => {

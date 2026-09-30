@@ -130,6 +130,7 @@ export default function ClientsPage() {
   };
 
   const debouncedSearch = useDebouncedValue(search);
+  const isSearching = search.trim() !== debouncedSearch.trim();
   const filteredClients = clients.filter((client) => {
     const nombre = client.nombre || "";
     const ruc = client.ruc || "";
@@ -204,17 +205,25 @@ export default function ClientsPage() {
       <Card className="overflow-hidden">
         <div className="space-y-4 border-b border-slate-200 bg-slate-50 p-4 sm:p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <input
-              type="text"
-              placeholder="Buscar cliente..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 sm:max-w-xs"
-            />
+            <label className="w-full sm:max-w-xs">
+              <span className="sr-only">Buscar cliente</span>
+              <input
+                type="text"
+                placeholder="Buscar cliente..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              />
+            </label>
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="relative">
+          <div
+            className={`overflow-x-auto transition-opacity duration-150 ${
+              isSearching ? "pointer-events-none opacity-50" : "opacity-100"
+            }`}
+          >
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50">
@@ -298,6 +307,13 @@ export default function ClientsPage() {
               )}
             </tbody>
           </table>
+          </div>
+
+          {isSearching && (
+            <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-16">
+              <LoadingSpinner size="sm" />
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-4 border-t border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">

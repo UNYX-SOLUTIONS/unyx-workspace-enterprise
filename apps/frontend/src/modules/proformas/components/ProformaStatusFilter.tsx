@@ -32,7 +32,7 @@ export default function ProformaStatusFilter({ value, onChange }: ProformaStatus
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label="Filtrar por estado"
-        className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+        className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 lg:min-w-42"
       >
         <span
           className={`h-1.5 w-1.5 rounded-full ${currentMeta?.dot ?? "bg-slate-300"}`}

@@ -5,6 +5,7 @@ import { Banknote, CheckCircle2, Download, FilePenLine, Inbox, Target } from "lu
 import {
   Card,
   EmptyState,
+  LoadingSpinner,
   PageHeader,
   SummaryCard,
 } from "../../../components/common";
@@ -293,17 +294,24 @@ export default function ProformaHistoryPage() {
           </div>
         </div>
 
-        {loading && (
-          <div className="p-10 text-center font-medium text-slate-700">Cargando proformas...</div>
-        )}
-
         {!loading && error && (
           <div className="p-10 text-center font-semibold text-red-700">{error}</div>
         )}
 
-        {!loading && !error && (
-          <>
-            <div className="overflow-x-auto">
+        {!error && loading && proformas.length === 0 && (
+          <div className="flex items-center justify-center py-16">
+            <LoadingSpinner size="md" />
+          </div>
+        )}
+
+        {!error && !(loading && proformas.length === 0) && (
+          <div className="relative">
+            <div
+              className={`transition-opacity duration-200 ${
+                loading ? "pointer-events-none opacity-50" : "opacity-100"
+              }`}
+            >
+              <div className="overflow-x-auto">
               <table className="w-full border-collapse text-left">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50">
@@ -483,7 +491,14 @@ export default function ProformaHistoryPage() {
                 </button>
               </div>
             </div>
-          </>
+            </div>
+
+            {loading && (
+              <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-20">
+                <LoadingSpinner size="sm" />
+              </div>
+            )}
+          </div>
         )}
       </Card>
 

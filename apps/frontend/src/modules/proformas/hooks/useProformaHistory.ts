@@ -15,6 +15,12 @@ export interface UseProformaHistory {
   isPending: boolean;
 }
 
+const MIN_LOADING_MS = 350;
+
+function wait(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
+}
+
 export function useProformaHistory(): UseProformaHistory {
   const [proformas, setProformas] = useState<ProformaDto[]>([]);
   const [search, setSearch] = useState("");
@@ -26,10 +32,19 @@ export function useProformaHistory(): UseProformaHistory {
   const [isPending, startTransition] = useTransition();
 
   const load = useCallback(async () => {
+    const startedAt = Date.now();
     setLoading(true);
     setError("");
     try {
       const response = await listProformas({ page, pageSize, search });
+
+      // Duración mínima para que el overlay de la tabla se perciba suave
+      // (evita parpadeos con respuestas muy rápidas).
+      const elapsed = Date.now() - startedAt;
+      if (elapsed < MIN_LOADING_MS) {
+        await wait(MIN_LOADING_MS - elapsed);
+      }
+
       setProformas(response.data);
       setTotal(response.meta.total);
     } catch {

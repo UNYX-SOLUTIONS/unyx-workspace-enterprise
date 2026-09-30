@@ -5,6 +5,7 @@ import PageHeader from "@/components/common/PageHeader";
 import ActionButton from "@/components/common/ActionButton";
 import { useToast } from "@/hooks/useToast";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
 import { formatDate, getDateTimestamp } from "@/modules/common/utils/dateHelpers";
 import { getMaintenanceStatusMeta } from "@/modules/common/utils/statusMap";
 
@@ -107,6 +108,7 @@ export default function MaintenanceHistoryPage() {
   }, []);
 
   const debouncedSearch = useDebouncedValue(search);
+  const isSearching = search.trim() !== debouncedSearch.trim();
   const normalizedSearch = debouncedSearch.trim().toLowerCase();
 
   const filteredMaintenances = useMemo(() => {
@@ -243,9 +245,9 @@ export default function MaintenanceHistoryPage() {
             className="
               w-full rounded-lg border border-slate-200
               bg-white px-4 py-3 !text-slate-900
-              placeholder:!text-slate-500 outline-none
+              placeholder:!text-slate-400 outline-none
               transition-all focus:border-blue-500
-              focus:ring-2 focus:ring-blue-500
+              focus:ring-2 focus:ring-blue-500/20
             "
           />
         </label>
@@ -268,7 +270,12 @@ export default function MaintenanceHistoryPage() {
 
         {!loading && !error && (
           <>
-            <div className="overflow-x-auto">
+            <div className="relative">
+              <div
+                className={`overflow-x-auto transition-opacity duration-150 ${
+                  isSearching ? "pointer-events-none opacity-50" : "opacity-100"
+                }`}
+              >
               <table className="w-full min-w-[950px] border-collapse text-sm">
                 <thead>
                   <tr className="border-b border-slate-200 bg-slate-50">
@@ -452,6 +459,13 @@ export default function MaintenanceHistoryPage() {
                   ))}
                 </tbody>
               </table>
+              </div>
+
+              {isSearching && (
+                <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-16">
+                  <LoadingSpinner size="sm" />
+                </div>
+              )}
             </div>
 
             {sortedMaintenances.length === 0 && (

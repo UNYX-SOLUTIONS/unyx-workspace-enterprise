@@ -11,8 +11,8 @@ export default function UserMenu() {
         AU
       </span>
       <span className="hidden text-left leading-tight lg:block">
-        <span className="block text-xs font-semibold text-slate-900">Admin User</span>
-        <span className="block text-[10px] text-slate-500">Finanzas &amp; Facturación</span>
+        <span className="block text-sm font-semibold text-slate-900">Admin User</span>
+        <span className="block text-[11px] text-slate-500">Finanzas &amp; Facturación</span>
       </span>
       <ChevronDown className="hidden h-3.5 w-3.5 text-slate-400 lg:block" aria-hidden="true" />
     </button>

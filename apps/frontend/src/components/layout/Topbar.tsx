@@ -1,5 +1,5 @@
 import { Bell, Menu } from "lucide-react";
-import SearchBar from "./SearchBar";
+import WelcomeUser from "./WelcomeUser";
 import UserMenu from "./UserMenu";
 
 export interface TopbarProps {
@@ -18,8 +18,8 @@ export default function Topbar({ onMenuClick }: TopbarProps) {
         <Menu className="h-5 w-5" aria-hidden="true" />
       </button>
 
-      <SearchBar />
-
+      <WelcomeUser />
+      
       <div className="flex items-center gap-1.5">
         <button
           type="button"

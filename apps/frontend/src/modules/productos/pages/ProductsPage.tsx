@@ -134,6 +134,7 @@ export default function ProductsPage() {
   }
 
   const debouncedSearch = useDebouncedValue(search);
+  const isSearching = search.trim() !== debouncedSearch.trim();
   const normalizedSearch = debouncedSearch.trim().toLowerCase();
 
   const filteredProducts = useMemo(() => {
@@ -193,7 +194,12 @@ export default function ProductsPage() {
           </label>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="relative">
+          <div
+            className={`overflow-x-auto transition-opacity duration-150 ${
+              isSearching ? "pointer-events-none opacity-50" : "opacity-100"
+            }`}
+          >
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50">
@@ -277,6 +283,13 @@ export default function ProductsPage() {
               )}
             </tbody>
           </table>
+          </div>
+
+          {isSearching && (
+            <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-16">
+              <LoadingSpinner size="sm" />
+            </div>
+          )}
         </div>
 
         <div className="border-t border-slate-200 bg-white p-4 text-sm text-slate-600 sm:p-6">

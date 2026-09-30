@@ -184,6 +184,44 @@ describe("updateProforma", () => {
     ).rejects.toMatchObject({ code: "INVALID_STATUS_TRANSITION" });
   });
 
+  it("permite avanzar el flujo ENVIADA -> APROBADA y cancelar desde cualquier estado", async () => {
+    prismaMock.proforma.findFirst.mockResolvedValue({
+      id: "p1",
+      numero: "00000001",
+      estado: "ENVIADA",
+      cliente: { id: "client-1" },
+      items: [],
+    });
+    prismaMock.proforma.update.mockImplementation(async ({ data }: { data: Record<string, unknown> }) => ({
+      id: "p1",
+      numero: "00000001",
+      estado: data.estado,
+      items: [],
+    }));
+
+    await expect(updateProforma("00000001", { estado: "APROBADA" })).resolves.toMatchObject({
+      estado: "APROBADA",
+    });
+
+    await expect(updateProforma("00000001", { estado: "CANCELADA" })).resolves.toMatchObject({
+      estado: "CANCELADA",
+    });
+  });
+
+  it("no permite cambiar una proforma CANCELADA", async () => {
+    prismaMock.proforma.findFirst.mockResolvedValue({
+      id: "p1",
+      numero: "00000001",
+      estado: "CANCELADA",
+      cliente: { id: "client-1" },
+      items: [],
+    });
+
+    await expect(
+      updateProforma("00000001", { estado: "EMITIDA" })
+    ).rejects.toMatchObject({ code: "INVALID_STATUS_TRANSITION" });
+  });
+
   it("lanza 404 cuando la proforma no existe", async () => {
     prismaMock.proforma.findFirst.mockResolvedValue(null);
 

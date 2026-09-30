@@ -1,8 +1,10 @@
-export default function SearchBar() {
+export default function WelcomeUser() {
   return (
-    <input
-      className="hidden rounded-full bg-[#eff4ff] px-4 py-2 outline-none focus:ring-2 focus:ring-[#2170e4] sm:block"
-      placeholder="Buscar..."
-    />
+    <div className="flex items-center gap-3">
+      <div>
+        <p className="text-md! font-medium text-gray-700">Welcome, Andrea!</p>
+        <p className="text-md! text-gray-500">You have 3 new notifications.</p>
+      </div>
+    </div>
   );
 }

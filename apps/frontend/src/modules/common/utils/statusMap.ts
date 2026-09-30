@@ -12,15 +12,33 @@ export const PROFORMA_STATUS_MAP: Record<string, StatusMeta> = {
     label: "Emitida",
     badge: "border-amber-300 bg-amber-100 text-amber-700",
   },
-  ACEPTADA: {
-    label: "Aceptada",
-    badge: "border-green-300 bg-green-100 text-green-700",
-  },
-  CERRADA: {
-    label: "Cerrada",
+  ENVIADA: {
+    label: "Enviada",
     badge: "border-blue-300 bg-blue-100 text-blue-700",
   },
+  APROBADA: {
+    label: "Aprobada",
+    badge: "border-green-300 bg-green-100 text-green-700",
+  },
+  CANCELADA: {
+    label: "Cancelada",
+    badge: "border-red-300 bg-red-50 text-red-700",
+  },
 };
+
+// Flujo permitido: BORRADOR -> EMITIDA -> ENVIADA -> APROBADA
+// y CANCELADA desde cualquier estado. Siempre se permite el estado actual.
+export const PROFORMA_TRANSITIONS: Record<string, string[]> = {
+  BORRADOR: ["BORRADOR", "EMITIDA", "CANCELADA"],
+  EMITIDA: ["EMITIDA", "ENVIADA", "CANCELADA"],
+  ENVIADA: ["ENVIADA", "APROBADA", "CANCELADA"],
+  APROBADA: ["APROBADA", "CANCELADA"],
+  CANCELADA: ["CANCELADA"],
+};
+
+export function getProformaTransitions(status?: string | null): string[] {
+  return PROFORMA_TRANSITIONS[status ?? ""] ?? [status ?? ""];
+}
 
 export const MAINTENANCE_STATUS_MAP: Record<string, StatusMeta> = {
   "En revisión": {

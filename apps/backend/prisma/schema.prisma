@@ -17,8 +17,9 @@ enum UserRole {
 enum EstadoProforma {
   BORRADOR
   EMITIDA
-  ACEPTADA
-  CERRADA
+  ENVIADA
+  APROBADA
+  CANCELADA
 }
 
 enum EstadoMantenimiento {

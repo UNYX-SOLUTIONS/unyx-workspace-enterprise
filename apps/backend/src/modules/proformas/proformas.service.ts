@@ -9,10 +9,11 @@ import type { createProformaSchema, updateProformaSchema } from "./proformas.val
 const IVA_RATE = "0.15";
 
 const STATUS_TRANSITIONS: Record<ProformaEstado, ProformaEstado[]> = {
-  BORRADOR: ["BORRADOR", "EMITIDA"],
-  EMITIDA: ["EMITIDA", "ACEPTADA", "CERRADA"],
-  ACEPTADA: ["ACEPTADA", "CERRADA"],
-  CERRADA: ["CERRADA"],
+  BORRADOR: ["BORRADOR", "EMITIDA", "CANCELADA"],
+  EMITIDA: ["EMITIDA", "ENVIADA", "CANCELADA"],
+  ENVIADA: ["ENVIADA", "APROBADA", "CANCELADA"],
+  APROBADA: ["APROBADA", "CANCELADA"],
+  CANCELADA: ["CANCELADA"],
 };
 
 const PROFORMA_INCLUDE = { cliente: true, items: true } as const;

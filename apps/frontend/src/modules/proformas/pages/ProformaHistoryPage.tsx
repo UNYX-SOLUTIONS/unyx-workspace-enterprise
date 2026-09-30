@@ -11,11 +11,15 @@ import {
 import { useToast } from "@/hooks/useToast";
 import { getDateTimestamp } from "@/modules/common/utils/dateHelpers";
 import { formatCurrency } from "@/modules/common/utils/monetary";
-import { getProformaStatusMeta } from "@/modules/common/utils/statusMap";
-import ProformaStatusBadge from "@/modules/proformas/components/ProformaStatusBadge";
+import {
+  getProformaStatusMeta,
+  getProformaTransitions,
+} from "@/modules/common/utils/statusMap";
 import { useProformaHistory } from "@/modules/proformas/hooks/useProformaHistory";
+import { updateProformaStatus } from "@/modules/proformas/services/proformaService";
 import { generatePdf } from "@/modules/proformas/utils/generatePdf";
 import type { ProformaDto } from "@/modules/proformas/services/proformaService";
+import type { ProformaEstado } from "@unyx/shared-schemas";
 
 type SortKey = "numero" | "cliente" | "fecha" | "estado" | "total";
 
@@ -48,7 +52,7 @@ function getSortValue(proforma: ProformaDto, key: SortKey): string | number {
 
 export default function ProformaHistoryPage() {
   const navigate = useNavigate();
-  const { showError } = useToast();
+  const { showError, showSuccess } = useToast();
   const {
     proformas,
     total,
@@ -59,6 +63,7 @@ export default function ProformaHistoryPage() {
     updateSearch,
     page,
     setPage,
+    reload,
   } = useProformaHistory();
 
   const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: "asc" | "desc" }>({
@@ -66,6 +71,7 @@ export default function ProformaHistoryPage() {
     direction: "desc",
   });
   const [generatingPdfNumber, setGeneratingPdfNumber] = useState<string | null>(null);
+  const [updatingStatusNumber, setUpdatingStatusNumber] = useState<string | null>(null);
 
   const sortedProformas = useMemo(() => {
     return [...proformas].sort((first, second) => {
@@ -89,11 +95,11 @@ export default function ProformaHistoryPage() {
       (sum, proforma) => sum + toDisplayCents(proforma?.total),
       0
     );
-    const accepted = proformas.filter((proforma) => proforma?.estado === "ACEPTADA").length;
+    const approved = proformas.filter((proforma) => proforma?.estado === "APROBADA").length;
     const drafts = proformas.filter((proforma) => proforma?.estado === "BORRADOR").length;
     return {
       totalAmount,
-      accepted,
+      approved,
       drafts,
       average: proformas.length > 0 ? totalAmount / proformas.length : 0,
     };
@@ -122,6 +128,26 @@ export default function ProformaHistoryPage() {
       showError(`Error al generar el PDF: ${message}`);
     } finally {
       setGeneratingPdfNumber(null);
+    }
+  }
+
+  async function handleStatusChange(proforma: ProformaDto, nextStatus: ProformaEstado) {
+    if (nextStatus === proforma.estado) return;
+
+    try {
+      setUpdatingStatusNumber(proforma.numero);
+      const updated = await updateProformaStatus(proforma.numero, nextStatus);
+      showSuccess(
+        `Proforma ${updated.numero}: estado actualizado a ${getProformaStatusMeta(updated.estado).label}.`
+      );
+      await reload();
+    } catch (statusError) {
+      const apiError = (statusError as { response?: { data?: { error?: string } } })?.response
+        ?.data?.error;
+      const message = statusError instanceof Error ? statusError.message : "Error desconocido";
+      showError(apiError || `No se pudo cambiar el estado: ${message}`);
+    } finally {
+      setUpdatingStatusNumber(null);
     }
   }
 
@@ -174,7 +200,7 @@ export default function ProformaHistoryPage() {
           icon="💵"
           color="blue"
         />
-        <SummaryCard title="Aceptadas" value={summary.accepted} icon="✅" color="green" />
+        <SummaryCard title="Aprobadas" value={summary.approved} icon="✅" color="green" />
         <SummaryCard title="Borradores" value={summary.drafts} icon="📝" color="orange" />
         <SummaryCard
           title="Ticket Promedio"
@@ -258,7 +284,7 @@ export default function ProformaHistoryPage() {
                   {sortedProformas.map((proforma) => (
                     <tr
                       key={proforma.id || proforma.numero}
-                      className="bg-white transition-colors hover:bg-[#f3f7ff]"
+                      className="animate-fade-in bg-white transition-colors hover:bg-[#f3f7ff]"
                     >
                         <td className="px-4 py-4 sm:px-6">
                           <button
@@ -283,7 +309,31 @@ export default function ProformaHistoryPage() {
                             : "Sin fecha"}
                         </td>
                         <td className="px-4 py-4 sm:px-6">
-                          <ProformaStatusBadge status={proforma.estado} />
+                          <select
+                            value={proforma.estado}
+                            disabled={updatingStatusNumber === proforma.numero}
+                            onChange={(event) =>
+                              handleStatusChange(
+                                proforma,
+                                event.target.value as ProformaEstado
+                              )
+                            }
+                            title="Cambiar estado de la proforma"
+                            className={`cursor-pointer rounded-full border px-3 py-1 text-xs font-bold uppercase outline-none transition-all hover:shadow-sm focus:ring-2 focus:ring-[#2170e4] disabled:cursor-wait disabled:opacity-60 ${
+                              getProformaStatusMeta(proforma.estado).badge
+                            }`}
+                          >
+                            {getProformaTransitions(proforma.estado).map((status) => (
+                              <option key={status} value={status}>
+                                {getProformaStatusMeta(status).label}
+                              </option>
+                            ))}
+                          </select>
+                          {updatingStatusNumber === proforma.numero && (
+                            <p className="mt-1 text-[10px] font-medium text-[#6b7280]">
+                              Guardando...
+                            </p>
+                          )}
                         </td>
                         <td className="hidden px-4 py-4 text-right font-extrabold text-[#111827] sm:table-cell sm:px-6">
                           {formatCurrency(toDisplayCents(proforma.total))}

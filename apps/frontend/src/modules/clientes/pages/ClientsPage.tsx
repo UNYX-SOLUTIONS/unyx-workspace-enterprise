@@ -10,6 +10,7 @@ import {
   LoadingSpinner,
 } from "../../../components/common";
 import { useToast } from "@/hooks/useToast";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 import { ClientForm, type ClientFormValues } from "@/modules/clientes/components/ClientForm";
 import { getInitials } from "@/utils/stringUtils";
@@ -127,15 +128,19 @@ export default function ClientsPage() {
     }
   };
 
+  const debouncedSearch = useDebouncedValue(search);
   const filteredClients = clients.filter((client) => {
     const nombre = client.nombre || "";
     const ruc = client.ruc || "";
     const email = client.email || "";
+    const query = debouncedSearch.trim().toLowerCase();
+
+    if (!query) return true;
 
     return (
-      nombre.toLowerCase().includes(search.toLowerCase()) ||
-      ruc.includes(search) ||
-      email.toLowerCase().includes(search.toLowerCase())
+      nombre.toLowerCase().includes(query) ||
+      ruc.includes(debouncedSearch.trim()) ||
+      email.toLowerCase().includes(query)
     );
   });
 
@@ -221,7 +226,7 @@ export default function ClientsPage() {
 
             <tbody className="divide-y divide-[#c7c6cb]">
               {filteredClients.map((client) => (
-                <tr key={client.id} className="transition-colors group hover:bg-[#eff4ff]">
+                <tr key={client.id} className="animate-fade-in transition-colors group hover:bg-[#eff4ff]">
                   <td className="px-4 py-4 sm:px-6">
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#2170e4] to-[#0058be] text-sm font-bold text-white">

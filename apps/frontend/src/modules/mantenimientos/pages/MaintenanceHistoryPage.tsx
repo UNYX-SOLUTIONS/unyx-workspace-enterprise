@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import PageHeader from "@/components/common/PageHeader";
 import ActionButton from "@/components/common/ActionButton";
 import { useToast } from "@/hooks/useToast";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { formatDate, getDateTimestamp } from "@/modules/common/utils/dateHelpers";
 import { getMaintenanceStatusMeta } from "@/modules/common/utils/statusMap";
 
@@ -105,7 +106,8 @@ export default function MaintenanceHistoryPage() {
     };
   }, []);
 
-  const normalizedSearch = search.trim().toLowerCase();
+  const debouncedSearch = useDebouncedValue(search);
+  const normalizedSearch = debouncedSearch.trim().toLowerCase();
 
   const filteredMaintenances = useMemo(() => {
     if (!normalizedSearch) {

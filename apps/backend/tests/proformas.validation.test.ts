@@ -46,8 +46,8 @@ describe("createProformaSchema", () => {
 
 describe("updateProformaSchema", () => {
   it("acepta actualizaciones parciales", () => {
-    const result = updateProformaSchema.parse({ estado: "ACEPTADA" });
-    expect(result.estado).toBe("ACEPTADA");
+    const result = updateProformaSchema.parse({ estado: "ENVIADA" });
+    expect(result.estado).toBe("ENVIADA");
   });
 
   it("acepta un objeto vacío (sin cambios)", () => {

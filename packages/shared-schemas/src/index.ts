@@ -22,8 +22,9 @@ export const proformaItemSchema = z.object({
 export const proformaEstadoEnum = z.enum([
   "BORRADOR",
   "EMITIDA",
-  "ACEPTADA",
-  "CERRADA",
+  "ENVIADA",
+  "APROBADA",
+  "CANCELADA",
 ]);
 
 export const proformaInputSchema = z.object({

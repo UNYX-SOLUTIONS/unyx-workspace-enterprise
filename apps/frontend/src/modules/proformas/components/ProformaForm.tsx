@@ -2,9 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 
 import { Card, InputField, Modal } from "@/components/common";
 import { useToast } from "@/hooks/useToast";
+import {
+  getProformaStatusMeta,
+  getProformaTransitions,
+} from "@/modules/common/utils/statusMap";
 import { ClientForm } from "@/modules/clientes/components/ClientForm";
 import { addClient, getClients, type ClientDto } from "@/modules/clientes/services/clientService";
 import type { UseProformaForm } from "@/modules/proformas/hooks/useProformaForm";
+import type { ProformaEstado } from "@unyx/shared-schemas";
 
 export interface ProformaFormProps {
   form: UseProformaForm;
@@ -73,6 +78,22 @@ export default function ProformaForm({ form }: ProformaFormProps) {
             value={form.validezDias}
             onChange={(event) => form.setField("validezDias", Number(event.target.value))}
           />
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-[#010105]">Estado</span>
+            <select
+              value={form.estado}
+              onChange={(event) => form.setEstado(event.target.value as ProformaEstado)}
+              className={`w-full cursor-pointer appearance-none rounded-lg border px-4 py-2 text-sm font-semibold outline-none transition-all focus:ring-2 focus:ring-[#2170e4] ${
+                getProformaStatusMeta(form.estado).badge
+              }`}
+            >
+              {getProformaTransitions(form.estado).map((status) => (
+                <option key={status} value={status}>
+                  {getProformaStatusMeta(status).label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
       </Card>
 

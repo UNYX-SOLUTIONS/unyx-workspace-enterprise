@@ -13,8 +13,7 @@ export default function ProformaActions({
   onEmit,
   onDownloadPdf,
 }: ProformaActionsProps) {
-  const emitLabel =
-    estado === "EMITIDA" || estado === "ACEPTADA" ? "Guardar cambios" : "Emitir Proforma";
+  const emitLabel = estado === "BORRADOR" ? "Emitir Proforma" : "Guardar cambios";
 
   return (
     <div className="space-y-3">

@@ -9,6 +9,7 @@ import {
   PageHeader,
 } from "../../../components/common";
 import { useToast } from "@/hooks/useToast";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 import { ProductForm, type ProductFormValues } from "@/modules/productos/components/ProductForm";
 
@@ -131,7 +132,8 @@ export default function ProductsPage() {
     }
   }
 
-  const normalizedSearch = search.trim().toLowerCase();
+  const debouncedSearch = useDebouncedValue(search);
+  const normalizedSearch = debouncedSearch.trim().toLowerCase();
 
   const filteredProducts = useMemo(() => {
     if (!normalizedSearch) return products;
@@ -227,7 +229,7 @@ export default function ProductsPage() {
 
             <tbody className="divide-y divide-[#c7c6cb]">
               {filteredProducts.map((product) => (
-                <tr key={product.id} className="transition-colors group hover:bg-[#eff4ff]">
+                <tr key={product.id} className="animate-fade-in transition-colors group hover:bg-[#eff4ff]">
                   <td className="px-4 py-4 font-mono text-xs font-bold text-[#2170e4] sm:px-6">
                     {product?.ref || "Sin referencia"}
                   </td>

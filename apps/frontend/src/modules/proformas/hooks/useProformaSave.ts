@@ -101,8 +101,8 @@ export function useProformaSave({ form, items }: UseProformaSaveParams) {
         }
 
         showSuccess(
-          estado === "EMITIDA"
-            ? `Proforma ${saved.numero} emitida correctamente.`
+          estado === "ENVIADA"
+            ? `Proforma ${saved.numero} enviada correctamente.`
             : `Borrador ${saved.numero} guardado correctamente.`
         );
         return saved;
@@ -117,7 +117,7 @@ export function useProformaSave({ form, items }: UseProformaSaveParams) {
   );
 
   const saveDraft = useCallback(() => save("BORRADOR"), [save]);
-  const emit = useCallback(() => save("EMITIDA"), [save]);
+  const emit = useCallback(() => save("ENVIADA"), [save]);
 
   const downloadPdf = useCallback(async () => {
     if (!validate()) return;

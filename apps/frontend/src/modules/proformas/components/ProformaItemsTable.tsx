@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { X } from "lucide-react";
 
 import { Card, Modal } from "@/components/common";
 import { useToast } from "@/hooks/useToast";
@@ -58,9 +59,9 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
 
   return (
     <Card className="overflow-visible">
-      <div className="border-b border-[#c7c6cb] bg-gradient-to-r from-[#eff4ff] to-[#dce9ff] p-6">
+      <div className="border-b border-slate-200 bg-slate-50 p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <h3 className="text-xl font-bold text-[#010105]">Detalle de Ítems</h3>
+          <h3 className="text-xl font-bold text-slate-900">Detalle de Ítems</h3>
 
           <div className="relative w-full lg:w-[420px]">
             <input
@@ -72,11 +73,11 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
               }}
               onFocus={() => setShowProductDropdown(true)}
               placeholder="Buscar producto por nombre, código o marca..."
-              className="w-full rounded-lg border border-[#c7c6cb] bg-white px-4 py-2 outline-none focus:ring-2 focus:ring-[#2170e4]"
+              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
             />
 
             {showProductDropdown && (
-              <div className="absolute z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-[#c7c6cb] bg-white shadow-xl">
+              <div className="absolute z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl">
                 {filteredProducts.map((product) => (
                   <button
                     key={product.id}
@@ -86,16 +87,16 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
                       setProductSearch("");
                       setShowProductDropdown(false);
                     }}
-                    className="w-full border-b border-[#f0f0f0] px-4 py-3 text-left hover:bg-[#eff4ff]"
+                    className="w-full border-b border-slate-100 px-4 py-3 text-left hover:bg-slate-100"
                   >
                     <div className="flex justify-between gap-3">
                       <div>
-                        <p className="font-bold text-[#010105]">{product.name}</p>
-                        <p className="text-xs text-[#46464b]">
+                        <p className="font-bold text-slate-900">{product.name}</p>
+                        <p className="text-xs text-slate-600">
                           {product.ref} · {product.brand || "Sin marca"}
                         </p>
                       </div>
-                      <p className="whitespace-nowrap font-bold text-[#2170e4]">
+                      <p className="whitespace-nowrap font-bold text-blue-600">
                         {formatCurrency(Math.round(Number(product.price || 0) * 100))}
                       </p>
                     </div>
@@ -110,7 +111,7 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
                       setProductSearch("");
                       setShowProductDropdown(false);
                     }}
-                    className="w-full bg-[#eff4ff] px-4 py-3 text-left font-bold text-[#0058be] hover:bg-[#dce9ff]"
+                    className="w-full bg-slate-50 px-4 py-3 text-left font-bold text-blue-600 hover:bg-slate-100"
                   >
                     + Añadir ítem manual: "{productSearch}"
                   </button>
@@ -122,7 +123,7 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
                     setShowProductDropdown(false);
                     setIsProductModalOpen(true);
                   }}
-                  className="w-full border-t border-[#c7c6cb] bg-white px-4 py-3 text-left font-bold text-[#010105] hover:bg-[#eff4ff]"
+                  className="w-full border-t border-slate-200 bg-white px-4 py-3 text-left font-bold text-slate-900 hover:bg-slate-100"
                 >
                   + Crear producto nuevo
                 </button>
@@ -135,18 +136,18 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
-            <tr className="bg-[#dce9ff] text-left">
-              <th className="px-4 py-3 font-bold text-[#010105]">Código</th>
-              <th className="px-4 py-3 font-bold text-[#010105]">Descripción</th>
-              <th className="px-4 py-3 text-right font-bold text-[#010105]">Cantidad</th>
-              <th className="px-4 py-3 text-right font-bold text-[#010105]">Precio</th>
-              <th className="px-4 py-3 text-right font-bold text-[#010105]">Total</th>
+            <tr className="bg-slate-50 text-left">
+              <th className="px-4 py-3 font-bold text-slate-900">Código</th>
+              <th className="px-4 py-3 font-bold text-slate-900">Descripción</th>
+              <th className="px-4 py-3 text-right font-bold text-slate-900">Cantidad</th>
+              <th className="px-4 py-3 text-right font-bold text-slate-900">Precio</th>
+              <th className="px-4 py-3 text-right font-bold text-slate-900">Total</th>
               <th className="w-12 px-4 py-3 text-center" />
             </tr>
           </thead>
           <tbody>
             {items.items.map((item) => (
-              <tr key={item.id} className="border-b transition-colors hover:bg-[#eff4ff]">
+              <tr key={item.id} className="border-b transition-colors hover:bg-slate-100">
                 <td className="px-4 py-3">
                   <input
                     className="w-full bg-transparent font-mono text-xs outline-none"
@@ -183,16 +184,17 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
                     onChange={(event) => items.updateItem(item.id, "precio", event.target.value)}
                   />
                 </td>
-                <td className="px-4 py-3 text-right font-bold text-[#2170e4]">
+                <td className="px-4 py-3 text-right font-bold text-blue-600">
                   {formatCurrency(lineTotalCents(item.cantidad, item.precio))}
                 </td>
                 <td className="px-4 py-3 text-center">
                   <button
                     type="button"
                     onClick={() => items.removeItem(item.id)}
-                    className="font-bold text-red-600 hover:text-red-800"
+                    aria-label={`Eliminar ítem ${item.descripcion || ""}`}
+                    className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-rose-50 hover:text-rose-600 focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2"
                   >
-                    ✕
+                    <X className="h-4 w-4" aria-hidden="true" />
                   </button>
                 </td>
               </tr>
@@ -200,7 +202,7 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
 
             {items.items.length === 0 && (
               <tr>
-                <td colSpan={6} className="p-8 text-center text-[#46464b]">
+                <td colSpan={6} className="p-8 text-center text-slate-600">
                   Busca un producto o añade un ítem manual para empezar.
                 </td>
               </tr>

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { PackageSearch } from "lucide-react";
 
 import {
   ActionButton,
@@ -9,6 +10,7 @@ import {
   PageHeader,
 } from "../../../components/common";
 import { useToast } from "@/hooks/useToast";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 import { ProductForm, type ProductFormValues } from "@/modules/productos/components/ProductForm";
 
@@ -131,7 +133,9 @@ export default function ProductsPage() {
     }
   }
 
-  const normalizedSearch = search.trim().toLowerCase();
+  const debouncedSearch = useDebouncedValue(search);
+  const isSearching = search.trim() !== debouncedSearch.trim();
+  const normalizedSearch = debouncedSearch.trim().toLowerCase();
 
   const filteredProducts = useMemo(() => {
     if (!normalizedSearch) return products;
@@ -155,7 +159,7 @@ export default function ProductsPage() {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <LoadingSpinner size="lg" />
-        <p className="mt-4 text-[#46464b]">Cargando productos...</p>
+        <p className="mt-4 text-slate-600">Cargando productos...</p>
       </div>
     );
   }
@@ -169,7 +173,7 @@ export default function ProductsPage() {
           <button
             type="button"
             onClick={() => handleOpenModal()}
-            className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-gradient-to-r from-[#2170e4] to-[#0058be] px-6 py-3 font-bold text-white transition-all hover:scale-105 hover:shadow-lg"
+            className="flex items-center gap-2 whitespace-nowrap rounded-lg bg-blue-500 hover:bg-blue-600 px-6 py-3 font-bold text-white transition-all hover:scale-105 hover:shadow-lg"
           >
             + Nuevo Producto
           </button>
@@ -177,23 +181,7 @@ export default function ProductsPage() {
       />
 
       <Card className="overflow-hidden">
-        <div className="flex flex-col gap-4 border-b border-[#c7c6cb] bg-gradient-to-r from-[#eff4ff] to-[#dce9ff] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              className="rounded-lg border border-[#c7c6cb] bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-[#e5eeff]"
-            >
-              📊 Filtrar
-            </button>
-
-            <button
-              type="button"
-              className="rounded-lg border border-[#c7c6cb] bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-[#e5eeff]"
-            >
-              🔤 Ordenar
-            </button>
-          </div>
-
+        <div className="flex flex-col gap-4 border-b border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <label className="w-full sm:max-w-xs">
             <span className="sr-only">Buscar producto</span>
             <input
@@ -201,47 +189,52 @@ export default function ProductsPage() {
               placeholder="Buscar producto..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-lg border border-[#c7c6cb] bg-white px-4 py-2 outline-none transition-all focus:ring-2 focus:ring-[#2170e4]"
+              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
             />
           </label>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="relative">
+          <div
+            className={`overflow-x-auto transition-opacity duration-150 ${
+              isSearching ? "pointer-events-none opacity-50" : "opacity-100"
+            }`}
+          >
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-[#c7c6cb] bg-[#eff4ff]">
-                <th className="px-4 py-4 text-xs font-bold uppercase text-[#46464b] sm:px-6">
+              <tr className="border-b border-slate-200 bg-slate-50">
+                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6">
                   Ref
                 </th>
-                <th className="px-4 py-4 text-xs font-bold uppercase text-[#46464b] sm:px-6">
+                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6">
                   Producto
                 </th>
-                <th className="px-4 py-4 text-right text-xs font-bold uppercase text-[#46464b] sm:px-6">
+                <th className="px-4 py-4 text-right text-xs font-bold uppercase text-slate-600 sm:px-6">
                   Precio
                 </th>
-                <th className="px-4 py-4 text-center text-xs font-bold uppercase text-[#46464b] sm:px-6">
+                <th className="px-4 py-4 text-center text-xs font-bold uppercase text-slate-600 sm:px-6">
                   Acciones
                 </th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-[#c7c6cb]">
+            <tbody className="divide-y divide-slate-200">
               {filteredProducts.map((product) => (
-                <tr key={product.id} className="transition-colors group hover:bg-[#eff4ff]">
-                  <td className="px-4 py-4 font-mono text-xs font-bold text-[#2170e4] sm:px-6">
+                <tr key={product.id} className="animate-fade-in transition-colors group hover:bg-slate-100">
+                  <td className="px-4 py-4 font-mono text-xs font-bold text-blue-600 sm:px-6">
                     {product?.ref || "Sin referencia"}
                   </td>
 
                   <td className="px-4 py-4 sm:px-6">
-                    <p className="font-bold text-[#010105]">
+                    <p className="font-bold text-slate-900">
                       {product?.name || "Producto sin nombre"}
                     </p>
-                    <p className="mt-1 text-xs text-[#46464b]">
+                    <p className="mt-1 text-xs text-slate-600">
                       {product?.category || product?.brand || "Sin categoría"}
                     </p>
                   </td>
 
-                  <td className="px-4 py-4 text-right font-bold text-[#010105] sm:px-6">
+                  <td className="px-4 py-4 text-right font-bold text-slate-900 sm:px-6">
                     ${Number(product?.price || 0).toFixed(2)}
                   </td>
 
@@ -266,7 +259,7 @@ export default function ProductsPage() {
                 <tr>
                   <td colSpan={4} className="p-8 text-center">
                     <EmptyState
-                      icon="📦"
+                      icon={<PackageSearch className="h-10 w-10 text-slate-300" aria-hidden="true" />}
                       title={normalizedSearch ? "Sin resultados" : "Sin productos"}
                       description={
                         normalizedSearch
@@ -278,7 +271,7 @@ export default function ProductsPage() {
                           <button
                             type="button"
                             onClick={() => handleOpenModal()}
-                            className="rounded-lg bg-[#2170e4] px-6 py-2 font-bold text-white transition-colors hover:bg-[#0058be]"
+                            className="rounded-lg bg-blue-500 px-6 py-2 font-bold text-white transition-colors hover:bg-blue-600"
                           >
                             + Crear Producto
                           </button>
@@ -290,9 +283,16 @@ export default function ProductsPage() {
               )}
             </tbody>
           </table>
+          </div>
+
+          {isSearching && (
+            <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-16">
+              <LoadingSpinner size="sm" />
+            </div>
+          )}
         </div>
 
-        <div className="border-t border-[#c7c6cb] bg-white p-4 text-sm text-[#46464b] sm:p-6">
+        <div className="border-t border-slate-200 bg-white p-4 text-sm text-slate-600 sm:p-6">
           Mostrando <span className="font-bold">{filteredProducts.length}</span> de{" "}
           <span className="font-bold">{products.length}</span> productos
         </div>

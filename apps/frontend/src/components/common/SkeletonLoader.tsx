@@ -9,7 +9,7 @@ export default function SkeletonLoader({ count = 3, className = "" }: SkeletonLo
       {Array.from({ length: count }).map((_, index) => (
         <div
           key={index}
-          className="h-16 animate-pulse rounded-lg bg-gradient-to-r from-[#eff4ff] to-[#dce9ff]"
+          className="h-16 animate-pulse rounded-lg bg-slate-50"
         />
       ))}
     </div>

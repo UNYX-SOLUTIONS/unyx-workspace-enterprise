@@ -20,7 +20,7 @@ export default function LoadingSpinner({
       role="status"
       aria-label={label}
       className={`
-        animate-spin rounded-full border-[#e5eeff] border-t-[#2170e4]
+        animate-spin rounded-full border-slate-200 border-t-blue-500
         ${sizes[size] || sizes.md}
       `}
     />

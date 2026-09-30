@@ -1,26 +1,10 @@
 import type { ReactNode } from "react";
 
-const colorClasses: Record<string, { card: string; title: string; icon: string }> = {
-  blue: {
-    card: "border-[#9dbcf5] bg-gradient-to-br from-[#f4f7ff] to-[#dce8ff]",
-    title: "!text-[#174a8b]",
-    icon: "bg-[#d6e5ff]",
-  },
-  green: {
-    card: "border-[#8dcbae] bg-gradient-to-br from-[#f0fbf6] to-[#d8f3e6]",
-    title: "!text-[#17603d]",
-    icon: "bg-[#cceedd]",
-  },
-  orange: {
-    card: "border-[#f1b77e] bg-gradient-to-br from-[#fff9f2] to-[#ffe8cf]",
-    title: "!text-[#8a4307]",
-    icon: "bg-[#ffdfbd]",
-  },
-  red: {
-    card: "border-[#ee9999] bg-gradient-to-br from-[#fff5f5] to-[#ffdede]",
-    title: "!text-[#8f2525]",
-    icon: "bg-[#ffd0d0]",
-  },
+const colorClasses: Record<string, { icon: string; trendUp: string; trendDown: string }> = {
+  blue: { icon: "bg-blue-50 text-blue-600", trendUp: "text-emerald-600", trendDown: "text-rose-600" },
+  green: { icon: "bg-emerald-50 text-emerald-600", trendUp: "text-emerald-600", trendDown: "text-rose-600" },
+  orange: { icon: "bg-amber-50 text-amber-600", trendUp: "text-emerald-600", trendDown: "text-rose-600" },
+  red: { icon: "bg-rose-50 text-rose-600", trendUp: "text-emerald-600", trendDown: "text-rose-600" },
 };
 
 export interface SummaryCardProps {
@@ -44,31 +28,16 @@ export default function SummaryCard({
 
   return (
     <div
-      className={`
-        rounded-xl border p-5 shadow-sm
-        transition-all duration-200
-        hover:-translate-y-0.5 hover:shadow-md
-        ${selectedColor.card}
-        ${className}
-      `}
+      className={`rounded-xl border border-slate-200 bg-white p-5 transition-shadow hover:shadow-sm ${className}`}
     >
       <div className="mb-3 flex items-start justify-between gap-3">
-        <p
-          className={`
-            text-xs font-extrabold uppercase tracking-wide
-            ${selectedColor.title}
-          `}
-        >
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
           {title}
         </p>
 
         {icon && (
           <span
-            className={`
-              flex h-9 w-9 shrink-0 items-center justify-center
-              rounded-lg text-xl
-              ${selectedColor.icon}
-            `}
+            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${selectedColor.icon}`}
             aria-hidden="true"
           >
             {icon}
@@ -77,17 +46,18 @@ export default function SummaryCard({
       </div>
 
       <div className="flex flex-wrap items-baseline gap-2">
-        <p className="break-words text-2xl font-extrabold tracking-tight !text-[#111827] sm:text-3xl">
+        <p className="break-words text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
           {value}
         </p>
 
         {typeof trend === "number" && (
           <span
-            className={`text-xs font-bold ${
-              trend >= 0 ? "!text-[#167247]" : "!text-[#b42318]"
+            className={`text-xs font-semibold ${
+              trend >= 0 ? selectedColor.trendUp : selectedColor.trendDown
             }`}
           >
-            {trend >= 0 ? "↑" : "↓"} {Math.abs(trend)}%
+            {trend >= 0 ? "+" : ""}
+            {trend}%
           </span>
         )}
       </div>

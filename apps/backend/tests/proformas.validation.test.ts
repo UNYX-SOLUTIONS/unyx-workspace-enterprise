@@ -6,14 +6,14 @@ const validPayload = {
   fecha: "2026-09-03",
   validezDias: 30,
   notas: "",
-  estado: "EMITIDA",
+  estado: "ENVIADA",
   items: [{ codigo: "P-01", descripcion: "Producto A", cantidad: 2, precio: 15.5 }],
 };
 
 describe("createProformaSchema", () => {
   it("acepta un payload válido con cliente en línea", () => {
     const result = createProformaSchema.parse(validPayload);
-    expect(result.estado).toBe("EMITIDA");
+    expect(result.estado).toBe("ENVIADA");
     expect(result.items).toHaveLength(1);
   });
 
@@ -46,8 +46,8 @@ describe("createProformaSchema", () => {
 
 describe("updateProformaSchema", () => {
   it("acepta actualizaciones parciales", () => {
-    const result = updateProformaSchema.parse({ estado: "ACEPTADA" });
-    expect(result.estado).toBe("ACEPTADA");
+    const result = updateProformaSchema.parse({ estado: "ENVIADA" });
+    expect(result.estado).toBe("ENVIADA");
   });
 
   it("acepta un objeto vacío (sin cambios)", () => {

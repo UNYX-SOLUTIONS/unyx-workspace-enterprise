@@ -46,12 +46,12 @@ test.describe("proformas", () => {
     await expect(page.getByText(/Producto creado y añadido/)).toBeVisible();
     await expect(page.locator('input[value="Producto E2E"]')).toBeVisible();
 
-    await expect(page.getByText("Subtotal", { exact: true }).first()).toBeVisible();
-    await expect(page.getByText("TOTAL", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("Resumen", { exact: true })).toBeVisible();
+    await expect(page.getByText("Total", { exact: true }).first()).toBeVisible();
 
     await page.getByRole("button", { name: "Emitir Proforma" }).click();
 
-    await expect(page.getByText(/emitida correctamente/i)).toBeVisible();
+    await expect(page.getByText(/enviada correctamente/i)).toBeVisible();
     await expect(page.getByLabel("Número")).not.toHaveValue("");
   });
 });

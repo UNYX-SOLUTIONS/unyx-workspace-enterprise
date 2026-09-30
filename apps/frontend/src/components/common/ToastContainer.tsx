@@ -1,11 +1,26 @@
+import { AlertTriangle, CheckCircle2, Info, XCircle } from "lucide-react";
 import { useToast } from "@/hooks/useToast";
 import type { ToastType } from "@/contexts/ToastContext";
 
 const typeStyles: Record<ToastType, string> = {
-  success: "border-green-300 bg-green-700",
-  error: "border-red-300 bg-red-700",
-  warning: "border-amber-300 bg-amber-600",
-  info: "border-slate-500 bg-slate-800",
+  success: "border-emerald-200 bg-white text-slate-800",
+  error: "border-rose-200 bg-white text-slate-800",
+  warning: "border-amber-200 bg-white text-slate-800",
+  info: "border-slate-200 bg-white text-slate-800",
+};
+
+const typeIcons: Record<ToastType, typeof CheckCircle2> = {
+  success: CheckCircle2,
+  error: XCircle,
+  warning: AlertTriangle,
+  info: Info,
+};
+
+const iconStyles: Record<ToastType, string> = {
+  success: "text-emerald-500",
+  error: "text-rose-500",
+  warning: "text-amber-500",
+  info: "text-blue-500",
 };
 
 export default function ToastContainer() {
@@ -19,16 +34,24 @@ export default function ToastContainer() {
       role="region"
       aria-live="polite"
     >
-      {messages.map((message) => (
-        <div
-          key={message.id}
-          className={`rounded-lg border px-4 py-3 text-sm text-white shadow-lg ${
-            typeStyles[message.type] || typeStyles.info
-          }`}
-        >
-          {message.text}
-        </div>
-      ))}
+      {messages.map((message) => {
+        const Icon = typeIcons[message.type] || Info;
+
+        return (
+          <div
+            key={message.id}
+            className={`flex items-start gap-2.5 rounded-lg border px-4 py-3 text-sm shadow-sm ${
+              typeStyles[message.type] || typeStyles.info
+            }`}
+          >
+            <Icon
+              className={`mt-0.5 h-4 w-4 shrink-0 ${iconStyles[message.type] || iconStyles.info}`}
+              aria-hidden="true"
+            />
+            <span>{message.text}</span>
+          </div>
+        );
+      })}
     </div>
   );
 }

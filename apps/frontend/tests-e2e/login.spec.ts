@@ -14,7 +14,7 @@ test.describe("autenticación", () => {
     await page.getByRole("button", { name: "Ingresar" }).click();
 
     await expect(page).toHaveURL(/\/dashboard$/);
-    await expect(page.getByText(/Bienvenido/)).toBeVisible();
+    await expect(page.getByText("Bienvenido, Administrador UNYX", { exact: true })).toBeVisible();
   });
 
   test("rechaza credenciales inválidas con toast de error", async ({ page }) => {

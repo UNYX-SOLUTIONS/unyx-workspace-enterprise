@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import {
-  Boxes,
   ChevronLeft,
   ChevronRight,
   HelpCircle,
@@ -18,9 +17,12 @@ export interface SidebarProps {
   onClose?: () => void;
 }
 
-export default function Sidebar({ open = true, onClose = () => {} }: SidebarProps) {
+export default function Sidebar({
+  open = true,
+  onClose = () => {},
+}: SidebarProps) {
   const [collapsed, setCollapsed] = useState<boolean>(
-    () => localStorage.getItem(COLLAPSE_KEY) === "1"
+    () => localStorage.getItem(COLLAPSE_KEY) === "1",
   );
 
   useEffect(() => {
@@ -35,25 +37,63 @@ export default function Sidebar({ open = true, onClose = () => {} }: SidebarProp
     <>
       <aside
         className={`fixed inset-y-0 left-0 z-40 flex w-64 transform flex-col border-r border-slate-800 bg-slate-900 transition-all duration-200 dark:border-slate-700 dark:bg-slate-800 md:static md:h-full md:shrink-0 md:translate-x-0 ${
-          collapsed ? "md:w-[76px]" : "md:w-64"
+          collapsed ? "md:w-19" : "md:w-64"
         } ${open ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div
-          className={`flex h-16 items-center gap-2.5 border-b border-white/10 px-4 ${
-            collapsed ? "md:justify-center md:px-0" : ""
+          className={`flex h-16 w-full items-center border-b border-white/10 ${
+            collapsed ? "md:justify-center md:px-0" : "gap-2.5 px-4"
           }`}
         >
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500 text-white">
-            <Boxes className="h-4 w-4" aria-hidden="true" />
-          </span>
-          <div className={`leading-tight ${collapsed ? "md:hidden" : ""}`}>
-            <p className="text-sm font-bold tracking-tight text-white">UNYX Solutions</p>
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">
-              Admin Workspace
-            </p>
-          </div>
-        </div>
+          {/* ===== ZONA IZQUIERDA: Logo / Logo-mini / Botón colapsar (swap) ===== */}
+          {collapsed ? (
+            // COLAPSADO: muestra logo-mini, y en hover se convierte en botón expandir
+            <button
+              type="button"
+              onClick={() => setCollapsed(false)}
+              aria-label="Expandir menú"
+              title="Expandir menú"
+              className="group relative hidden h-10 w-10 items-center justify-center rounded-lg transition-colors hover:bg-white/5 md:flex"
+            >
+              {/* Logo mini (visible por defecto) */}
+              <img
+                src="/apple-touch-icon.png" /* 👈 pon aquí tu ruta al logo cuadrado/mini */
+                alt="Unyx Solutions"
+                className="h-9.5 w-9.5 object-contain transition-opacity duration-150 group-hover:opacity-0"
+              />
+              {/* Chevron (visible solo en hover, encima del logo) */}
+              <ChevronRight
+                className="absolute h-5 w-5 text-slate-300 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+                aria-hidden="true"
+              />
+            </button>
+          ) : (
+            // EXPANDIDO: logo completo + botón colapsar a la derecha
+            <>
+              <Link
+                to="/"
+                className="flex items-center gap-2 leading-tight"
+                aria-label="Ir al inicio"
+              >
+                <img
+                  src="/logo.png"
+                  alt="Unyx Solutions"
+                  className="ml-1 mt-1 h-6 w-auto object-contain p-0.5"
+                />
+              </Link>
 
+              <button
+                type="button"
+                onClick={() => setCollapsed(true)}
+                aria-label="Colapsar menú"
+                title="Colapsar menú"
+                className="ml-auto hidden rounded-lg p-1 text-slate-400 transition-colors hover:bg-white/5 hover:text-white md:flex"
+              >
+                <ChevronLeft className="h-6 w-6 shrink-0" aria-hidden="true" />
+              </button>
+            </>
+          )}
+        </div>
         <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
           {navigation.map((item) => (
             <NavLink
@@ -76,23 +116,6 @@ export default function Sidebar({ open = true, onClose = () => {} }: SidebarProp
         </nav>
 
         <div className="space-y-1 border-t border-white/10 px-3 py-4">
-          <button
-            type="button"
-            onClick={() => setCollapsed((value) => !value)}
-            aria-label={collapsed ? "Expandir menú" : "Colapsar menú"}
-            title={collapsed ? "Expandir menú" : "Colapsar menú"}
-            className={`${itemClass} hidden w-full text-slate-400 hover:bg-white/5 hover:text-white md:flex ${
-              collapsed ? "md:justify-center" : ""
-            }`}
-          >
-            {collapsed ? (
-              <ChevronRight className="h-4 w-4 shrink-0" aria-hidden="true" />
-            ) : (
-              <ChevronLeft className="h-4 w-4 shrink-0" aria-hidden="true" />
-            )}
-            <span className={labelClass}>Colapsar</span>
-          </button>
-
           {/* Configuración: al pasar el mouse se abre el panel (estilo Kommo) */}
           <div className="group/config relative">
             <NavLink
@@ -153,7 +176,10 @@ export default function Sidebar({ open = true, onClose = () => {} }: SidebarProp
       </aside>
 
       {open && (
-        <div className="fixed inset-0 bg-black/30 md:hidden" onClick={onClose} />
+        <div
+          className="fixed inset-0 bg-black/30 md:hidden"
+          onClick={onClose}
+        />
       )}
     </>
   );

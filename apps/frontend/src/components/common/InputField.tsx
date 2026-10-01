@@ -26,7 +26,7 @@ export default function InputField({
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-sm font-semibold text-slate-900"
+          className="block text-sm font-semibold text-slate-900 dark:text-slate-100"
         >
           {label}
           {required && <span className="ml-1 text-red-500">*</span>}
@@ -43,10 +43,10 @@ export default function InputField({
           w-full rounded-lg border px-4 py-2 outline-none transition-all
           ${
             readOnly
-              ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-600"
+              ? "cursor-not-allowed border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400"
               : error
                 ? "border-red-500 focus:ring-2 focus:ring-red-500"
-                : "border-slate-200 focus:ring-2 focus:ring-blue-500"
+                : "border-slate-200 dark:border-slate-800 focus:ring-2 focus:ring-blue-500"
           }
           ${inputClassName}
         `}

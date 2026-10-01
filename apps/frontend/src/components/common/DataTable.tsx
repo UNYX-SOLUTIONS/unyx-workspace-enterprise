@@ -53,7 +53,7 @@ export default function DataTable<TRow>({
 }: DataTableProps<TRow>) {
   if (!rows.length) {
     return (
-      <div className="rounded-lg border border-slate-200 bg-white p-8 text-center text-sm text-slate-600">
+      <div className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 text-center text-sm text-slate-600 dark:text-slate-400">
         {emptyMessage}
       </div>
     );
@@ -65,17 +65,17 @@ export default function DataTable<TRow>({
         {rows.map((row, rowIndex) => (
           <div
             key={getRowKey ? getRowKey(row, rowIndex) : rowIndex}
-            className="space-y-3 rounded-lg border border-slate-200 bg-white p-4"
+            className="space-y-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4"
           >
             {headers.map((header, columnIndex) => (
               <div
                 key={headerKey(header, columnIndex)}
                 className="flex items-start justify-between gap-4"
               >
-                <span className="text-xs font-semibold uppercase text-slate-600">
+                <span className="text-xs font-semibold uppercase text-slate-600 dark:text-slate-400">
                   {headerLabel(header)}
                 </span>
-                <span className="text-right text-sm text-slate-900">
+                <span className="text-right text-sm text-slate-900 dark:text-slate-100">
                   {renderCell(header, row, rowIndex, columnIndex)}
                 </span>
               </div>
@@ -84,14 +84,14 @@ export default function DataTable<TRow>({
         ))}
       </div>
 
-      <div className="hidden overflow-x-auto rounded-lg border border-slate-200 bg-white md:block">
+      <div className="hidden overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 md:block">
         <table className="w-full border-collapse text-left">
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50">
+            <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
               {headers.map((header, index) => (
                 <th
                   key={headerKey(header, index)}
-                  className="px-6 py-4 text-xs font-bold uppercase text-slate-600"
+                  className="px-6 py-4 text-xs font-bold uppercase text-slate-600 dark:text-slate-400"
                 >
                   {headerLabel(header)}
                 </th>
@@ -99,14 +99,14 @@ export default function DataTable<TRow>({
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-slate-200">
+          <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
             {rows.map((row, rowIndex) => (
               <tr
                 key={getRowKey ? getRowKey(row, rowIndex) : rowIndex}
-                className="transition-colors hover:bg-slate-100"
+                className="transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
               >
                 {headers.map((header, columnIndex) => (
-                  <td key={headerKey(header, columnIndex)} className="px-6 py-4 text-sm text-slate-900">
+                  <td key={headerKey(header, columnIndex)} className="px-6 py-4 text-sm text-slate-900 dark:text-slate-100">
                     {renderCell(header, row, rowIndex, columnIndex)}
                   </td>
                 ))}

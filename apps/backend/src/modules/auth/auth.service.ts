@@ -23,3 +23,24 @@ export async function login(credentials: LoginCredentials) {
     token,
   };
 }
+
+export async function changePassword(
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) {
+    throw new AppError(404, "USER_NOT_FOUND", "Usuario no encontrado");
+  }
+
+  const passwordOk = await bcrypt.compare(currentPassword, user.passwordHash);
+  if (!passwordOk) {
+    throw new AppError(400, "INVALID_PASSWORD", "La contraseña actual no es correcta");
+  }
+
+  const passwordHash = await bcrypt.hash(newPassword, 10);
+  await prisma.user.update({ where: { id: userId }, data: { passwordHash } });
+
+  return { ok: true };
+}

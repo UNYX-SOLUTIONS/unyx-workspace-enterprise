@@ -16,7 +16,7 @@ export default function MainLayout() {
   return (
     // Shell de altura fija: solo el <main> hace scroll; sidebar y topbar
     // permanecen estáticos.
-    <div className="flex h-screen overflow-hidden bg-slate-50">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
       <Sidebar open={sidebarOpen} onClose={closeSidebar} />
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -27,7 +27,7 @@ export default function MainLayout() {
             <Outlet />
           </div>
 
-          <footer className="border-t border-slate-200 bg-white px-6 py-4">
+          <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-4">
             <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-1 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between">
               <p>© {new Date().getFullYear()} UNYX Solutions S.A.S.</p>
 

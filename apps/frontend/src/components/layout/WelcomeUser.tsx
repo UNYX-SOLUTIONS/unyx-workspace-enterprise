@@ -28,13 +28,13 @@ export default function WelcomeUser({
       className="hidden min-w-0 flex-col sm:flex gap-0.5"
     >
       <div className="flex items-center gap-2">
-        <h2 className="truncate text-sm font-semibold tracking-tight text-slate-900">
+        <h2 className="truncate text-sm font-semibold tracking-tight text-slate-900 dark:text-slate-100">
           {greeting},{" "}
           <span className="text-unyx-blue">{firstName}</span>
         </h2>
       </div>
 
-      <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-slate-500">
+      <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400">
         <CalendarDays className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
         <span className="capitalize">{today}</span>
         <ChevronRight className="h-3 w-3 text-slate-300" aria-hidden="true" />

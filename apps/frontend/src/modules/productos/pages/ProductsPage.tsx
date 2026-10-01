@@ -159,7 +159,7 @@ export default function ProductsPage() {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <LoadingSpinner size="lg" />
-        <p className="mt-4 text-slate-600">Cargando productos...</p>
+        <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando productos...</p>
       </div>
     );
   }
@@ -181,7 +181,7 @@ export default function ProductsPage() {
       />
 
       <Card className="overflow-hidden">
-        <div className="flex flex-col gap-4 border-b border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="flex flex-col gap-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <label className="w-full sm:max-w-xs">
             <span className="sr-only">Buscar producto</span>
             <input
@@ -189,7 +189,7 @@ export default function ProductsPage() {
               placeholder="Buscar producto..."
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
             />
           </label>
         </div>
@@ -202,39 +202,39 @@ export default function ProductsPage() {
           >
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-slate-200 bg-slate-50">
-                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6">
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 dark:text-slate-400 sm:px-6">
                   Ref
                 </th>
-                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6">
+                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 dark:text-slate-400 sm:px-6">
                   Producto
                 </th>
-                <th className="px-4 py-4 text-right text-xs font-bold uppercase text-slate-600 sm:px-6">
+                <th className="px-4 py-4 text-right text-xs font-bold uppercase text-slate-600 dark:text-slate-400 sm:px-6">
                   Precio
                 </th>
-                <th className="px-4 py-4 text-center text-xs font-bold uppercase text-slate-600 sm:px-6">
+                <th className="px-4 py-4 text-center text-xs font-bold uppercase text-slate-600 dark:text-slate-400 sm:px-6">
                   Acciones
                 </th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-slate-200">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
               {filteredProducts.map((product) => (
-                <tr key={product.id} className="animate-fade-in transition-colors group hover:bg-slate-100">
+                <tr key={product.id} className="animate-fade-in transition-colors group hover:bg-slate-100 dark:hover:bg-slate-800">
                   <td className="px-4 py-4 font-mono text-xs font-bold text-blue-600 sm:px-6">
                     {product?.ref || "Sin referencia"}
                   </td>
 
                   <td className="px-4 py-4 sm:px-6">
-                    <p className="font-bold text-slate-900">
+                    <p className="font-bold text-slate-900 dark:text-slate-100">
                       {product?.name || "Producto sin nombre"}
                     </p>
-                    <p className="mt-1 text-xs text-slate-600">
+                    <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
                       {product?.category || product?.brand || "Sin categoría"}
                     </p>
                   </td>
 
-                  <td className="px-4 py-4 text-right font-bold text-slate-900 sm:px-6">
+                  <td className="px-4 py-4 text-right font-bold text-slate-900 dark:text-slate-100 sm:px-6">
                     ${Number(product?.price || 0).toFixed(2)}
                   </td>
 
@@ -292,7 +292,7 @@ export default function ProductsPage() {
           )}
         </div>
 
-        <div className="border-t border-slate-200 bg-white p-4 text-sm text-slate-600 sm:p-6">
+        <div className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 text-sm text-slate-600 dark:text-slate-400 sm:p-6">
           Mostrando <span className="font-bold">{filteredProducts.length}</span> de{" "}
           <span className="font-bold">{products.length}</span> productos
         </div>

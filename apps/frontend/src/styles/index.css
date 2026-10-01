@@ -1,12 +1,19 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Inter", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-display: "Hanken Grotesk", "Inter", system-ui, sans-serif;
+  --color-unyx-blue: #3b82f6;
 }
 
 :root {
   color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 html,
@@ -23,6 +30,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+.dark body {
+  color: #e2e8f0;
+  background-color: #020617;
 }
 
 /* Entrada suave para filas y tarjetas al filtrar/cargar */
@@ -58,4 +70,12 @@ body {
 
 *::-webkit-scrollbar-thumb:hover {
   background-color: #94a3b8;
+}
+
+.dark *::-webkit-scrollbar-thumb {
+  background-color: #334155;
+}
+
+.dark *::-webkit-scrollbar-thumb:hover {
+  background-color: #475569;
 }

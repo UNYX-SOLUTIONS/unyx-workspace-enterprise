@@ -217,7 +217,7 @@ export default function MaintenanceHistoryPage() {
   const headerButtonClass = `
     flex w-full items-center gap-2 text-left
     text-xs font-extrabold uppercase tracking-wide
-    !text-slate-700 transition-colors
+    !text-slate-700 dark:!text-slate-300 transition-colors
     hover:!text-blue-700
   `;
 
@@ -233,7 +233,7 @@ export default function MaintenanceHistoryPage() {
         }
       />
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 shadow-sm">
         <label className="block">
           <span className="sr-only">Buscar mantenimiento</span>
 
@@ -243,8 +243,8 @@ export default function MaintenanceHistoryPage() {
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Buscar por número, cliente, RUC, marca, modelo o serie"
             className="
-              w-full rounded-lg border border-slate-200
-              bg-white px-4 py-3 !text-slate-900
+              w-full rounded-lg border border-slate-200 dark:border-slate-800
+              bg-white dark:bg-slate-900 px-4 py-3 !text-slate-900 dark:!text-slate-100
               placeholder:!text-slate-400 outline-none
               transition-all focus:border-blue-500
               focus:ring-2 focus:ring-blue-500/20
@@ -253,10 +253,10 @@ export default function MaintenanceHistoryPage() {
         </label>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
         {loading && (
           <div className="p-10 text-center">
-            <p className="font-semibold !text-slate-600">
+            <p className="font-semibold !text-slate-600 dark:!text-slate-400">
               Cargando mantenimientos...
             </p>
           </div>
@@ -278,7 +278,7 @@ export default function MaintenanceHistoryPage() {
               >
               <table className="w-full min-w-[950px] border-collapse text-sm">
                 <thead>
-                  <tr className="border-b border-slate-200 bg-slate-50">
+                  <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
                     <th className="px-4 py-4">
                       <button
                         type="button"
@@ -345,17 +345,17 @@ export default function MaintenanceHistoryPage() {
                       </button>
                     </th>
 
-                    <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wide !text-slate-700">
+                    <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wide !text-slate-700 dark:!text-slate-300">
                       Acciones
                     </th>
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {sortedMaintenances.map((maintenance) => (
                     <tr
                       key={maintenance.id || maintenance.numero}
-                      className="transition-colors hover:bg-slate-50"
+                      className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60"
                     >
                       <td className="px-4 py-4">
                         <button
@@ -367,19 +367,19 @@ export default function MaintenanceHistoryPage() {
                         </button>
                       </td>
 
-                      <td className="px-4 py-4 font-medium !text-slate-700">
+                      <td className="px-4 py-4 font-medium !text-slate-700 dark:!text-slate-300">
                         {formatDate(maintenance.fecha, "Sin fecha")}
                       </td>
 
                       <td className="px-4 py-4">
-                        <p className="font-bold !text-slate-900">
+                        <p className="font-bold !text-slate-900 dark:!text-slate-100">
                           {String(
                             (maintenance?.cliente as { nombre?: unknown } | undefined)
                               ?.nombre || "Sin cliente"
                           )}
                         </p>
 
-                        <p className="mt-1 text-xs !text-slate-600">
+                        <p className="mt-1 text-xs !text-slate-600 dark:!text-slate-400">
                           {String(
                             (maintenance?.cliente as { ruc?: unknown } | undefined)?.ruc ||
                               "Sin identificación"
@@ -388,7 +388,7 @@ export default function MaintenanceHistoryPage() {
                       </td>
 
                       <td className="px-4 py-4">
-                        <p className="font-bold !text-slate-900">
+                        <p className="font-bold !text-slate-900 dark:!text-slate-100">
                           {[
                             (maintenance?.equipo as { marca?: unknown } | undefined)?.marca,
                             (maintenance?.equipo as { modelo?: unknown } | undefined)?.modelo,
@@ -397,7 +397,7 @@ export default function MaintenanceHistoryPage() {
                             .join(" ") || "Sin información"}
                         </p>
 
-                        <p className="mt-1 text-xs !text-slate-600">
+                        <p className="mt-1 text-xs !text-slate-600 dark:!text-slate-400">
                           {String(
                             (maintenance?.equipo as { tipo?: unknown } | undefined)?.tipo ||
                               "Equipo"
@@ -405,7 +405,7 @@ export default function MaintenanceHistoryPage() {
                         </p>
                       </td>
 
-                      <td className="px-4 py-4 font-medium !text-slate-700">
+                      <td className="px-4 py-4 font-medium !text-slate-700 dark:!text-slate-300">
                         {String(
                           (maintenance?.equipo as { numeroSerie?: unknown } | undefined)
                             ?.numeroSerie || "Sin serie"
@@ -428,10 +428,10 @@ export default function MaintenanceHistoryPage() {
                             type="button"
                             onClick={() => handleEdit(maintenance)}
                             className="
-                              rounded-lg border border-slate-200
-                              bg-white px-3 py-2 font-semibold
-                              !text-slate-700 transition-colors
-                              hover:bg-slate-100
+                              rounded-lg border border-slate-200 dark:border-slate-800
+                              bg-white dark:bg-slate-900 px-3 py-2 font-semibold
+                              !text-slate-700 dark:!text-slate-300 transition-colors
+                              hover:bg-slate-100 dark:hover:bg-slate-800
                             "
                           >
                             Editar
@@ -470,7 +470,7 @@ export default function MaintenanceHistoryPage() {
 
             {sortedMaintenances.length === 0 && (
               <div className="p-10 text-center">
-                <p className="font-semibold !text-slate-700">
+                <p className="font-semibold !text-slate-700 dark:!text-slate-300">
                   {normalizedSearch
                     ? "No se encontraron mantenimientos con esa búsqueda."
                     : "Todavía no existen mantenimientos registrados."}
@@ -478,14 +478,14 @@ export default function MaintenanceHistoryPage() {
               </div>
             )}
 
-            <div className="border-t border-slate-100 bg-white px-5 py-4">
-              <p className="text-sm font-medium !text-slate-600">
+            <div className="border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 px-5 py-4">
+              <p className="text-sm font-medium !text-slate-600 dark:!text-slate-400">
                 Mostrando{" "}
-                <span className="font-extrabold !text-slate-900">
+                <span className="font-extrabold !text-slate-900 dark:!text-slate-100">
                   {sortedMaintenances.length}
                 </span>{" "}
                 de{" "}
-                <span className="font-extrabold !text-slate-900">
+                <span className="font-extrabold !text-slate-900 dark:!text-slate-100">
                   {maintenances.length}
                 </span>{" "}
                 mantenimientos

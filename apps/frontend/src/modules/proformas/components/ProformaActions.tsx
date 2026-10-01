@@ -21,7 +21,7 @@ export default function ProformaActions({
         type="button"
         onClick={onDownloadPdf}
         disabled={pending}
-        className="w-full rounded-lg border border-blue-500 bg-white px-6 py-3 font-bold text-blue-600 transition-all hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full rounded-lg border border-blue-500 bg-white dark:bg-slate-900 px-6 py-3 font-bold text-blue-600 transition-all hover:bg-slate-100 dark:hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Generar PDF
       </button>
@@ -31,7 +31,7 @@ export default function ProformaActions({
           type="button"
           onClick={onSaveDraft}
           disabled={pending}
-          className="w-full rounded-lg border border-blue-500 bg-white px-6 py-3 font-bold text-blue-600 transition-all hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-lg border border-blue-500 bg-white dark:bg-slate-900 px-6 py-3 font-bold text-blue-600 transition-all hover:bg-slate-100 dark:hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {pending ? "Procesando..." : "Guardar borrador"}
         </button>

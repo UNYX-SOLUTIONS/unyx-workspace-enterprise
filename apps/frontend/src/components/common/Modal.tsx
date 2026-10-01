@@ -69,13 +69,13 @@ export default function Modal({
       <div
         className={`
           relative z-10 max-h-[90vh] w-full overflow-y-auto
-          rounded-xl border border-slate-200
-          bg-white shadow-lg
+          rounded-xl border border-slate-200 dark:border-slate-800
+          bg-white dark:bg-slate-900 shadow-lg
           ${sizes[size] || sizes.md}
         `}
       >
-        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4">
-          <p id="modal-title" className="font-display text-lg font-bold text-slate-900">
+        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-4">
+          <p id="modal-title" className="font-display text-lg font-bold text-slate-900 dark:text-slate-100">
             {title}
           </p>
 
@@ -83,13 +83,13 @@ export default function Modal({
             type="button"
             onClick={onClose}
             aria-label="Cerrar"
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 dark:text-slate-400 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
           >
             <X className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
 
-        <div className="bg-white p-6">{children}</div>
+        <div className="bg-white dark:bg-slate-900 p-6">{children}</div>
       </div>
     </div>
   );

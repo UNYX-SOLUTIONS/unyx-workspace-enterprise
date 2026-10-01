@@ -155,7 +155,7 @@ export default function ClientsPage() {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <LoadingSpinner size="lg" />
-        <p className="mt-4 text-slate-600">Cargando clientes...</p>
+        <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando clientes...</p>
       </div>
     );
   }
@@ -203,7 +203,7 @@ export default function ClientsPage() {
       </section>
 
       <Card className="overflow-hidden">
-        <div className="space-y-4 border-b border-slate-200 bg-slate-50 p-4 sm:p-6">
+        <div className="space-y-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4 sm:p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <label className="w-full sm:max-w-xs">
               <span className="sr-only">Buscar cliente</span>
@@ -212,7 +212,7 @@ export default function ClientsPage() {
                 placeholder="Buscar cliente..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
               />
             </label>
           </div>
@@ -226,28 +226,28 @@ export default function ClientsPage() {
           >
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-slate-200 bg-slate-50">
-                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6">
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 dark:text-slate-400 sm:px-6">
                   Cliente
                 </th>
-                <th className="hidden px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6 md:table-cell">
+                <th className="hidden px-4 py-4 text-xs font-bold uppercase text-slate-600 dark:text-slate-400 sm:px-6 md:table-cell">
                   RUC
                 </th>
-                <th className="hidden px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6 lg:table-cell">
+                <th className="hidden px-4 py-4 text-xs font-bold uppercase text-slate-600 dark:text-slate-400 sm:px-6 lg:table-cell">
                   Teléfono
                 </th>
-                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 sm:px-6">
+                <th className="px-4 py-4 text-xs font-bold uppercase text-slate-600 dark:text-slate-400 sm:px-6">
                   Estado
                 </th>
-                <th className="px-4 py-4 text-right text-xs font-bold uppercase text-slate-600 sm:px-6">
+                <th className="px-4 py-4 text-right text-xs font-bold uppercase text-slate-600 dark:text-slate-400 sm:px-6">
                   Acciones
                 </th>
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-slate-200">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
               {filteredClients.map((client) => (
-                <tr key={client.id} className="animate-fade-in transition-colors group hover:bg-slate-100">
+                <tr key={client.id} className="animate-fade-in transition-colors group hover:bg-slate-100 dark:hover:bg-slate-800">
                   <td className="px-4 py-4 sm:px-6">
                     <div className="flex items-center gap-3">
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-blue-500 text-sm font-bold text-white">
@@ -255,19 +255,19 @@ export default function ClientsPage() {
                       </div>
 
                       <div className="min-w-0">
-                        <p className="truncate font-bold text-slate-900">{client.nombre}</p>
-                        <p className="truncate text-xs text-slate-600">
+                        <p className="truncate font-bold text-slate-900 dark:text-slate-100">{client.nombre}</p>
+                        <p className="truncate text-xs text-slate-600 dark:text-slate-400">
                           {client.email || "Sin correo"}
                         </p>
                       </div>
                     </div>
                   </td>
 
-                  <td className="hidden px-4 py-4 font-mono text-sm text-slate-900 sm:px-6 md:table-cell">
+                  <td className="hidden px-4 py-4 font-mono text-sm text-slate-900 dark:text-slate-100 sm:px-6 md:table-cell">
                     {client.ruc}
                   </td>
 
-                  <td className="hidden px-4 py-4 text-sm text-slate-900 sm:px-6 lg:table-cell">
+                  <td className="hidden px-4 py-4 text-sm text-slate-900 dark:text-slate-100 sm:px-6 lg:table-cell">
                     {client.telefono || "Sin teléfono"}
                   </td>
 
@@ -316,8 +316,8 @@ export default function ClientsPage() {
           )}
         </div>
 
-        <div className="flex flex-col gap-4 border-t border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-          <p className="text-sm text-slate-600">
+        <div className="flex flex-col gap-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             Mostrando <span className="font-bold">{filteredClients.length}</span> de{" "}
             <span className="font-bold">{clients.length}</span> clientes
           </p>

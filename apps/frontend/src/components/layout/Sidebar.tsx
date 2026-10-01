@@ -37,7 +37,7 @@ export default function Sidebar({
     <>
       <aside
         className={`fixed inset-y-0 left-0 z-40 flex w-64 transform flex-col border-r border-slate-800 bg-slate-900 transition-all duration-200 dark:border-slate-700 dark:bg-slate-800 md:static md:h-full md:shrink-0 md:translate-x-0 ${
-          collapsed ? "md:w-19" : "md:w-64"
+          collapsed ? "md:w-19" : "md:w-60"
         } ${open ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div
@@ -104,8 +104,8 @@ export default function Sidebar({
               className={({ isActive }) =>
                 `${itemClass} ${collapsed ? "md:justify-center" : ""} ${
                   isActive
-                    ? "bg-blue-500/15 text-blue-400"
-                    : "text-slate-400 hover:bg-white/5 hover:text-white"
+                    ? "bg-blue-500/15 text-gray-50! font-semibold!"
+                    : "text-gray-200! hover:bg-white/5 hover:text-white font-light!"
                 }`
               }
             >
@@ -125,8 +125,8 @@ export default function Sidebar({
               className={({ isActive }) =>
                 `${itemClass} ${collapsed ? "md:justify-center" : ""} ${
                   isActive
-                    ? "bg-blue-500/15 text-blue-400"
-                    : "text-slate-400 hover:bg-white/5 hover:text-white"
+                    ? "bg-blue-500/15 text-gray-50! font-semibold!"
+                    : "text-gray-200! hover:bg-white/5 hover:text-white font-light!"
                 }`
               }
             >
@@ -167,7 +167,7 @@ export default function Sidebar({
           <a
             href="mailto:soporte@unyxsolutions.com"
             title={collapsed ? "Soporte" : undefined}
-            className={`${itemClass} ${collapsed ? "md:justify-center" : ""} text-slate-400 hover:bg-white/5 hover:text-white`}
+            className={`${itemClass} ${collapsed ? "md:justify-center" : ""} text-gray-200! hover:bg-white/5 hover:text-white font-light!`}
           >
             <HelpCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
             <span className={labelClass}>Soporte</span>

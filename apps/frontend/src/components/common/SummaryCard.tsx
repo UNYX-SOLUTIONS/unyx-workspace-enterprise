@@ -28,10 +28,10 @@ export default function SummaryCard({
 
   return (
     <div
-      className={`rounded-xl border border-slate-200 bg-white p-5 transition-shadow hover:shadow-sm ${className}`}
+      className={`rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 transition-shadow hover:shadow-sm ${className}`}
     >
       <div className="mb-3 flex items-start justify-between gap-3">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
           {title}
         </p>
 
@@ -46,7 +46,7 @@ export default function SummaryCard({
       </div>
 
       <div className="flex flex-wrap items-baseline gap-2">
-        <p className="break-words text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <p className="break-words text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
           {value}
         </p>
 

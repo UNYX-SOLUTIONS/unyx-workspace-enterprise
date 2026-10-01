@@ -16,13 +16,13 @@ export default function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center px-4 py-12 text-center">
-      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-50">
+      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-950">
         {icon}
       </div>
 
-      <h3 className="mb-2 text-sm font-semibold text-slate-900">{title}</h3>
+      <h3 className="mb-2 text-sm font-semibold text-slate-900 dark:text-slate-100">{title}</h3>
 
-      {description && <p className="mb-6 max-w-sm text-sm text-slate-500">{description}</p>}
+      {description && <p className="mb-6 max-w-sm text-sm text-slate-500 dark:text-slate-400">{description}</p>}
 
       {action}
     </div>

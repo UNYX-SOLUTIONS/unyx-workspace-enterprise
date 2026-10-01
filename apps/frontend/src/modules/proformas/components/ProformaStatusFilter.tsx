@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { Check, ChevronDown } from "lucide-react";
 import FloatingMenu from "@/components/common/FloatingMenu";
-import { useClickOutside } from "@/hooks/useClickOutside";
 import {
   PROFORMA_ESTADOS,
   getProformaStatusMeta,
@@ -16,15 +15,13 @@ export interface ProformaStatusFilterProps {
 
 export default function ProformaStatusFilter({ value, onChange }: ProformaStatusFilterProps) {
   const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  useClickOutside(containerRef, () => setOpen(false), open);
 
   const options: ProformaStatusFilterValue[] = ["TODOS", ...PROFORMA_ESTADOS];
   const currentMeta = value === "TODOS" ? null : getProformaStatusMeta(value);
 
   return (
-    <div ref={containerRef}>
+    <div>
       <button
         ref={triggerRef}
         type="button"
@@ -32,7 +29,7 @@ export default function ProformaStatusFilter({ value, onChange }: ProformaStatus
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label="Filtrar por estado"
-        className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 lg:min-w-42"
+        className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 lg:min-w-42"
       >
         <span
           className={`h-1.5 w-1.5 rounded-full ${currentMeta?.dot ?? "bg-slate-300"}`}
@@ -55,7 +52,7 @@ export default function ProformaStatusFilter({ value, onChange }: ProformaStatus
         <ul
           role="listbox"
           aria-label="Estados"
-          className="overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-lg"
+          className="overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-1 shadow-lg"
         >
           {options.map((option) => {
             const meta = option === "TODOS" ? null : getProformaStatusMeta(option);
@@ -71,8 +68,8 @@ export default function ProformaStatusFilter({ value, onChange }: ProformaStatus
                     setOpen(false);
                     onChange(option);
                   }}
-                  className={`flex w-full items-center gap-2 px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide transition-colors hover:bg-slate-50 ${
-                    isCurrent ? "text-slate-900" : "text-slate-600"
+                  className={`flex w-full items-center gap-2 px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 ${
+                    isCurrent ? "text-slate-900 dark:text-slate-100" : "text-slate-600 dark:text-slate-400"
                   }`}
                 >
                   <span

@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode, type RefObject } from "react";
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { createPortal } from "react-dom";
 
 export interface FloatingMenuProps {
@@ -11,7 +11,8 @@ export interface FloatingMenuProps {
 }
 
 // Menú flotante en portal con posición fija: evita que las tablas con
-// overflow recorten el dropdown (bug del dropdown bajo la fila).
+// overflow recorten el dropdown. El cierre por clic-fuera ignora los clics
+// dentro del propio menú para que las opciones reciban su evento click.
 export default function FloatingMenu({
   open,
   anchorRef,
@@ -21,6 +22,7 @@ export default function FloatingMenu({
   children,
 }: FloatingMenuProps) {
   const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) {
@@ -56,18 +58,37 @@ export default function FloatingMenu({
   useEffect(() => {
     if (!open) return undefined;
 
+    function onPointerDown(event: MouseEvent | TouchEvent) {
+      const target = event.target as Node;
+
+      // Clics dentro del menú o del ancla no cierran: así las opciones
+      // reciben su evento click antes de desmontarse.
+      if (menuRef.current?.contains(target)) return;
+      if (anchorRef.current?.contains(target)) return;
+
+      onClose();
+    }
+
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") onClose();
     }
 
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("touchstart", onPointerDown);
     document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [open, onClose]);
+
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("touchstart", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open, anchorRef, onClose]);
 
   if (!open || !position) return null;
 
   return createPortal(
     <div
+      ref={menuRef}
       style={{ position: "fixed", top: position.top, left: position.left, width }}
       className="z-[70]"
     >

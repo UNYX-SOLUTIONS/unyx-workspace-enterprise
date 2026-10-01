@@ -85,7 +85,7 @@ export function EquipmentForm({ equipo, onChange }: EquipmentFormProps) {
       <label
         className="
           mt-7 flex items-center gap-3
-          text-sm font-semibold !text-slate-900
+          text-sm font-semibold !text-slate-900 dark:!text-slate-100
         "
       >
         <input

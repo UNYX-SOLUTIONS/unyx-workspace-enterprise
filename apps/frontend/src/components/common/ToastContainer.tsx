@@ -3,10 +3,10 @@ import { useToast } from "@/hooks/useToast";
 import type { ToastType } from "@/contexts/ToastContext";
 
 const typeStyles: Record<ToastType, string> = {
-  success: "border-emerald-200 bg-white text-slate-800",
-  error: "border-rose-200 bg-white text-slate-800",
-  warning: "border-amber-200 bg-white text-slate-800",
-  info: "border-slate-200 bg-white text-slate-800",
+  success: "border-emerald-200 dark:border-emerald-500/30 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200",
+  error: "border-rose-200 dark:border-rose-500/30 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200",
+  warning: "border-amber-200 dark:border-amber-500/30 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200",
+  info: "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200",
 };
 
 const typeIcons: Record<ToastType, typeof CheckCircle2> = {

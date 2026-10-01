@@ -1,10 +1,10 @@
 const styles: Record<string, string> = {
-  Activo: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  Pendiente: "border-amber-200 bg-amber-50 text-amber-700",
-  Inactivo: "border-slate-200 bg-slate-100 text-slate-600",
-  Conforme: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  Observación: "border-amber-200 bg-amber-50 text-amber-700",
-  "No aplica": "border-slate-200 bg-slate-100 text-slate-600",
+  Activo: "border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+  Pendiente: "border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400",
+  Inactivo: "border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400",
+  Conforme: "border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
+  Observación: "border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400",
+  "No aplica": "border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400",
 };
 
 const dots: Record<string, string> = {
@@ -23,7 +23,7 @@ export interface StatusBadgeProps {
 
 export default function StatusBadge({ status, className = "" }: StatusBadgeProps) {
   const resolved = status ?? "";
-  const style = styles[resolved] || "border-slate-200 bg-slate-100 text-slate-600";
+  const style = styles[resolved] || "border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400";
   const dot = dots[resolved] || "bg-slate-400";
 
   return (

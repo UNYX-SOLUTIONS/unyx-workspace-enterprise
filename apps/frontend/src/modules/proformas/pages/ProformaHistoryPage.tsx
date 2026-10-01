@@ -222,7 +222,7 @@ export default function ProformaHistoryPage() {
   }
 
   const sortableHeaderClass =
-    "group flex w-full items-center gap-2 text-left text-xs font-extrabold uppercase tracking-wide text-slate-700 transition-colors hover:text-slate-900";
+    "group flex w-full items-center gap-2 text-left text-xs font-extrabold uppercase tracking-wide text-slate-700 dark:text-slate-300 transition-colors hover:text-slate-900";
 
   return (
     <div className="w-full space-y-6">
@@ -268,11 +268,11 @@ export default function ProformaHistoryPage() {
       </section>
 
       <Card className="overflow-hidden">
-        <div className="flex flex-col gap-4 border-b border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="flex flex-col gap-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <button
             type="button"
             onClick={handleExport}
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
           >
             <Download className="h-4 w-4" aria-hidden="true" />
             Exportar CSV
@@ -288,7 +288,7 @@ export default function ProformaHistoryPage() {
                 placeholder="Buscar proforma..."
                 value={search}
                 onChange={(event) => updateSearch(event.target.value)}
-                className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-900 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-slate-900 dark:text-slate-100 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
               />
             </label>
           </div>
@@ -314,7 +314,7 @@ export default function ProformaHistoryPage() {
               <div className="overflow-x-auto">
               <table className="w-full border-collapse text-left">
                 <thead>
-                  <tr className="border-b border-slate-200 bg-slate-50">
+                  <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
                     <th className="px-4 py-4 sm:px-6">
                       <button type="button" onClick={() => handleSort("numero")} className={sortableHeaderClass}>
                         Número {sortIndicator("numero")}
@@ -344,19 +344,19 @@ export default function ProformaHistoryPage() {
                         Total {sortIndicator("total")}
                       </button>
                     </th>
-                    <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wide text-slate-700 sm:px-6">
+                    <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wide text-slate-700 dark:text-slate-300 sm:px-6">
                       Acciones
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {sortedProformas.map((proforma) => {
                     const statusMeta = getProformaStatusMeta(proforma.estado);
 
                     return (
                       <tr
                         key={proforma.id || proforma.numero}
-                        className={`animate-fade-in border-l-2 border-l-transparent bg-white transition-colors hover:bg-slate-50 ${statusMeta.hoverBorder}`}
+                        className={`animate-fade-in border-l-2 border-l-transparent bg-white dark:bg-slate-900 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 ${statusMeta.hoverBorder}`}
                       >
                         <td className="px-4 py-4 sm:px-6">
                           <button
@@ -368,14 +368,14 @@ export default function ProformaHistoryPage() {
                           </button>
                         </td>
                         <td className="px-4 py-4 sm:px-6">
-                          <p className="font-bold text-slate-900">
+                          <p className="font-bold text-slate-900 dark:text-slate-100">
                             {proforma?.cliente?.nombre || "Sin cliente"}
                           </p>
-                          <p className="mt-1 text-xs font-medium text-slate-600">
+                          <p className="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400">
                             {proforma?.cliente?.ruc || "Sin RUC"}
                           </p>
                         </td>
-                        <td className="hidden px-4 py-4 font-medium text-slate-700 sm:px-6 md:table-cell">
+                        <td className="hidden px-4 py-4 font-medium text-slate-700 dark:text-slate-300 sm:px-6 md:table-cell">
                           {proforma.fecha
                             ? new Date(proforma.fecha).toLocaleDateString("es-EC")
                             : "Sin fecha"}
@@ -414,12 +414,12 @@ export default function ProformaHistoryPage() {
                             </p>
                           )}
                           {updatingStatusNumber === proforma.numero && (
-                            <p className="mt-1 text-[10px] font-medium text-slate-500">
+                            <p className="mt-1 text-[10px] font-medium text-slate-500 dark:text-slate-400">
                               Guardando...
                             </p>
                           )}
                         </td>
-                        <td className="hidden px-4 py-4 text-right font-extrabold text-slate-900 sm:table-cell sm:px-6">
+                        <td className="hidden px-4 py-4 text-right font-extrabold text-slate-900 dark:text-slate-100 sm:table-cell sm:px-6">
                           {formatCurrency(toDisplayCents(proforma.total))}
                         </td>
                         <td className="px-4 py-4 sm:px-6">
@@ -468,8 +468,8 @@ export default function ProformaHistoryPage() {
               </table>
             </div>
 
-            <div className="flex flex-col gap-4 border-t border-slate-200 bg-white p-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
-              <p className="font-medium text-slate-700">
+            <div className="flex flex-col gap-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
+              <p className="font-medium text-slate-700 dark:text-slate-300">
                 Mostrando {proformas.length} de {total} proformas · Página {page} de {totalPages}
               </p>
               <div className="flex gap-2">
@@ -477,7 +477,7 @@ export default function ProformaHistoryPage() {
                   type="button"
                   disabled={page <= 1}
                   onClick={() => setPage((current) => Math.max(1, current - 1))}
-                  className="rounded-lg border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-700 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Anterior
                 </button>
@@ -485,7 +485,7 @@ export default function ProformaHistoryPage() {
                   type="button"
                   disabled={page >= totalPages}
                   onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
-                  className="rounded-lg border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-700 transition-colors hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Siguiente
                 </button>

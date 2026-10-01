@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import FloatingMenu from "@/components/common/FloatingMenu";
-import { useClickOutside } from "@/hooks/useClickOutside";
 import {
   PROFORMA_ESTADOS,
   getProformaStatusMeta,
@@ -23,14 +22,12 @@ export default function ProformaStatusDropdown({
   onSelect,
 }: ProformaStatusDropdownProps) {
   const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  useClickOutside(containerRef, () => setOpen(false), open);
 
   const meta = getProformaStatusMeta(status);
 
   return (
-    <div ref={containerRef} className="inline-block">
+    <div className="inline-block">
       <button
         ref={triggerRef}
         type="button"
@@ -53,7 +50,7 @@ export default function ProformaStatusDropdown({
         <ul
           role="listbox"
           aria-label="Estados disponibles"
-          className="overflow-hidden rounded-lg border border-slate-200 bg-white py-1 shadow-lg"
+          className="overflow-hidden rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-1 shadow-lg"
         >
           {PROFORMA_ESTADOS.map((option) => {
             const optionMeta = getProformaStatusMeta(option);
@@ -69,8 +66,8 @@ export default function ProformaStatusDropdown({
                     setOpen(false);
                     if (!isCurrent) onSelect(option);
                   }}
-                  className={`flex w-full items-center gap-2 px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide transition-colors hover:bg-slate-50 ${
-                    isCurrent ? "text-slate-900" : "text-slate-600"
+                  className={`flex w-full items-center gap-2 px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 ${
+                    isCurrent ? "text-slate-900 dark:text-slate-100" : "text-slate-600 dark:text-slate-400"
                   }`}
                 >
                   <span

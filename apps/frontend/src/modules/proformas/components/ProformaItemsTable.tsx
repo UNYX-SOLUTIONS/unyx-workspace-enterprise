@@ -59,9 +59,9 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
 
   return (
     <Card className="overflow-visible">
-      <div className="border-b border-slate-200 bg-slate-50 p-6">
+      <div className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <h3 className="text-xl font-bold text-slate-900">Detalle de Ítems</h3>
+          <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">Detalle de Ítems</h3>
 
           <div className="relative w-full lg:w-[420px]">
             <input
@@ -73,11 +73,11 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
               }}
               onFocus={() => setShowProductDropdown(true)}
               placeholder="Buscar producto por nombre, código o marca..."
-              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500"
             />
 
             {showProductDropdown && (
-              <div className="absolute z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl">
+              <div className="absolute z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl">
                 {filteredProducts.map((product) => (
                   <button
                     key={product.id}
@@ -87,12 +87,12 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
                       setProductSearch("");
                       setShowProductDropdown(false);
                     }}
-                    className="w-full border-b border-slate-100 px-4 py-3 text-left hover:bg-slate-100"
+                    className="w-full border-b border-slate-100 dark:border-slate-800 px-4 py-3 text-left hover:bg-slate-100 dark:hover:bg-slate-800"
                   >
                     <div className="flex justify-between gap-3">
                       <div>
-                        <p className="font-bold text-slate-900">{product.name}</p>
-                        <p className="text-xs text-slate-600">
+                        <p className="font-bold text-slate-900 dark:text-slate-100">{product.name}</p>
+                        <p className="text-xs text-slate-600 dark:text-slate-400">
                           {product.ref} · {product.brand || "Sin marca"}
                         </p>
                       </div>
@@ -111,7 +111,7 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
                       setProductSearch("");
                       setShowProductDropdown(false);
                     }}
-                    className="w-full bg-slate-50 px-4 py-3 text-left font-bold text-blue-600 hover:bg-slate-100"
+                    className="w-full bg-slate-50 dark:bg-slate-950 px-4 py-3 text-left font-bold text-blue-600 hover:bg-slate-100 dark:hover:bg-slate-800"
                   >
                     + Añadir ítem manual: "{productSearch}"
                   </button>
@@ -123,7 +123,7 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
                     setShowProductDropdown(false);
                     setIsProductModalOpen(true);
                   }}
-                  className="w-full border-t border-slate-200 bg-white px-4 py-3 text-left font-bold text-slate-900 hover:bg-slate-100"
+                  className="w-full border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-left font-bold text-slate-900 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
                   + Crear producto nuevo
                 </button>
@@ -136,18 +136,18 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
-            <tr className="bg-slate-50 text-left">
-              <th className="px-4 py-3 font-bold text-slate-900">Código</th>
-              <th className="px-4 py-3 font-bold text-slate-900">Descripción</th>
-              <th className="px-4 py-3 text-right font-bold text-slate-900">Cantidad</th>
-              <th className="px-4 py-3 text-right font-bold text-slate-900">Precio</th>
-              <th className="px-4 py-3 text-right font-bold text-slate-900">Total</th>
+            <tr className="bg-slate-50 dark:bg-slate-950 text-left">
+              <th className="px-4 py-3 font-bold text-slate-900 dark:text-slate-100">Código</th>
+              <th className="px-4 py-3 font-bold text-slate-900 dark:text-slate-100">Descripción</th>
+              <th className="px-4 py-3 text-right font-bold text-slate-900 dark:text-slate-100">Cantidad</th>
+              <th className="px-4 py-3 text-right font-bold text-slate-900 dark:text-slate-100">Precio</th>
+              <th className="px-4 py-3 text-right font-bold text-slate-900 dark:text-slate-100">Total</th>
               <th className="w-12 px-4 py-3 text-center" />
             </tr>
           </thead>
           <tbody>
             {items.items.map((item) => (
-              <tr key={item.id} className="border-b transition-colors hover:bg-slate-100">
+              <tr key={item.id} className="border-b transition-colors hover:bg-slate-100 dark:hover:bg-slate-800">
                 <td className="px-4 py-3">
                   <input
                     className="w-full bg-transparent font-mono text-xs outline-none"
@@ -202,7 +202,7 @@ export default function ProformaItemsTable({ items }: ProformaItemsTableProps) {
 
             {items.items.length === 0 && (
               <tr>
-                <td colSpan={6} className="p-8 text-center text-slate-600">
+                <td colSpan={6} className="p-8 text-center text-slate-600 dark:text-slate-400">
                   Busca un producto o añade un ítem manual para empezar.
                 </td>
               </tr>

@@ -62,7 +62,7 @@ export default function ProformaForm({ form }: ProformaFormProps) {
   return (
     <>
       <Card className="p-6">
-        <h3 className="mb-6 text-xl font-bold text-slate-900">Datos de la Proforma</h3>
+        <h3 className="mb-6 text-xl font-bold text-slate-900 dark:text-slate-100">Datos de la Proforma</h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <InputField label="Número" value={form.numero} readOnly placeholder="Auto generado" />
           <InputField
@@ -79,7 +79,7 @@ export default function ProformaForm({ form }: ProformaFormProps) {
             onChange={(event) => form.setField("validezDias", Number(event.target.value))}
           />
           <label className="block">
-            <span className="mb-2 block text-sm font-semibold text-slate-900">Estado</span>
+            <span className="mb-2 block text-sm font-semibold text-slate-900 dark:text-slate-100">Estado</span>
             <select
               value={form.estado}
               onChange={(event) => form.setEstado(event.target.value as ProformaEstado)}
@@ -98,10 +98,10 @@ export default function ProformaForm({ form }: ProformaFormProps) {
       </Card>
 
       <Card className="p-6">
-        <h3 className="mb-6 text-xl font-bold text-slate-900">Datos del Cliente</h3>
+        <h3 className="mb-6 text-xl font-bold text-slate-900 dark:text-slate-100">Datos del Cliente</h3>
 
         <div className="relative mb-4">
-          <label className="mb-2 block text-sm font-semibold text-slate-900">
+          <label className="mb-2 block text-sm font-semibold text-slate-900 dark:text-slate-100">
             Buscar cliente registrado
           </label>
           <input
@@ -113,11 +113,11 @@ export default function ProformaForm({ form }: ProformaFormProps) {
             }}
             onFocus={() => setShowClientDropdown(true)}
             placeholder="Buscar por nombre, RUC o correo..."
-            className="w-full rounded-lg border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-slate-200 dark:border-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           {showClientDropdown && (
-            <div className="absolute z-40 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl">
+            <div className="absolute z-40 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl">
               {filteredClients.map((client) => (
                 <button
                   key={client.id}
@@ -127,10 +127,10 @@ export default function ProformaForm({ form }: ProformaFormProps) {
                     setClientSearch(client.nombre || "");
                     setShowClientDropdown(false);
                   }}
-                  className="w-full border-b border-slate-100 px-4 py-3 text-left hover:bg-slate-100"
+                  className="w-full border-b border-slate-100 dark:border-slate-800 px-4 py-3 text-left hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
-                  <p className="font-bold text-slate-900">{client.nombre}</p>
-                  <p className="text-xs text-slate-600">
+                  <p className="font-bold text-slate-900 dark:text-slate-100">{client.nombre}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
                     {client.ruc} · {client.email || "Sin correo"}
                   </p>
                 </button>
@@ -142,7 +142,7 @@ export default function ProformaForm({ form }: ProformaFormProps) {
                   setShowClientDropdown(false);
                   setIsClientModalOpen(true);
                 }}
-                className="w-full bg-slate-50 px-4 py-3 text-left font-bold text-blue-600 hover:bg-slate-100"
+                className="w-full bg-slate-50 dark:bg-slate-950 px-4 py-3 text-left font-bold text-blue-600 hover:bg-slate-100 dark:hover:bg-slate-800"
               >
                 + Crear nuevo cliente
               </button>
@@ -181,15 +181,15 @@ export default function ProformaForm({ form }: ProformaFormProps) {
       </Card>
 
       <Card className="p-6">
-        <h3 className="mb-4 text-xl font-bold text-slate-900">Notas / Info Adicional</h3>
+        <h3 className="mb-4 text-xl font-bold text-slate-900 dark:text-slate-100">Notas / Info Adicional</h3>
         <textarea
-          className="h-24 w-full resize-none rounded-lg border border-slate-200 p-3 outline-none transition-all focus:ring-2 focus:ring-blue-500"
+          className="h-24 w-full resize-none rounded-lg border border-slate-200 dark:border-slate-800 p-3 outline-none transition-all focus:ring-2 focus:ring-blue-500"
           placeholder="Ej: forma de pago, plazos de entrega, garantía, etc."
           value={form.notas}
           onChange={(event) => form.setField("notas", event.target.value)}
         />
-        <div className="mt-4 rounded-lg border-l-4 border-blue-500 bg-blue-50 p-4 text-sm text-slate-600">
-          <strong className="text-slate-900">NOTA:</strong> Proforma válida por{" "}
+        <div className="mt-4 rounded-lg border-l-4 border-blue-500 bg-blue-50 p-4 text-sm text-slate-600 dark:text-slate-400">
+          <strong className="text-slate-900 dark:text-slate-100">NOTA:</strong> Proforma válida por{" "}
           {form.validezDias} días. Los precios pueden variar según disponibilidad.
         </div>
       </Card>

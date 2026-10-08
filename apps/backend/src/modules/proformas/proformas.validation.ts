@@ -12,10 +12,29 @@ const createProformaSchema = proformaInputSchema
 
 const updateProformaSchema = proformaInputSchema.partial();
 
+const fechaRegex = /^\d{4}-\d{2}-\d{2}$/;
+
 const proformaQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(200).default(20),
   search: z.string().trim().optional(),
+  desde: z.string().regex(fechaRegex, "Formato de fecha inválido (YYYY-MM-DD)").optional(),
+  hasta: z.string().regex(fechaRegex, "Formato de fecha inválido (YYYY-MM-DD)").optional(),
 });
 
-export { createProformaSchema, proformaQuerySchema, updateProformaSchema };
+const proformaStatsQuerySchema = z.object({
+  desde: z.string().regex(fechaRegex, "Formato de fecha inválido (YYYY-MM-DD)").optional(),
+  hasta: z.string().regex(fechaRegex, "Formato de fecha inválido (YYYY-MM-DD)").optional(),
+});
+
+const proformaMonthlyQuerySchema = z.object({
+  meses: z.coerce.number().int().min(1).max(24).default(6),
+});
+
+export {
+  createProformaSchema,
+  proformaMonthlyQuerySchema,
+  proformaQuerySchema,
+  proformaStatsQuerySchema,
+  updateProformaSchema,
+};

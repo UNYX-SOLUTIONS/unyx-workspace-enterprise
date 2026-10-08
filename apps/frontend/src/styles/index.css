@@ -3,7 +3,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Inter", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans:
+    "Inter", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-display: "Hanken Grotesk", "Inter", system-ui, sans-serif;
   --color-unyx-blue: #3b82f6;
 }
@@ -20,6 +21,7 @@ html,
 body,
 #root {
   height: 100%;
+  overscroll-behavior: none;
 }
 
 body {

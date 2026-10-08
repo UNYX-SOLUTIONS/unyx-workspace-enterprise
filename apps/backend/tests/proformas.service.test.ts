@@ -8,6 +8,7 @@ const prismaMock = vi.hoisted(() => {
       count: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
+      groupBy: vi.fn(),
     },
     client: {
       findFirst: vi.fn(),
@@ -34,6 +35,8 @@ import {
   createProforma,
   deleteProforma,
   formatProformaNumber,
+  getMonthlyStats,
+  getProformaStats,
   previewNextProformaNumber,
   updateProforma,
 } from "../src/modules/proformas/proformas.service.js";
@@ -224,6 +227,72 @@ describe("updateProforma", () => {
       status: 404,
       code: "PROFORMA_NOT_FOUND",
     });
+  });
+});
+
+describe("getProformaStats", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("agrega por estado y calcula tasa de aceptación y ticket promedio", async () => {
+    prismaMock.proforma.groupBy.mockResolvedValue([
+      { estado: "BORRADOR", _count: { _all: 2 }, _sum: { total: 100 } },
+      { estado: "ENVIADA", _count: { _all: 3 }, _sum: { total: 300 } },
+      { estado: "ACEPTADA", _count: { _all: 2 }, _sum: { total: 400 } },
+      { estado: "CANCELADA", _count: { _all: 1 }, _sum: { total: 50 } },
+    ]);
+
+    const stats = await getProformaStats();
+
+    expect(stats.totalProformas).toBe(8);
+    expect(stats.aceptadas).toEqual({ count: 2, monto: 400 });
+    expect(stats.expiradas).toEqual({ count: 0, monto: 0 });
+    expect(stats.emitidas).toBe(6);
+    expect(stats.tasaAceptacion).toBe(33.3);
+    expect(stats.ticketPromedio).toBe(200);
+  });
+
+  it("devuelve ceros sin proformas y no divide por cero", async () => {
+    prismaMock.proforma.groupBy.mockResolvedValue([]);
+
+    const stats = await getProformaStats();
+
+    expect(stats.totalProformas).toBe(0);
+    expect(stats.tasaAceptacion).toBe(0);
+    expect(stats.ticketPromedio).toBe(0);
+  });
+
+  it("soporta montos Decimal (objetos con toString) del sum de Prisma", async () => {
+    prismaMock.proforma.groupBy.mockResolvedValue([
+      { estado: "ACEPTADA", _count: { _all: 2 }, _sum: { total: { toString: () => "250.75" } } },
+    ]);
+
+    const stats = await getProformaStats();
+
+    expect(stats.aceptadas.monto).toBe(250.75);
+    expect(stats.ticketPromedio).toBe(125.38);
+  });
+});
+
+describe("getMonthlyStats", () => {
+  it("rellena con ceros los meses sin datos y ubica los montos por estado", async () => {
+    const now = new Date();
+    const currentKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    prismaMock.$queryRaw.mockResolvedValue([
+      { mes: currentKey, estado: "ACEPTADA", count: 2, monto: 300 },
+      { mes: currentKey, estado: "ENVIADA", count: 1, monto: 120.5 },
+    ]);
+
+    const rows = await getMonthlyStats(3);
+
+    expect(rows).toHaveLength(3);
+    const last = rows[rows.length - 1];
+    expect(last.mes).toBe(currentKey);
+    expect(last.aceptadas).toEqual({ count: 2, monto: 300 });
+    expect(last.enviadas).toEqual({ count: 1, monto: 120.5 });
+    expect(last.canceladas).toEqual({ count: 0, monto: 0 });
+    expect(rows[0].aceptadas).toEqual({ count: 0, monto: 0 });
   });
 });
 

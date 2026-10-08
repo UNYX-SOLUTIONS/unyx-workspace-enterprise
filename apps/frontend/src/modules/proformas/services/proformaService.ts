@@ -49,12 +49,65 @@ export interface ListOptions {
   page?: number;
   pageSize?: number;
   search?: string;
+  desde?: string;
+  hasta?: string;
+}
+
+export interface DateRange {
+  desde?: string;
+  hasta?: string;
+}
+
+export interface EstadoStats {
+  count: number;
+  monto: number;
+}
+
+export interface ProformaStats {
+  totalProformas: number;
+  borradores: EstadoStats;
+  enviadas: EstadoStats;
+  aceptadas: EstadoStats;
+  canceladas: EstadoStats;
+  expiradas: EstadoStats;
+  emitidas: number;
+  tasaAceptacion: number;
+  ticketPromedio: number;
+}
+
+export interface MonthlyStatsRow {
+  mes: string;
+  borradores: EstadoStats;
+  enviadas: EstadoStats;
+  aceptadas: EstadoStats;
+  canceladas: EstadoStats;
+  expiradas: EstadoStats;
+}
+
+export async function getProformaStats(range: DateRange = {}): Promise<ProformaStats> {
+  const { data } = await api.get<ProformaStats>("/proformas/estadisticas", {
+    params: { desde: range.desde || undefined, hasta: range.hasta || undefined },
+  });
+  return data;
+}
+
+export async function getMonthlyStats(meses = 6): Promise<MonthlyStatsRow[]> {
+  const { data } = await api.get<MonthlyStatsRow[]>("/proformas/estadisticas/mensual", {
+    params: { meses },
+  });
+  return data;
 }
 
 export async function listProformas(options: ListOptions = {}): Promise<Paginated<ProformaDto>> {
-  const { page = 1, pageSize = 50, search = "" } = options;
+  const { page = 1, pageSize = 50, search = "", desde = "", hasta = "" } = options;
   const { data } = await api.get<Paginated<ProformaDto>>("/proformas", {
-    params: { page, pageSize, search: search || undefined },
+    params: {
+      page,
+      pageSize,
+      search: search || undefined,
+      desde: desde || undefined,
+      hasta: hasta || undefined,
+    },
   });
   return data;
 }

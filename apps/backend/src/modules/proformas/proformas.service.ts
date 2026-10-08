@@ -106,17 +106,37 @@ export async function findProforma(identifier: string): Promise<ProformaWithRela
   return proforma;
 }
 
+export interface DateRange {
+  desde?: string;
+  hasta?: string;
+}
+
+// Rango de fechas inclusivo en hora local (TZ del servidor, America/Guayaquil
+// en el stack Docker). "hasta" incluye todo el día.
+function dateRangeFilter({ desde, hasta }: DateRange) {
+  if (!desde && !hasta) return {};
+  return {
+    fecha: {
+      ...(desde ? { gte: new Date(`${desde}T00:00:00`) } : {}),
+      ...(hasta ? { lte: new Date(`${hasta}T23:59:59.999`) } : {}),
+    },
+  };
+}
+
 export async function listProformas({
   page,
   pageSize,
   search,
+  desde,
+  hasta,
 }: {
   page: number;
   pageSize: number;
   search?: string;
-}) {
+} & DateRange) {
   const where = {
     deletedAt: null,
+    ...dateRangeFilter({ desde, hasta }),
     ...(search
       ? {
           OR: [
@@ -143,6 +163,149 @@ export async function listProformas({
     data,
     meta: { page, pageSize, total, totalPages: Math.ceil(total / pageSize) },
   };
+}
+
+interface EstadoStats {
+  count: number;
+  monto: number;
+}
+
+export interface ProformaStats {
+  totalProformas: number;
+  borradores: EstadoStats;
+  enviadas: EstadoStats;
+  aceptadas: EstadoStats;
+  canceladas: EstadoStats;
+  expiradas: EstadoStats;
+  emitidas: number;
+  tasaAceptacion: number;
+  ticketPromedio: number;
+}
+
+function toNumber(value: { toString(): string } | null | undefined): number {
+  if (!value) return 0;
+  return Number(value.toString());
+}
+
+// Estadísticas agregadas sobre TODO el histórico (no solo la página visible),
+// opcionalmente acotadas a un rango de fechas.
+// - "emitidas": proformas que salieron de borrador (enviadas + aceptadas + canceladas + expiradas)
+// - "tasaAceptacion": aceptadas / emitidas * 100
+// - "ticketPromedio": monto aceptado / proformas aceptadas
+export async function getProformaStats(range: DateRange = {}): Promise<ProformaStats> {
+  const groups = await prisma.proforma.groupBy({
+    by: ["estado"],
+    where: { deletedAt: null, ...dateRangeFilter(range) },
+    _count: { _all: true },
+    _sum: { total: true },
+  });
+
+  const byEstado: Partial<Record<ProformaEstado, EstadoStats>> = {};
+  let totalProformas = 0;
+
+  for (const group of groups) {
+    const stats: EstadoStats = {
+      count: group._count._all,
+      monto: toNumber(group._sum.total),
+    };
+    byEstado[group.estado as ProformaEstado] = stats;
+    totalProformas += stats.count;
+  }
+
+  const empty: EstadoStats = { count: 0, monto: 0 };
+  const borradores = byEstado.BORRADOR ?? empty;
+  const enviadas = byEstado.ENVIADA ?? empty;
+  const aceptadas = byEstado.ACEPTADA ?? empty;
+  const canceladas = byEstado.CANCELADA ?? empty;
+  const expiradas = byEstado.EXPIRADA ?? empty;
+
+  const emitidas = enviadas.count + aceptadas.count + canceladas.count + expiradas.count;
+  const tasaAceptacion = emitidas > 0 ? (aceptadas.count / emitidas) * 100 : 0;
+  const ticketPromedio = aceptadas.count > 0 ? aceptadas.monto / aceptadas.count : 0;
+
+  return {
+    totalProformas,
+    borradores,
+    enviadas,
+    aceptadas,
+    canceladas,
+    expiradas,
+    emitidas,
+    tasaAceptacion: Math.round(tasaAceptacion * 10) / 10,
+    ticketPromedio: Math.round(ticketPromedio * 100) / 100,
+  };
+}
+
+export interface MonthlyStatsRow {
+  mes: string;
+  borradores: EstadoStats;
+  enviadas: EstadoStats;
+  aceptadas: EstadoStats;
+  canceladas: EstadoStats;
+  expiradas: EstadoStats;
+}
+
+const ESTADO_TO_KEY: Record<string, keyof Omit<MonthlyStatsRow, "mes">> = {
+  BORRADOR: "borradores",
+  ENVIADA: "enviadas",
+  ACEPTADA: "aceptadas",
+  CANCELADA: "canceladas",
+  EXPIRADA: "expiradas",
+};
+
+// Serie mensual para gráficos: últimos N meses (incluye meses sin datos en 0).
+export async function getMonthlyStats(months = 6): Promise<MonthlyStatsRow[]> {
+  const since = new Date();
+  since.setDate(1);
+  since.setHours(0, 0, 0, 0);
+  since.setMonth(since.getMonth() - (months - 1));
+
+  const rows = await prisma.$queryRaw<
+    Array<{ mes: string; estado: string; count: number; monto: number }>
+  >`
+    SELECT to_char(date_trunc('month', "fecha"), 'YYYY-MM') AS mes,
+           "estado"::text AS estado,
+           COUNT(*)::int AS count,
+           COALESCE(SUM("total"), 0)::float8 AS monto
+    FROM "Proforma"
+    WHERE "deletedAt" IS NULL AND "fecha" >= ${since}
+    GROUP BY 1, 2
+    ORDER BY 1
+  `;
+
+  const monthKeys: string[] = [];
+  const cursor = new Date(since);
+  for (let index = 0; index < months; index += 1) {
+    monthKeys.push(
+      `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}`
+    );
+    cursor.setMonth(cursor.getMonth() + 1);
+  }
+
+  const empty = (): EstadoStats => ({ count: 0, monto: 0 });
+  const byMonth = new Map<string, MonthlyStatsRow>(
+    monthKeys.map((mes) => [
+      mes,
+      {
+        mes,
+        borradores: empty(),
+        enviadas: empty(),
+        aceptadas: empty(),
+        canceladas: empty(),
+        expiradas: empty(),
+      },
+    ])
+  );
+
+  for (const row of rows) {
+    const entry = byMonth.get(row.mes);
+    const key = ESTADO_TO_KEY[row.estado];
+    if (entry && key) {
+      entry[key] = { count: Number(row.count), monto: Number(row.monto) };
+    }
+  }
+
+  return monthKeys.map((mes) => byMonth.get(mes)!);
 }
 
 export async function previewNextProformaNumber(): Promise<string> {

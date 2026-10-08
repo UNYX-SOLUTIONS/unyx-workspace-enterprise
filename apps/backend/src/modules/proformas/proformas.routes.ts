@@ -7,6 +7,8 @@ export const proformasRouter = Router();
 proformasRouter.use(requireAuth);
 
 proformasRouter.get("/numero-siguiente", controller.previewNumber);
+proformasRouter.get("/estadisticas", controller.stats);
+proformasRouter.get("/estadisticas/mensual", controller.monthlyStats);
 proformasRouter.get("/", controller.list);
 proformasRouter.get("/:id", controller.getOne);
 proformasRouter.post("/", controller.create);

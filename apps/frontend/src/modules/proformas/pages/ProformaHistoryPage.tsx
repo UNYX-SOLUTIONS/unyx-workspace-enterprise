@@ -1,6 +1,13 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Banknote, CheckCircle2, Download, FilePenLine, Inbox, Target } from "lucide-react";
+import {
+  Banknote,
+  CheckCircle2,
+  Download,
+  FileText,
+  Inbox,
+  Target,
+} from "lucide-react";
 
 import {
   Card,
@@ -20,6 +27,7 @@ import ProformaStatusFilter, {
   type ProformaStatusFilterValue,
 } from "@/modules/proformas/components/ProformaStatusFilter";
 import { useProformaHistory } from "@/modules/proformas/hooks/useProformaHistory";
+import { useProformaStats } from "@/modules/proformas/hooks/useProformaStats";
 import {
   deleteProforma,
   duplicateProforma,
@@ -46,11 +54,15 @@ function getSortValue(proforma: ProformaDto, key: SortKey): string | number {
     case "numero":
       return getQuotationNumber(proforma?.numero);
     case "cliente":
-      return String(proforma?.cliente?.nombre || "").trim().toLowerCase();
+      return String(proforma?.cliente?.nombre || "")
+        .trim()
+        .toLowerCase();
     case "fecha":
       return getDateTimestamp(proforma?.fecha);
     case "estado":
-      return String(proforma?.estado || "").trim().toLowerCase();
+      return String(proforma?.estado || "")
+        .trim()
+        .toLowerCase();
     case "total":
       return toDisplayCents(proforma?.total);
     default:
@@ -61,6 +73,10 @@ function getSortValue(proforma: ProformaDto, key: SortKey): string | number {
 export default function ProformaHistoryPage() {
   const navigate = useNavigate();
   const { showError, showSuccess } = useToast();
+
+  const [desde, setDesde] = useState("");
+  const [hasta, setHasta] = useState("");
+
   const {
     proformas,
     total,
@@ -72,18 +88,45 @@ export default function ProformaHistoryPage() {
     page,
     setPage,
     reload,
-  } = useProformaHistory();
+  } = useProformaHistory({ desde, hasta });
+  const { stats, reload: reloadStats } = useProformaStats({ desde, hasta });
 
-  const [sortConfig, setSortConfig] = useState<{ key: SortKey; direction: "asc" | "desc" }>({
+  const applyRange = (nextDesde: string, nextHasta: string) => {
+    setDesde(nextDesde);
+    setHasta(nextHasta);
+    setPage(1);
+  };
+
+  const applyThisMonth = () => {
+    const now = new Date();
+    const pad = (value: number) => String(value).padStart(2, "0");
+    const firstDay = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-01`;
+    const today = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+    applyRange(firstDay, today);
+  };
+
+  const [sortConfig, setSortConfig] = useState<{
+    key: SortKey;
+    direction: "asc" | "desc";
+  }>({
     key: "numero",
     direction: "desc",
   });
-  const [generatingPdfNumber, setGeneratingPdfNumber] = useState<string | null>(null);
-  const [updatingStatusNumber, setUpdatingStatusNumber] = useState<string | null>(null);
-  const [duplicatingNumber, setDuplicatingNumber] = useState<string | null>(null);
+  const [generatingPdfNumber, setGeneratingPdfNumber] = useState<string | null>(
+    null,
+  );
+  const [updatingStatusNumber, setUpdatingStatusNumber] = useState<
+    string | null
+  >(null);
+  const [duplicatingNumber, setDuplicatingNumber] = useState<string | null>(
+    null,
+  );
   const [deletingNumber, setDeletingNumber] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState<ProformaStatusFilterValue>("TODOS");
-  const [detailProforma, setDetailProforma] = useState<ProformaDto | null>(null);
+  const [statusFilter, setStatusFilter] =
+    useState<ProformaStatusFilterValue>("TODOS");
+  const [detailProforma, setDetailProforma] = useState<ProformaDto | null>(
+    null,
+  );
 
   const sortedProformas = useMemo(() => {
     const filtered =
@@ -107,21 +150,6 @@ export default function ProformaHistoryPage() {
     });
   }, [proformas, sortConfig, statusFilter]);
 
-  const summary = useMemo(() => {
-    const totalAmount = proformas.reduce(
-      (sum, proforma) => sum + toDisplayCents(proforma?.total),
-      0
-    );
-    const accepted = proformas.filter((proforma) => proforma?.estado === "ACEPTADA").length;
-    const drafts = proformas.filter((proforma) => proforma?.estado === "BORRADOR").length;
-    return {
-      totalAmount,
-      accepted,
-      drafts,
-      average: proformas.length > 0 ? totalAmount / proformas.length : 0,
-    };
-  }, [proformas]);
-
   function handleSort(key: SortKey) {
     setSortConfig((current) => {
       if (current.key === key) {
@@ -133,7 +161,11 @@ export default function ProformaHistoryPage() {
 
   function sortIndicator(key: SortKey) {
     if (sortConfig.key !== key) return <span aria-hidden="true">↕</span>;
-    return <span aria-hidden="true">{sortConfig.direction === "asc" ? "↑" : "↓"}</span>;
+    return (
+      <span aria-hidden="true">
+        {sortConfig.direction === "asc" ? "↑" : "↓"}
+      </span>
+    );
   }
 
   async function handleGeneratePdf(proforma: ProformaDto) {
@@ -141,27 +173,35 @@ export default function ProformaHistoryPage() {
       setGeneratingPdfNumber(proforma.numero);
       await generatePdf(proforma);
     } catch (pdfError) {
-      const message = pdfError instanceof Error ? pdfError.message : "Error desconocido";
+      const message =
+        pdfError instanceof Error ? pdfError.message : "Error desconocido";
       showError(`Error al generar el PDF: ${message}`);
     } finally {
       setGeneratingPdfNumber(null);
     }
   }
 
-  async function handleStatusChange(proforma: ProformaDto, nextStatus: ProformaEstado) {
+  async function handleStatusChange(
+    proforma: ProformaDto,
+    nextStatus: ProformaEstado,
+  ) {
     if (nextStatus === proforma.estado) return;
 
     try {
       setUpdatingStatusNumber(proforma.numero);
       const updated = await updateProformaStatus(proforma.numero, nextStatus);
       showSuccess(
-        `Proforma ${updated.numero}: estado actualizado a ${getProformaStatusMeta(updated.estado).label}.`
+        `Proforma ${updated.numero}: estado actualizado a ${getProformaStatusMeta(updated.estado).label}.`,
       );
-      await reload();
+      await Promise.all([reload(), reloadStats()]);
     } catch (statusError) {
-      const apiError = (statusError as { response?: { data?: { error?: string } } })?.response
-        ?.data?.error;
-      const message = statusError instanceof Error ? statusError.message : "Error desconocido";
+      const apiError = (
+        statusError as { response?: { data?: { error?: string } } }
+      )?.response?.data?.error;
+      const message =
+        statusError instanceof Error
+          ? statusError.message
+          : "Error desconocido";
       showError(apiError || `No se pudo cambiar el estado: ${message}`);
     } finally {
       setUpdatingStatusNumber(null);
@@ -173,10 +213,11 @@ export default function ProformaHistoryPage() {
       setDuplicatingNumber(proforma.numero);
       const copy = await duplicateProforma(proforma.numero);
       showSuccess(`Proforma duplicada como ${copy.numero} (borrador).`);
-      await reload();
+      await Promise.all([reload(), reloadStats()]);
     } catch (duplicateError) {
-      const apiError = (duplicateError as { response?: { data?: { error?: string } } })?.response
-        ?.data?.error;
+      const apiError = (
+        duplicateError as { response?: { data?: { error?: string } } }
+      )?.response?.data?.error;
       showError(apiError || "No se pudo duplicar la proforma.");
     } finally {
       setDuplicatingNumber(null);
@@ -188,10 +229,11 @@ export default function ProformaHistoryPage() {
       setDeletingNumber(proforma.numero);
       await deleteProforma(proforma.numero);
       showSuccess(`Proforma ${proforma.numero} eliminada.`);
-      await reload();
+      await Promise.all([reload(), reloadStats()]);
     } catch (deleteError) {
-      const apiError = (deleteError as { response?: { data?: { error?: string } } })?.response
-        ?.data?.error;
+      const apiError = (
+        deleteError as { response?: { data?: { error?: string } } }
+      )?.response?.data?.error;
       showError(apiError || "No se pudo eliminar la proforma.");
     } finally {
       setDeletingNumber(null);
@@ -202,14 +244,20 @@ export default function ProformaHistoryPage() {
     const header = ["Número", "Fecha", "Cliente", "RUC", "Estado", "Total"];
     const rows = sortedProformas.map((proforma) => [
       proforma.numero,
-      proforma.fecha ? new Date(proforma.fecha).toLocaleDateString("es-EC") : "",
+      proforma.fecha
+        ? new Date(proforma.fecha).toLocaleDateString("es-EC")
+        : "",
       proforma?.cliente?.nombre || "",
       proforma?.cliente?.ruc || "",
       getProformaStatusMeta(proforma.estado).label,
       formatCurrency(toDisplayCents(proforma.total)),
     ]);
     const csv = [header, ...rows]
-      .map((row) => row.map((cell) => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(","))
+      .map((row) =>
+        row
+          .map((cell) => `"${String(cell ?? "").replace(/"/g, '""')}"`)
+          .join(","),
+      )
       .join("\n");
 
     const blob = new Blob([`\uFEFF${csv}`], { type: "text/csv;charset=utf-8" });
@@ -242,60 +290,133 @@ export default function ProformaHistoryPage() {
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <SummaryCard
-          title="Total (página)"
-          value={formatCurrency(summary.totalAmount)}
+          title="Monto aceptado"
+          value={formatCurrency(toDisplayCents(stats.aceptadas.monto))}
+          hint={`${stats.aceptadas.count} proformas aceptadas`}
           icon={<Banknote className="h-4 w-4" aria-hidden="true" />}
-          color="blue"
-        />
-        <SummaryCard
-          title="Aceptadas"
-          value={summary.accepted}
-          icon={<CheckCircle2 className="h-4 w-4" aria-hidden="true" />}
           color="green"
         />
         <SummaryCard
-          title="Borradores"
-          value={summary.drafts}
-          icon={<FilePenLine className="h-4 w-4" aria-hidden="true" />}
+          title="Pipeline (enviadas)"
+          value={formatCurrency(toDisplayCents(stats.enviadas.monto))}
+          hint={`${stats.enviadas.count} en espera de decisión`}
+          icon={<FileText className="h-4 w-4" aria-hidden="true" />}
           color="orange"
         />
         <SummaryCard
-          title="Ticket Promedio"
-          value={formatCurrency(Math.round(summary.average))}
+          title="Tasa de aceptación"
+          value={`${stats.tasaAceptacion}%`}
+          hint={`${stats.aceptadas.count} de ${stats.emitidas} emitidas`}
           icon={<Target className="h-4 w-4" aria-hidden="true" />}
-          color="red"
+          color="blue"
+        />
+        <SummaryCard
+          title="Ticket promedio"
+          value={formatCurrency(toDisplayCents(stats.ticketPromedio))}
+          hint="calculado sobre aceptadas"
+          icon={<CheckCircle2 className="h-4 w-4" aria-hidden="true" />}
+          color="blue"
         />
       </section>
 
       <Card className="overflow-hidden">
-        <div className="flex flex-col gap-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-          <button
-            type="button"
-            onClick={handleExport}
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-          >
-            <Download className="h-4 w-4" aria-hidden="true" />
-            Exportar CSV
-          </button>
+        <div className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4 sm:p-6">
+          {/* Fila 1: Exportar + Rango de fechas + Filtro de estado */}
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            {/* Rango de fechas + Filtro de estado */}
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
+              {/* Rango de fechas */}
+              <div className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-1">
+                <div className="flex items-center gap-1.5 px-2">
+                  <label htmlFor="fecha-desde" className="sr-only">
+                    Desde
+                  </label>
+                  <input
+                    id="fecha-desde"
+                    type="date"
+                    value={desde}
+                    onChange={(event) => applyRange(event.target.value, hasta)}
+                    className="rounded-md border-0 bg-transparent px-2 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 outline-none focus:ring-0"
+                  />
+                  <span className="text-xs font-medium text-slate-400">→</span>
+                  <label htmlFor="fecha-hasta" className="sr-only">
+                    Hasta
+                  </label>
+                  <input
+                    id="fecha-hasta"
+                    type="date"
+                    value={hasta}
+                    onChange={(event) => applyRange(desde, event.target.value)}
+                    className="rounded-md border-0 bg-transparent px-2 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 outline-none focus:ring-0"
+                  />
+                </div>
 
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <ProformaStatusFilter value={statusFilter} onChange={setStatusFilter} />
+                <div
+                  className="h-5 w-px bg-slate-200 dark:bg-slate-800"
+                  aria-hidden="true"
+                />
 
-            <label className="w-full sm:max-w-xs">
+                <button
+                  type="button"
+                  onClick={applyThisMonth}
+                  className="rounded-md px-3 py-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+                >
+                  Este mes
+                </button>
+
+                {(desde || hasta) && (
+                  <>
+                    <div
+                      className="h-5 w-px bg-slate-200 dark:bg-slate-800"
+                      aria-hidden="true"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => applyRange("", "")}
+                      className="rounded-md px-3 py-1.5 text-xs font-semibold text-blue-600 transition-colors hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-500/10"
+                    >
+                      Limpiar
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Filtro de estado */}
+              <ProformaStatusFilter
+                value={statusFilter}
+                onChange={setStatusFilter}
+              />
+            </div>
+            {/* Botón Exportar */}
+            <button
+              type="button"
+              onClick={handleExport}
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 lg:flex-shrink-0"
+            >
+              <Download className="h-4 w-4" aria-hidden="true" />
+              Exportar CSV
+            </button>
+          </div>
+
+          {/* Fila 2: Buscador (ancho completo) */}
+          <div className="mt-3">
+            <label className="block">
               <span className="sr-only">Buscar proforma</span>
               <input
                 type="search"
-                placeholder="Buscar proforma..."
+                placeholder="Buscar por número, cliente o RUC..."
                 value={search}
                 onChange={(event) => updateSearch(event.target.value)}
-                className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-slate-900 dark:text-slate-100 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2.5 text-sm text-slate-900 dark:text-slate-100 outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
               />
             </label>
           </div>
         </div>
 
         {!loading && error && (
-          <div className="p-10 text-center font-semibold text-red-700">{error}</div>
+          <div className="p-10 text-center font-semibold text-red-700">
+            {error}
+          </div>
         )}
 
         {!error && loading && proformas.length === 0 && (
@@ -312,185 +433,232 @@ export default function ProformaHistoryPage() {
               }`}
             >
               <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-left">
-                <thead>
-                  <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
-                    <th className="px-4 py-4 sm:px-6">
-                      <button type="button" onClick={() => handleSort("numero")} className={sortableHeaderClass}>
-                        Número {sortIndicator("numero")}
-                      </button>
-                    </th>
-                    <th className="px-4 py-4 sm:px-6">
-                      <button type="button" onClick={() => handleSort("cliente")} className={sortableHeaderClass}>
-                        Cliente {sortIndicator("cliente")}
-                      </button>
-                    </th>
-                    <th className="hidden px-4 py-4 sm:px-6 md:table-cell">
-                      <button type="button" onClick={() => handleSort("fecha")} className={sortableHeaderClass}>
-                        Fecha {sortIndicator("fecha")}
-                      </button>
-                    </th>
-                    <th className="px-4 py-4 sm:px-6">
-                      <button type="button" onClick={() => handleSort("estado")} className={sortableHeaderClass}>
-                        Estado {sortIndicator("estado")}
-                      </button>
-                    </th>
-                    <th className="hidden px-4 py-4 text-right sm:table-cell sm:px-6">
-                      <button
-                        type="button"
-                        onClick={() => handleSort("total")}
-                        className={`${sortableHeaderClass} justify-end`}
-                      >
-                        Total {sortIndicator("total")}
-                      </button>
-                    </th>
-                    <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wide text-slate-700 dark:text-slate-300 sm:px-6">
-                      Acciones
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {sortedProformas.map((proforma) => {
-                    const statusMeta = getProformaStatusMeta(proforma.estado);
+                <table className="w-full border-collapse text-left">
+                  <thead>
+                    <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                      <th className="px-4 py-4 sm:px-6">
+                        <button
+                          type="button"
+                          onClick={() => handleSort("numero")}
+                          className={sortableHeaderClass}
+                        >
+                          Número {sortIndicator("numero")}
+                        </button>
+                      </th>
+                      <th className="px-4 py-4 sm:px-6">
+                        <button
+                          type="button"
+                          onClick={() => handleSort("cliente")}
+                          className={sortableHeaderClass}
+                        >
+                          Cliente {sortIndicator("cliente")}
+                        </button>
+                      </th>
+                      <th className="hidden px-4 py-4 sm:px-6 md:table-cell">
+                        <button
+                          type="button"
+                          onClick={() => handleSort("fecha")}
+                          className={sortableHeaderClass}
+                        >
+                          Fecha {sortIndicator("fecha")}
+                        </button>
+                      </th>
+                      <th className="px-4 py-4 sm:px-6">
+                        <button
+                          type="button"
+                          onClick={() => handleSort("estado")}
+                          className={sortableHeaderClass}
+                        >
+                          Estado {sortIndicator("estado")}
+                        </button>
+                      </th>
+                      <th className="hidden px-4 py-4 text-right sm:table-cell sm:px-6">
+                        <button
+                          type="button"
+                          onClick={() => handleSort("total")}
+                          className={`${sortableHeaderClass} justify-end`}
+                        >
+                          Total {sortIndicator("total")}
+                        </button>
+                      </th>
+                      <th className="px-4 py-4 text-center text-xs font-extrabold uppercase tracking-wide text-slate-700 dark:text-slate-300 sm:px-6">
+                        Acciones
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {sortedProformas.map((proforma) => {
+                      const statusMeta = getProformaStatusMeta(proforma.estado);
 
-                    return (
-                      <tr
-                        key={proforma.id || proforma.numero}
-                        className={`animate-fade-in border-l-2 border-l-transparent bg-white dark:bg-slate-900 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 ${statusMeta.hoverBorder}`}
-                      >
-                        <td className="px-4 py-4 sm:px-6">
-                          <button
-                            type="button"
-                            onClick={() => navigate(`/proformas/${proforma.numero}/editar`)}
-                            className="font-bold text-blue-600 transition-colors hover:text-blue-700 hover:underline"
-                          >
-                            #{proforma.numero || "Sin número"}
-                          </button>
-                        </td>
-                        <td className="px-4 py-4 sm:px-6">
-                          <p className="font-bold text-slate-900 dark:text-slate-100">
-                            {proforma?.cliente?.nombre || "Sin cliente"}
-                          </p>
-                          <p className="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400">
-                            {proforma?.cliente?.ruc || "Sin RUC"}
-                          </p>
-                        </td>
-                        <td className="hidden px-4 py-4 font-medium text-slate-700 dark:text-slate-300 sm:px-6 md:table-cell">
-                          {proforma.fecha
-                            ? new Date(proforma.fecha).toLocaleDateString("es-EC")
-                            : "Sin fecha"}
-                        </td>
-                        <td className="w-[160px] px-4 py-4 sm:px-6">
-                          <div className="flex items-center gap-2">
-                            <ProformaStatusDropdown
-                              status={proforma.estado}
-                              disabled={updatingStatusNumber === proforma.numero}
-                              onSelect={(status) => handleStatusChange(proforma, status)}
-                            />
-                            {statusMeta.reversible && (
-                              <span
-                                title="Estado reversible: puede volver a aprobarse o editarse"
-                                className="text-slate-400"
-                              >
-                                <svg
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="1.8"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  className="h-3.5 w-3.5"
-                                  aria-hidden="true"
+                      return (
+                        <tr
+                          key={proforma.id || proforma.numero}
+                          className={`animate-fade-in border-l-2 border-l-transparent bg-white dark:bg-slate-900 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 ${statusMeta.hoverBorder}`}
+                        >
+                          <td className="px-4 py-4 sm:px-6">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                navigate(`/proformas/${proforma.numero}/editar`)
+                              }
+                              className="font-bold text-blue-600 transition-colors hover:text-blue-700 hover:underline"
+                            >
+                              #{proforma.numero || "Sin número"}
+                            </button>
+                          </td>
+                          <td className="px-4 py-4 sm:px-6">
+                            <p className="font-bold text-slate-900 dark:text-slate-100">
+                              {proforma?.cliente?.nombre || "Sin cliente"}
+                            </p>
+                            <p className="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400">
+                              {proforma?.cliente?.ruc || "Sin RUC"}
+                            </p>
+                          </td>
+                          <td className="hidden px-4 py-4 font-medium text-slate-700 dark:text-slate-300 sm:px-6 md:table-cell">
+                            {proforma.fecha
+                              ? new Date(proforma.fecha).toLocaleDateString(
+                                  "es-EC",
+                                )
+                              : "Sin fecha"}
+                          </td>
+                          <td className="w-[160px] px-4 py-4 sm:px-6">
+                            <div className="flex items-center gap-2">
+                              <ProformaStatusDropdown
+                                status={proforma.estado}
+                                disabled={
+                                  updatingStatusNumber === proforma.numero
+                                }
+                                onSelect={(status) =>
+                                  handleStatusChange(proforma, status)
+                                }
+                              />
+                              {statusMeta.reversible && (
+                                <span
+                                  title="Estado reversible: puede volver a aprobarse o editarse"
+                                  className="text-slate-400"
                                 >
-                                  <path d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
-                                </svg>
-                              </span>
+                                  <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.8"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className="h-3.5 w-3.5"
+                                    aria-hidden="true"
+                                  >
+                                    <path d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                                  </svg>
+                                </span>
+                              )}
+                            </div>
+                            {(proforma.estado === "CANCELADA" ||
+                              proforma.estado === "EXPIRADA") && (
+                              <p className="mt-1 text-[10px] text-slate-400">
+                                {statusMeta.label === "CANCELADA"
+                                  ? "Cancelada"
+                                  : "Expirada"}{" "}
+                                por el cliente · reversible
+                              </p>
                             )}
-                          </div>
-                          {(proforma.estado === "CANCELADA" || proforma.estado === "EXPIRADA") && (
-                            <p className="mt-1 text-[10px] text-slate-400">
-                              {statusMeta.label === "CANCELADA" ? "Cancelada" : "Expirada"} por el
-                              cliente · reversible
-                            </p>
-                          )}
-                          {updatingStatusNumber === proforma.numero && (
-                            <p className="mt-1 text-[10px] font-medium text-slate-500 dark:text-slate-400">
-                              Guardando...
-                            </p>
-                          )}
-                        </td>
-                        <td className="hidden px-4 py-4 text-right font-extrabold text-slate-900 dark:text-slate-100 sm:table-cell sm:px-6">
-                          {formatCurrency(toDisplayCents(proforma.total))}
-                        </td>
-                        <td className="px-4 py-4 sm:px-6">
-                          <ProformaRowActions
-                            numero={proforma.numero}
-                            status={proforma.estado}
-                            pendingPdf={generatingPdfNumber === proforma.numero}
-                            deleting={deletingNumber === proforma.numero}
-                            duplicating={duplicatingNumber === proforma.numero}
-                            onView={() => setDetailProforma(proforma)}
-                            onEdit={() => navigate(`/proformas/${proforma.numero}/editar`)}
-                            onDuplicate={() => handleDuplicate(proforma)}
-                            onDownloadPdf={() => handleGeneratePdf(proforma)}
-                            onDelete={() => handleDelete(proforma)}
-                            onChangeStatus={(status) => handleStatusChange(proforma, status)}
+                            {updatingStatusNumber === proforma.numero && (
+                              <p className="mt-1 text-[10px] font-medium text-slate-500 dark:text-slate-400">
+                                Guardando...
+                              </p>
+                            )}
+                          </td>
+                          <td className="hidden px-4 py-4 text-right font-extrabold text-slate-900 dark:text-slate-100 sm:table-cell sm:px-6">
+                            {formatCurrency(toDisplayCents(proforma.total))}
+                          </td>
+                          <td className="px-4 py-4 sm:px-6">
+                            <ProformaRowActions
+                              numero={proforma.numero}
+                              status={proforma.estado}
+                              pendingPdf={
+                                generatingPdfNumber === proforma.numero
+                              }
+                              deleting={deletingNumber === proforma.numero}
+                              duplicating={
+                                duplicatingNumber === proforma.numero
+                              }
+                              onView={() => setDetailProforma(proforma)}
+                              onEdit={() =>
+                                navigate(`/proformas/${proforma.numero}/editar`)
+                              }
+                              onDuplicate={() => handleDuplicate(proforma)}
+                              onDownloadPdf={() => handleGeneratePdf(proforma)}
+                              onDelete={() => handleDelete(proforma)}
+                              onChangeStatus={(status) =>
+                                handleStatusChange(proforma, status)
+                              }
+                            />
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    {sortedProformas.length === 0 && (
+                      <tr>
+                        <td colSpan={6} className="p-8 text-center">
+                          <EmptyState
+                            icon={
+                              <Inbox
+                                className="h-10 w-10 text-slate-300"
+                                aria-hidden="true"
+                              />
+                            }
+                            title="No hay proformas"
+                            description={
+                              search
+                                ? "Intenta con otra búsqueda."
+                                : "Crea tu primera proforma para comenzar."
+                            }
+                            action={
+                              !search ? (
+                                <button
+                                  type="button"
+                                  onClick={() => navigate("/proformas/nueva")}
+                                  className="rounded-lg bg-blue-500 px-6 py-2 font-bold text-white transition-colors hover:bg-blue-600"
+                                >
+                                  + Crear Proforma
+                                </button>
+                              ) : null
+                            }
                           />
                         </td>
                       </tr>
-                    );
-                  })}
-                  {sortedProformas.length === 0 && (
-                    <tr>
-                      <td colSpan={6} className="p-8 text-center">
-                        <EmptyState
-                          icon={<Inbox className="h-10 w-10 text-slate-300" aria-hidden="true" />}
-                          title="No hay proformas"
-                          description={
-                            search ? "Intenta con otra búsqueda." : "Crea tu primera proforma para comenzar."
-                          }
-                          action={
-                            !search ? (
-                              <button
-                                type="button"
-                                onClick={() => navigate("/proformas/nueva")}
-                                className="rounded-lg bg-blue-500 px-6 py-2 font-bold text-white transition-colors hover:bg-blue-600"
-                              >
-                                + Crear Proforma
-                              </button>
-                            ) : null
-                          }
-                        />
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="flex flex-col gap-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
-              <p className="font-medium text-slate-700 dark:text-slate-300">
-                Mostrando {proformas.length} de {total} proformas · Página {page} de {totalPages}
-              </p>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  disabled={page <= 1}
-                  onClick={() => setPage((current) => Math.max(1, current - 1))}
-                  className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  Anterior
-                </button>
-                <button
-                  type="button"
-                  disabled={page >= totalPages}
-                  onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
-                  className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  Siguiente
-                </button>
+                    )}
+                  </tbody>
+                </table>
               </div>
-            </div>
+
+              <div className="flex flex-col gap-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 text-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
+                <p className="font-medium text-slate-700 dark:text-slate-300">
+                  Mostrando {proformas.length} de {total} proformas · Página{" "}
+                  {page} de {totalPages}
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    disabled={page <= 1}
+                    onClick={() =>
+                      setPage((current) => Math.max(1, current - 1))
+                    }
+                    className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Anterior
+                  </button>
+                  <button
+                    type="button"
+                    disabled={page >= totalPages}
+                    onClick={() =>
+                      setPage((current) => Math.min(totalPages, current + 1))
+                    }
+                    className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 font-semibold text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              </div>
             </div>
 
             {loading && (

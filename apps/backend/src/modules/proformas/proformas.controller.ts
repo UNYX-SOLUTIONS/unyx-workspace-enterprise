@@ -2,7 +2,9 @@ import { type Request, type Response } from "express";
 import * as proformaService from "./proformas.service.js";
 import {
   createProformaSchema,
+  proformaMonthlyQuerySchema,
   proformaQuerySchema,
+  proformaStatsQuerySchema,
   updateProformaSchema,
 } from "./proformas.validation.js";
 
@@ -37,4 +39,14 @@ export async function remove(req: Request, res: Response) {
 
 export async function previewNumber(_req: Request, res: Response) {
   res.json({ numero: await proformaService.previewNextProformaNumber() });
+}
+
+export async function stats(req: Request, res: Response) {
+  const range = proformaStatsQuerySchema.parse(req.query);
+  res.json(await proformaService.getProformaStats(range));
+}
+
+export async function monthlyStats(req: Request, res: Response) {
+  const { meses } = proformaMonthlyQuerySchema.parse(req.query);
+  res.json(await proformaService.getMonthlyStats(meses));
 }

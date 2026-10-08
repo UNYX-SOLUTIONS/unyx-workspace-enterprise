@@ -10,6 +10,7 @@ const colorClasses: Record<string, { icon: string; trendUp: string; trendDown: s
 export interface SummaryCardProps {
   title?: ReactNode;
   value?: ReactNode;
+  hint?: ReactNode;
   icon?: ReactNode;
   trend?: number;
   color?: keyof typeof colorClasses;
@@ -19,6 +20,7 @@ export interface SummaryCardProps {
 export default function SummaryCard({
   title,
   value,
+  hint,
   icon,
   trend,
   color = "blue",
@@ -46,7 +48,7 @@ export default function SummaryCard({
       </div>
 
       <div className="flex flex-wrap items-baseline gap-2">
-        <p className="break-words text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
+        <p className="wrap-break-word text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-3xl">
           {value}
         </p>
 
@@ -61,6 +63,10 @@ export default function SummaryCard({
           </span>
         )}
       </div>
+
+      {hint && (
+        <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">{hint}</p>
+      )}
     </div>
   );
 }

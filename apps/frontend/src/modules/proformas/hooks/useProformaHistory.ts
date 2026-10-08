@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useTransition } from "react";
-import { listProformas, type ProformaDto } from "@/modules/proformas/services/proformaService";
+import { listProformas, type DateRange, type ProformaDto } from "@/modules/proformas/services/proformaService";
 
 export interface UseProformaHistory {
   proformas: ProformaDto[];
@@ -21,7 +21,7 @@ function wait(milliseconds: number): Promise<void> {
   return new Promise((resolve) => window.setTimeout(resolve, milliseconds));
 }
 
-export function useProformaHistory(): UseProformaHistory {
+export function useProformaHistory(range: DateRange = {}): UseProformaHistory {
   const [proformas, setProformas] = useState<ProformaDto[]>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -31,12 +31,15 @@ export function useProformaHistory(): UseProformaHistory {
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
 
+  const desde = range.desde ?? "";
+  const hasta = range.hasta ?? "";
+
   const load = useCallback(async () => {
     const startedAt = Date.now();
     setLoading(true);
     setError("");
     try {
-      const response = await listProformas({ page, pageSize, search });
+      const response = await listProformas({ page, pageSize, search, desde, hasta });
 
       // Duración mínima para que el overlay de la tabla se perciba suave
       // (evita parpadeos con respuestas muy rápidas).
@@ -52,7 +55,7 @@ export function useProformaHistory(): UseProformaHistory {
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, search]);
+  }, [page, pageSize, search, desde, hasta]);
 
   useEffect(() => {
     const timer = window.setTimeout(load, 300);
